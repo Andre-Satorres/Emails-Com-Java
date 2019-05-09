@@ -42,7 +42,7 @@
 		}
 		catch(Exception e)
 		{
-			response.sendRedirect("Erro.html");
+			e.printStackTrace();
 		}
 	%>
 </body>
