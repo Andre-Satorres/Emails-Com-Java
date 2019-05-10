@@ -38,7 +38,7 @@
 			
 			Emails.incluir(email);
 		
-			response.sendRedirect("Sucesso.html");
+			response.sendRedirect("mail/index.jsp");
 		}
 		catch(Exception e)
 		{

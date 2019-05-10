@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" import="bd.daos.*, bd.dbos.*"
+    pageEncoding="ISO-8859-1"%>
 <html>
 <head>
   <title>uMail v1.0</title>
@@ -9,13 +11,13 @@
     <div class="container">
       <div class="">
         <div class="">
-          <form class="main-form" action="index.html" method="post">
+          <form class="main-form" action="login.jsp" method="post">
             <h3>Entrar</h3>
             <div class="form-group">
-              <input type="text" class="form-control" placeholder="Endereço de email">
+              <input type="text" class="form-control" placeholder="Endereço de email" id="usuario" name="usuario">
             </div>
             <div class="form-group">
-              <input type="password" class="form-control" placeholder="Senha">
+              <input type="password" class="form-control" placeholder="Senha" id="senha" name="senha">
             </div>
             <div class="form-group">
               <input type="submit" class="btn-submit" value="Entrar">

@@ -45,26 +45,27 @@ public class Emails
             String sql;
 
             sql = "INSERT INTO Email " +
-                  "(Nome,Sobrenome,Usuario,Senha,seguranca,porta,servidor) " +
+            	  "(Usuario, senha, porta, seguranca, host, nome, sobrenome)" +
                   "VALUES " +
                   "(?,?,?,?,?,?,?)";
 
             BDSQLServer.COMANDO.prepareStatement (sql);
             
-            BDSQLServer.COMANDO.setString (1, email.getNome     ());
-            BDSQLServer.COMANDO.setString (2, email.getSobrenome());
-            BDSQLServer.COMANDO.setString (3, email.getUsuario  ());
-            BDSQLServer.COMANDO.setString (4, email.getSenha    ());
-            BDSQLServer.COMANDO.setInt    (5, email.getSeguranca());
-            BDSQLServer.COMANDO.setInt    (6, email.getPorta    ());
-            BDSQLServer.COMANDO.setInt    (7, email.getHost     ());
-
+            BDSQLServer.COMANDO.setString (1, email.getUsuario  ());
+            BDSQLServer.COMANDO.setString (2, email.getSenha    ());
+            BDSQLServer.COMANDO.setInt    (3, email.getPorta    ());
+            BDSQLServer.COMANDO.setInt    (4, email.getSeguranca());
+            BDSQLServer.COMANDO.setInt    (5, email.getHost     ());
+            BDSQLServer.COMANDO.setString (6, email.getNome     ());
+            BDSQLServer.COMANDO.setString (7, email.getSobrenome());
+            
             BDSQLServer.COMANDO.executeUpdate ();
             BDSQLServer.COMANDO.commit        ();
         }
         catch (SQLException erro)
         {
-            throw new Exception ("Erro ao inserir email.");
+        	erro.printStackTrace();
+            //throw new Exception ("Erro ao inserir email.");
         }
     }
 
