@@ -64,8 +64,7 @@ public class Emails
         }
         catch (SQLException erro)
         {
-        	erro.printStackTrace();
-            //throw new Exception ("Erro ao inserir email.");
+            throw new Exception ("Erro ao inserir email.");
         }
     }
 
@@ -274,7 +273,7 @@ public class Emails
         }
     }
 
-    public static Email getLivro (String usuario) throws Exception
+    public static Email getUsuario (String usuario) throws Exception
     {
         Email email = null;
 
@@ -311,7 +310,7 @@ public class Emails
         return email;
     }
 
-    public static MeuResultSet getLivros () throws Exception
+    public static MeuResultSet getUsuarios () throws Exception
     {
         MeuResultSet resultado = null;
 
@@ -319,8 +318,7 @@ public class Emails
         {
             String sql;
 
-            sql = "SELECT * " +
-                  "FROM Email";
+            sql = "SELECT * " + "FROM Email";
 
             BDSQLServer.COMANDO.prepareStatement (sql);
 

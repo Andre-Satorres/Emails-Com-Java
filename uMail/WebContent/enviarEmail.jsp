@@ -15,7 +15,7 @@
    String from = "michone@gmail.com";
 
    // Assuming you are sending email from localhost
-   String host = "localhost";
+   String host = "localhost"; 
 
    // Get system properties object
    Properties properties = System.getProperties();
