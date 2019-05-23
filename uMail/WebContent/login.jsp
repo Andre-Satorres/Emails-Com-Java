@@ -10,8 +10,6 @@
    <%
    		String usuario = request.getParameter("usuario");
 		String senha   = request.getParameter("senha");
-		System.out.print(usuario);
-		System.out.print(senha);
 	
 		try
 		{
@@ -21,7 +19,9 @@
 				response.sendRedirect("mail/index.jsp");
 			}
 			else
-				out.print("Usuário ou senha inválidos!");
+				request.setAttribute("errorMessage", "Senhas não coincidem!");
+			
+			response.sendRedirect("index.jsp");
 		}
 		catch(Exception e)
 		{

@@ -37,6 +37,7 @@ public class LoginMail
 	
 	public LoginMail(String usuario, String senha)
 	{
+		if(usuario != null && senha != null)
 		this.usuario = usuario;
 		this.senha = senha;
 	}
