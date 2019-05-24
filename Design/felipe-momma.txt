@@ -1,0 +1,38 @@
+<form class="main-form" action="index.html" method="post">
+          <h3>Cadastro</h3>
+          <div class="flex-content">
+            <div class="form-group name-box">
+              <input type="text" class="form-control" placeholder="Nome">
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="Sobrenome">
+            </div>
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Email">
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control" placeholder="Senha">
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control" placeholder="Confirmar senha">
+          </div>
+          <div class="form-group">
+            <input type="number" class="form-control" placeholder="Porta" min="1" max="65535">
+          </div>
+          <div class="form-group">
+            <select class="form-control" name="">
+              <option>SSL</option>
+              <option>TSL</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <select class="form-control" name="">
+              <option>POP3</option>
+              <option>IMAP</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <input type="submit" class="btn-submit" value="Cadastrar">
+          </div>
+        </form>
