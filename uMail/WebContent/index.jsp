@@ -18,7 +18,7 @@
               value="<%= (request.getParameter("usuarioL")!= null?request.getParameter("usuarioL"):"")%>">
             </div>
             <div class="form-group">
-              <input type="password" class="form-control" placeholder="Senha" id="senha" name="senha">
+              <input type="password" class="form-control" placeholder="Senha" id="senhaL" name="senhaL">
             </div>
             <div class="form-group">
               <input type="submit" class="btn-submit" value="Entrar" onclick="">

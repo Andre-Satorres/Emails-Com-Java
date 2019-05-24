@@ -139,12 +139,12 @@ public class LoginMails
             if (!resultado.first())
                 throw new Exception ("Nao cadastrado");
 
-            uMail = new LoginMail ( resultado.getString("nome"),
+            uMail = new LoginMail ( resultado.getString("usuario"),
             					resultado.getString("senha"));
         }
         catch (SQLException erro)
         {
-            throw new Exception ("Erro ao procurar usuario.");
+            throw new Exception (erro.getMessage());
         }
 
         return uMail;

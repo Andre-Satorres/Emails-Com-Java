@@ -26,7 +26,7 @@
 		{
 			LoginMail new_user = new LoginMail(usuario, senha);
 			LoginMails.incluir(new_user);
-			response.sendRedirect("mail/index.jsp");
+			response.sendRedirect("mail/inbox.jsp");
 		}
 		else 
 		{
