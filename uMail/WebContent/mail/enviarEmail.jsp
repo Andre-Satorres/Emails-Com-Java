@@ -9,10 +9,10 @@
    String result;
    
    // Recipient's email ID needs to be mentioned.
-   String to = "abcd@gmail.com";
+   String to = request.getParameter("para");
 
    // Sender's email ID needs to be mentioned
-   String from = "michone@gmail.com";
+   String from = (String)session.getAttribute("usuario");
 
    // Assuming you are sending email from localhost
    String host = "localhost"; 
@@ -37,10 +37,10 @@
 	      message.addRecipient(Message.RecipientType.TO,
 	                               new InternetAddress(to));
 	      // Set Subject: header field
-	      message.setSubject("This is the Subject Line!");
+	      message.setSubject(request.getParameter("assunto"));
 	      
 	      // Now set the actual message
-	      message.setText("This is actual message");
+	      message.setText(request.getParameter("conteudo"));
 	      
 	      // Send message
 	      Transport.send(message);
