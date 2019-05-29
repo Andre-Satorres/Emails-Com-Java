@@ -2,39 +2,54 @@ package bd.dbos;
 
 public class Email implements Cloneable
 {
-	private String usuario;
-	private String senha;
-	private String nome;
-	private String sobrenome;
-    private int    porta;
-    private int    seguranca;
-    private int    host;
+	private String    usuario;
+	private String    senha;
+	private String    nome;
+	private String    sobrenome;
+    private int       porta;
+    private Seguranca seguranca;
+    private Host      host;
+    private String    servidor;
+    
     static final String pattern = "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$";
   
-	public int getHost() 
+	public Host getHost() 
     {
 		return host;
 	}
-
-	public void setHost(int host) throws Exception 
+	
+	public void setHost(Host host) throws Exception 
 	{
-		if(host == 1 || host == 2 || host == 3)
-			this.host = host;
-		else
-			throw new Exception ("Servidor inválido!");
+		if(host == null)
+			throw new Exception("Host invalido!");
+		
+		this.host = host;
+	}
+	
+	public String getServidor() 
+    {
+		return servidor;
+	}
+	
+	public void setServidor(String server) throws Exception 
+	{
+		if(server == null)
+			throw new Exception("Servidor invalido!");
+		
+		this.servidor = server;
 	}
 
-	public int getSeguranca() 
+	public Seguranca getSeguranca() 
 	{
 		return seguranca;
 	}
-
-	public void setSeguranca(int seguranca) throws Exception 
+	
+	public void setSeguranca(Seguranca seguranca) throws Exception 
 	{
-		if(seguranca == 1 || seguranca == 2)
-			this.seguranca = seguranca;
-		else
-			throw new Exception("Criptografia inválida!");
+		if(seguranca == null)
+			throw new Exception("Seguranca inválida!");
+		
+		this.seguranca = seguranca;
 	}
 
 	public int getPorta() 
@@ -103,7 +118,7 @@ public class Email implements Cloneable
 			throw new Exception ("Sobrenome inválido!");
 	}
 
-	public Email (String nome, String sobrenome, String usuario, String senha, int porta, int seguranca, int host) throws Exception
+	public Email (String nome, String sobrenome, String usuario, String senha, int porta, Seguranca seguranca, Host host, String servidor) throws Exception
     {
 		this.setNome(nome);
 		this.setSobrenome(sobrenome);
@@ -112,6 +127,7 @@ public class Email implements Cloneable
     	this.setPorta(porta);
     	this.setHost(host);
     	this.setSeguranca(seguranca);
+    	this.setServidor(servidor);
     }
 
     public String toString ()
@@ -124,7 +140,8 @@ public class Email implements Cloneable
         ret+="Senha....: "+this.senha      +"\n";
         ret+="Porta....: "+this.porta      +"\n";
         ret+="Seguranca: "+this.seguranca  +"\n";
-        ret+="Servidor.: "+this.host;
+        ret+="Servidor.: "+this.servidor   +"\n";
+        ret+="Host.....: "+this.host;
 
         return ret;
     }
@@ -157,10 +174,13 @@ public class Email implements Cloneable
         if (!(this.senha.equals(em.senha)))
             return false;
 
-        if (this.seguranca!= em.seguranca)
+        if (!(this.seguranca.equals(em.seguranca)))
             return false;
         
-        if (this.host!= em.host)
+        if (!(this.host.equals(em.host)))
+            return false;
+        
+        if (!(this.servidor.equals(em.servidor)))
             return false;
 
         return true;
@@ -171,12 +191,13 @@ public class Email implements Cloneable
         int ret=666;
 
         ret = 7*ret + new Integer(this.porta).hashCode();
-        ret = 7*ret + new Integer(this.seguranca).hashCode();
-        ret = 7*ret + new Integer(this.host).hashCode();
+        ret = 7*ret + this.seguranca.hashCode();
+        ret = 7*ret + this.host.hashCode();
         ret = 7*ret + this.usuario.hashCode();
         ret = 7*ret + this.senha.hashCode();
         ret = 7*ret + this.nome.hashCode();
         ret = 7*ret + this.sobrenome.hashCode();
+        ret = 7*ret + this.servidor.hashCode();
 
         return ret;
     }
@@ -191,6 +212,7 @@ public class Email implements Cloneable
         this.host      = modelo.host;
         this.nome      = modelo.nome;
         this.sobrenome = modelo.sobrenome;
+        this.servidor  = modelo.servidor;
     }
 
     public Object clone ()
