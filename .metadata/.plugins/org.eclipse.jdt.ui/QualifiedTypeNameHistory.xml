@@ -5,4 +5,10 @@
 <fullyQualifiedTypeName name="javax.mail.internet.MimeMessage"/>
 <fullyQualifiedTypeName name="javax.mail.internet.InternetAddress"/>
 <fullyQualifiedTypeName name="javax.mail.internet.AddressException"/>
+<fullyQualifiedTypeName name="com.sun.xml.internal.messaging.saaj.packaging.mime.internet.MimeBodyPart"/>
+<fullyQualifiedTypeName name="com.sun.xml.internal.messaging.saaj.packaging.mime.internet.MimeMultipart"/>
+<fullyQualifiedTypeName name="javax.activation.DataSource"/>
+<fullyQualifiedTypeName name="javax.activation.FileDataSource"/>
+<fullyQualifiedTypeName name="javax.activation.DataHandler"/>
+<fullyQualifiedTypeName name="javax.mail.internet.MimeBodyPart"/>
 </qualifiedTypeNameHistroy>

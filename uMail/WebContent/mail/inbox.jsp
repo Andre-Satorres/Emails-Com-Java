@@ -7,7 +7,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="../css/master.css">
-    <link rel="stylesheet" type="text/css" href="css.css">
     <link rel="icon" type="image/png" sizes="16x16" href="https://www.wrappixel.com/demos/admin-templates/materialart/assets/images/favicon.png">
     <link href="./Materialart Admin Template_files/style.css" rel="stylesheet">
     <link href="./Materialart Admin Template_files/email.css" rel="stylesheet">
@@ -91,6 +90,8 @@
                         </ul>
                     <div class="ps__scrollbar-x-rail" style="left: 0px; bottom: 0px;"><div class="ps__scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__scrollbar-y-rail" style="top: 0px; height: 676px; right: 0px;"><div class="ps__scrollbar-y" tabindex="0" style="top: 0px; height: 0px;"></div></div></div>
                     <div class="right-part mail-list">
+                    
+                    
                         <div class="p-15 b-b">
                             <div class="d-flex align-items-center">
                                 <div>
@@ -104,20 +105,22 @@
                                 </div>
                             </div>
                         </div>
+                        
                         <div class="grey lighten-5 p-15 d-flex no-block">
                             <label>
                                 <input type="checkbox" class="sl-all"><span>Marcar Todos</span></label>
                             <div class="ml-auto">
-                                <a class="dropdown-trigger font-20" href="https://www.wrappixel.com/demos/admin-templates/materialart/html/ltr/inbox-email.html?email-body=#" data-target="dme"><i class="material-icons">folder</i><i class="material-icons op-5">expand_more</i></a>
+                                <a class="dropdown-trigger font-20" href="" data-target="dme"><i class="material-icons">folder</i><i class="material-icons op-5">expand_more</i></a>
 
-                                <a class="font-20 m-l-5" href="https://www.wrappixel.com/demos/admin-templates/materialart/html/ltr/inbox-email.html?email-body=#"><i class="material-icons">delete</i></a>
-                                <a class="font-20 m-l-10" href="https://www.wrappixel.com/demos/admin-templates/materialart/html/ltr/inbox-email.html?email-body=#"><i class="material-icons">refresh</i></a>
+                                <a class="font-20 m-l-5" href=""><i class="material-icons">delete</i></a>
+                                <a class="font-20 m-l-10" href=""><i class="material-icons">refresh</i></a>
                             </div>
                         </div>
+                       
+                       
 <div class="table-responsive">
-<table>
-</table><table class="email-table no-wrap">
-<tbody>                        
+<table class="email-table no-wrap">
+<tbody>                
 <%
 	try
 	{
@@ -126,14 +129,23 @@
 	
 		Message[] emails = emailFolder.getMessages();
 	
-		for(int i =messages.length-1; i>=0; i--)
+		int qtd = 0;
+		
+		if(request.getParameter("int") != null)
+			qtd = Integer.parseInt(request.getParameter("int")); 
+		
+			
+		for(int i =qtd+7; i>=qtd; i--)
 		{   
-			%>
+            if(i > emails.length-1)
+            	break;
+            %>
 
             <tr class="unread">
                 <td class="chb">
                     <label>
-                        <input type="checkbox"><span></span></label>
+                        <input type="checkbox"><span></span>
+                    </label>
                 </td>
                 <td class="starred"><i class="fa fa-star-o"></i></td>
                 <td class="user-image"><img src="https://www.gravatar.com/avatar/<%=MD5Util.md5Hex(((InternetAddress)emails[i].getFrom()[0]).getAddress()) %>" alt="user" class="circle" width="30"></td>
@@ -144,12 +156,9 @@
                 <td class="clip"><i class="fa fa-paperclip"></i></td>
                 <td class="time"><%=emails[i].getSentDate() %></td>
             </tr>
-                               
-            <% 	
-		} 
-	} 
-	catch (NoSuchProviderException e) 
-	{}                   
+            
+            <%
+		}
 %>                            
 </tbody>
 </table>
@@ -158,13 +167,28 @@
 
     <div class="p-15 center-align m-t-30">
         <ul class="pagination">
-            <li class="disabled"><a href="https://www.wrappixel.com/demos/admin-templates/materialart/html/ltr/inbox-email.html?email-body=#!"><i class="material-icons">chevron_left</i></a></li>
-            <li class="active"><a href="https://www.wrappixel.com/demos/admin-templates/materialart/html/ltr/inbox-email.html?email-body=#!">1</a></li>
-            <li class="waves-effect"><a href="https://www.wrappixel.com/demos/admin-templates/materialart/html/ltr/inbox-email.html?email-body=#!">2</a></li>
-            <li class="waves-effect"><a href="https://www.wrappixel.com/demos/admin-templates/materialart/html/ltr/inbox-email.html?email-body=#!">3</a></li>
-            <li class="waves-effect"><a href="https://www.wrappixel.com/demos/admin-templates/materialart/html/ltr/inbox-email.html?email-body=#!">4</a></li>
-            <li class="waves-effect"><a href="https://www.wrappixel.com/demos/admin-templates/materialart/html/ltr/inbox-email.html?email-body=#!">5</a></li>
-            <li class="waves-effect"><a href="https://www.wrappixel.com/demos/admin-templates/materialart/html/ltr/inbox-email.html?email-body=#!"><i class="material-icons">chevron_right</i></a></li>
+            <li class="disabled"><a href=""><i class="material-icons">chevron_left</i></a></li>
+            
+            <%
+			
+	            for(int i=0; i<emails.length-1;)
+	            {
+	            	if(i!=qtd){%>
+	            	<li class="waves-effect"><a href="?int=<%=i%>"><%=i/7 +1%></a></li>
+	            	<%}
+	            	else
+	            	{%>
+	            		<li class="active"><a href="?int=<%=i%>"><%=i/7 + 1 %></a></li>
+	            	<%}
+	            	
+	            	i+=7;
+	            }
+			}
+        	catch (NoSuchProviderException e) 
+        	{}  
+            %>
+            
+            <li class="waves-effect"><a href=""><i class="material-icons">chevron_right</i></a></li>
         </ul>
     </div>
 </div>
