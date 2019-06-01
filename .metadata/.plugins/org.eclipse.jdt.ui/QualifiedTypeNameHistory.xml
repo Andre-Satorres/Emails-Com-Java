@@ -11,4 +11,8 @@
 <fullyQualifiedTypeName name="javax.activation.FileDataSource"/>
 <fullyQualifiedTypeName name="javax.activation.DataHandler"/>
 <fullyQualifiedTypeName name="javax.mail.internet.MimeBodyPart"/>
+<fullyQualifiedTypeName name="bd.dbos.Seguranca"/>
+<fullyQualifiedTypeName name="bd.daos.Segurancas"/>
+<fullyQualifiedTypeName name="bd.daos.Hosts"/>
+<fullyQualifiedTypeName name="javax.mail.internet.MimeMultipart"/>
 </qualifiedTypeNameHistroy>

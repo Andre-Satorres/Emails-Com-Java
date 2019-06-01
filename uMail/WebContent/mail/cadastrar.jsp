@@ -37,7 +37,7 @@
 		else
 			servidor = 2;
 		
-		Email email = new Email(nome, sobrenome, usuario, senha, porta, seguranca, servidor);
+		Email email = new Email(nome, sobrenome, usuario, senha, porta, seguranca, host, servidor);
 		
 		Emails.incluir(email);
 	

@@ -12,15 +12,20 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import javax.mail.BodyPart;
 import javax.mail.Multipart;
 
 public class EmailManipulator extends Email
 {
-	public EmailManipulator(Email modelo) throws Exception 
+	public EmailManipulator(String nome, String sobrenome, String usuario, String senha, int porta, Seguranca seguranca, Host host, String servidor) throws Exception 
 	{
-		super(modelo);
-		// TODO Auto-generated constructor stub
+		super(nome, sobrenome, usuario, senha, porta, seguranca, host, servidor);
+	}
+	
+	public EmailManipulator(Email em) throws Exception 
+	{
+		super(em);
 	}
 
 	private Properties emailProperties;
@@ -32,7 +37,8 @@ public class EmailManipulator extends Email
 		try
 		{
 			emailProperties = System.getProperties();
-			emailProperties.put("mail.smtp.port", this.getPorta());
+			emailProperties.put("mail.smtp.port", this.getPorta()); //587 se for tls; 465 se for SSl
+			emailProperties.put("mail.smtp.host", "smtp."+this.getServidor());
 			emailProperties.put("mail.smtp.auth", "true");
 			
 			if(this.getSeguranca().getId() == 1)
@@ -41,6 +47,7 @@ public class EmailManipulator extends Email
 			{
 				emailProperties.put("mail.smtp.socketFactory.port", this.getPorta());
 				emailProperties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+				emailProperties.put("mail.smtp.ssl.enable", "true");
 			}
 			
 			return 0;
@@ -56,11 +63,12 @@ public class EmailManipulator extends Email
 		try 
 		{
 			this.setMailServerProperties();
-			String user = this.getUsuario();
-			String senha = this.getSenha();
+			final String user = this.getUsuario();
+			final String senha = this.getSenha();
 			mailSession = Session.getDefaultInstance(emailProperties,
 					new javax.mail.Authenticator() {
 						protected PasswordAuthentication getPasswordAuthentication() {
+							String a = "oi";
 							return new PasswordAuthentication(user, senha);
 						}
 					});
@@ -97,7 +105,7 @@ public class EmailManipulator extends Email
 	        
 	        messageBodyPart.setContent(emailBody, "text/html; charset=utf-8");
 	        
-	        Multipart multipart = (Multipart) emailMessage.getContent();
+	        Multipart multipart = new MimeMultipart();
 	        
 	        multipart.addBodyPart(messageBodyPart);
 	        
@@ -124,14 +132,7 @@ public class EmailManipulator extends Email
 	{
 		try 
 		{
-			String emailHost = this.getHost() + "." + this.getServidor(); // "smtp.gmail.com";
-			String fromUser = this.getUsuario().substring(0, this.getUsuario().indexOf('@')); //just the id alone without @gmail.com
-			String fromUserEmailPassword = "your email password here";
-			
-			Transport transport = mailSession.getTransport("smtp");
-	        transport.connect(emailHost, this.getPorta(), fromUser, this.getSenha());
-	        transport.sendMessage(emailMessage, emailMessage.getAllRecipients());
-	        transport.close();
+			Transport.send(emailMessage);
 		}
 		catch(Exception e)
 		{

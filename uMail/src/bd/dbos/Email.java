@@ -7,9 +7,9 @@ public class Email implements Cloneable
 	private String    nome;
 	private String    sobrenome;
     private int       porta;
-    private Seguranca seguranca;
-    private Host      host;
-    private String    servidor;
+    private Seguranca seguranca; //tls, ssl
+    private Host      host;      // pop3, imap, smtp
+    private String    servidor; // gmail.com --> dominio
     
     static final String pattern = "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$";
   

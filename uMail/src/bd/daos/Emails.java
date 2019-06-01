@@ -45,19 +45,20 @@ public class Emails
             String sql;
 
             sql = "INSERT INTO Email " +
-            	  "(Usuario, senha, porta, seguranca, host, nome, sobrenome)" +
+            	  "(Usuario, senha, porta, seguranca, host, nome, sobrenome, servidor)" +
                   "VALUES " +
-                  "(?,?,?,?,?,?,?)";
+                  "(?,?,?,?,?,?,?,?)";
 
             BDSQLServer.COMANDO.prepareStatement (sql);
             
             BDSQLServer.COMANDO.setString (1, email.getUsuario  ());
             BDSQLServer.COMANDO.setString (2, email.getSenha    ());
             BDSQLServer.COMANDO.setInt    (3, email.getPorta    ());
-            BDSQLServer.COMANDO.setInt    (4, email.getSeguranca());
-            BDSQLServer.COMANDO.setInt    (5, email.getHost     ());
+            BDSQLServer.COMANDO.setInt    (4, email.getSeguranca().getId());
+            BDSQLServer.COMANDO.setInt    (5, email.getHost     ().getId());
             BDSQLServer.COMANDO.setString (6, email.getNome     ());
             BDSQLServer.COMANDO.setString (7, email.getSobrenome());
+            BDSQLServer.COMANDO.setString (8, email.getServidor());
             
             BDSQLServer.COMANDO.executeUpdate ();
             BDSQLServer.COMANDO.commit        ();
@@ -171,7 +172,7 @@ public class Emails
 
             BDSQLServer.COMANDO.prepareStatement (sql);
 
-            BDSQLServer.COMANDO.setInt (1, email.getSeguranca());
+            BDSQLServer.COMANDO.setInt (1, email.getSeguranca().getId());
             BDSQLServer.COMANDO.setString (2, email.getUsuario());
 
             BDSQLServer.COMANDO.executeUpdate ();
@@ -183,7 +184,7 @@ public class Emails
         }
     }
     
-    public static void alterarServidor (Email email) throws Exception //SERVIDOR = POP3, IMAP ou SMTP 
+    public static void alterarHost (Email email) throws Exception //HOST = POP3, IMAP ou SMTP 
     {
         if (email==null)
             throw new Exception ("Email nao fornecido");
@@ -201,7 +202,37 @@ public class Emails
 
             BDSQLServer.COMANDO.prepareStatement (sql);
 
-            BDSQLServer.COMANDO.setInt    (1, email.getHost());
+            BDSQLServer.COMANDO.setInt    (1, email.getHost().getId());
+            BDSQLServer.COMANDO.setString (2, email.getUsuario());
+
+            BDSQLServer.COMANDO.executeUpdate ();
+            BDSQLServer.COMANDO.commit        ();
+        }
+        catch (SQLException erro)
+        {
+            throw new Exception ("Erro ao atualizar host!");
+        }
+    }
+    
+    public static void alterarServidor (Email email) throws Exception //SERVIDOR = gmail.com = dominio
+    {
+        if (email==null)
+            throw new Exception ("Email nao fornecido");
+
+        if (!cadastrado (email.getUsuario()))
+            throw new Exception ("Nao cadastrado");
+
+        try
+        {
+            String sql;
+
+            sql = "UPDATE Email " +
+                  "SET servidor=? " +
+                  "WHERE usuario = ?";
+
+            BDSQLServer.COMANDO.prepareStatement (sql);
+
+            BDSQLServer.COMANDO.setString (1, email.getServidor());
             BDSQLServer.COMANDO.setString (2, email.getUsuario());
 
             BDSQLServer.COMANDO.executeUpdate ();
@@ -212,6 +243,7 @@ public class Emails
             throw new Exception ("Erro ao atualizar servidor!");
         }
     }
+    
     
     public static void alterarNome (Email email) throws Exception
     {
@@ -293,14 +325,10 @@ public class Emails
 
             if (!resultado.first())
                 throw new Exception ("Nao cadastrado");
-
-            email = new Email ( resultado.getString("nome"),
-            					resultado.getString("sobrenome"),
-            					resultado.getString("usuario"), 
-            					resultado.getString("SENHA"),
-            					resultado.getInt   ("Porta"),
-                                resultado.getInt("Seguranca"),
-                                resultado.getInt ("HOST"));
+            
+            email = new Email ( resultado.getString("nome"), resultado.getString("sobrenome"), resultado.getString("usuario"), resultado.getString("SENHA"),
+            					resultado.getInt   ("Porta"), Segurancas.getSeguranca(resultado.getInt("Seguranca")), Hosts.getHost(resultado.getInt ("HOST")),
+            					resultado.getString("servidor"));
         }
         catch (SQLException erro)
         {
