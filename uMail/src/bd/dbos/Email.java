@@ -10,6 +10,7 @@ public class Email implements Cloneable
     private Seguranca seguranca; //tls, ssl
     private Host      host;      // pop3, imap, smtp
     private String    servidor; // gmail.com --> dominio
+    private String    conta;
     
     static final String pattern = "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$";
   
@@ -24,6 +25,19 @@ public class Email implements Cloneable
 			throw new Exception("Host invalido!");
 		
 		this.host = host;
+	}
+	
+	public String getConta() 
+    {
+		return conta;
+	}
+	
+	public void setConta(String conta) throws Exception 
+	{
+		if(conta == null)
+			throw new Exception("Conta invalida!");
+		
+		this.conta = conta;
 	}
 	
 	public String getServidor() 
@@ -118,7 +132,7 @@ public class Email implements Cloneable
 			throw new Exception ("Sobrenome inválido!");
 	}
 
-	public Email (String nome, String sobrenome, String usuario, String senha, int porta, Seguranca seguranca, Host host, String servidor) throws Exception
+	public Email (String usuario, String senha, int porta, Seguranca seguranca, Host host, String nome, String sobrenome, String servidor, String conta) throws Exception
     {
 		this.setNome(nome);
 		this.setSobrenome(sobrenome);
@@ -128,6 +142,7 @@ public class Email implements Cloneable
     	this.setHost(host);
     	this.setSeguranca(seguranca);
     	this.setServidor(servidor);
+    	this.setConta(conta);
     }
 
     public String toString ()
@@ -138,6 +153,7 @@ public class Email implements Cloneable
         ret+="Sobrenome: "+this.sobrenome  +"\n";
         ret+="Usuario..: "+this.usuario    +"\n";
         ret+="Senha....: "+this.senha      +"\n";
+        ret+="Conta....: "+this.conta      +"\n";
         ret+="Porta....: "+this.porta      +"\n";
         ret+="Seguranca: "+this.seguranca  +"\n";
         ret+="Servidor.: "+this.servidor   +"\n";
@@ -182,6 +198,10 @@ public class Email implements Cloneable
         
         if (!(this.servidor.equals(em.servidor)))
             return false;
+        
+        if (!(this.conta.equals(em.conta)))
+            return false;
+
 
         return true;
     }
@@ -198,6 +218,7 @@ public class Email implements Cloneable
         ret = 7*ret + this.nome.hashCode();
         ret = 7*ret + this.sobrenome.hashCode();
         ret = 7*ret + this.servidor.hashCode();
+        ret = 7*ret + this.conta.hashCode();
 
         return ret;
     }
@@ -205,6 +226,9 @@ public class Email implements Cloneable
 
     public Email (Email modelo) throws Exception
     {
+    	if(modelo == null)
+    		throw new Exception("Modelo ausente!");
+    	
         this.usuario   = modelo.usuario;
         this.seguranca = modelo.seguranca; 
         this.senha     = modelo.senha;
@@ -213,6 +237,7 @@ public class Email implements Cloneable
         this.nome      = modelo.nome;
         this.sobrenome = modelo.sobrenome;
         this.servidor  = modelo.servidor;
+        this.conta     = modelo.conta;
     }
 
     public Object clone ()

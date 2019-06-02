@@ -7,7 +7,8 @@ import bd.dbos.*;
 
 public class Emails
 {
-    public static boolean cadastrado (String usuario) throws Exception
+	
+    public static boolean cadastrado (String usuario, String conta) throws Exception
     {
         boolean retorno = false;
 
@@ -17,11 +18,12 @@ public class Emails
 
             sql = "SELECT * " +
                   "FROM EMAIL " +
-                  "WHERE USUARIO = ?";
+                  "WHERE USUARIO = ? and conta = ?";
 
             BDSQLServer.COMANDO.prepareStatement (sql);
 
             BDSQLServer.COMANDO.setString (1, usuario);
+            BDSQLServer.COMANDO.setString (2, conta);
 
             MeuResultSet resultado = (MeuResultSet)BDSQLServer.COMANDO.executeQuery ();
 
@@ -45,9 +47,9 @@ public class Emails
             String sql;
 
             sql = "INSERT INTO Email " +
-            	  "(Usuario, senha, porta, seguranca, host, nome, sobrenome, servidor)" +
+            	  "(Usuario, senha, porta, seguranca, host, nome, sobrenome, servidor, conta)" +
                   "VALUES " +
-                  "(?,?,?,?,?,?,?,?)";
+                  "(?,?,?,?,?,?,?,?,?)";
 
             BDSQLServer.COMANDO.prepareStatement (sql);
             
@@ -59,6 +61,7 @@ public class Emails
             BDSQLServer.COMANDO.setString (6, email.getNome     ());
             BDSQLServer.COMANDO.setString (7, email.getSobrenome());
             BDSQLServer.COMANDO.setString (8, email.getServidor());
+            BDSQLServer.COMANDO.setString (9, email.getConta());
             
             BDSQLServer.COMANDO.executeUpdate ();
             BDSQLServer.COMANDO.commit        ();
@@ -69,9 +72,9 @@ public class Emails
         }
     }
 
-    public static void excluir (String usuario) throws Exception
+    public static void excluir (String usuario, String conta) throws Exception
     {
-        if (!cadastrado (usuario))
+        if (!cadastrado (usuario, conta))
             throw new Exception ("Nao cadastrado");
 
         try
@@ -79,11 +82,12 @@ public class Emails
             String sql;
 
             sql = "DELETE FROM Email " +
-                  "WHERE USUARIO=? ";
+                  "WHERE USUARIO=? and CONTA = ?";
 
             BDSQLServer.COMANDO.prepareStatement (sql);
 
             BDSQLServer.COMANDO.setString (1, usuario);
+            BDSQLServer.COMANDO.setString (2, conta);
 
             BDSQLServer.COMANDO.executeUpdate ();
             BDSQLServer.COMANDO.commit        ();        
@@ -99,7 +103,7 @@ public class Emails
         if (email==null)
             throw new Exception ("Email nao fornecido");
 
-        if (!cadastrado (email.getUsuario()))
+        if (!cadastrado (email.getUsuario(), email.getConta()))
             throw new Exception ("Nao cadastrado");
 
         try
@@ -108,12 +112,13 @@ public class Emails
 
             sql = "UPDATE Email " +
                   "SET senha=? " +
-                  "WHERE usuario = ?";
+                  "WHERE usuario = ? and conta=?";
 
             BDSQLServer.COMANDO.prepareStatement (sql);
 
             BDSQLServer.COMANDO.setString (1, email.getSenha());
             BDSQLServer.COMANDO.setString (2, email.getUsuario());
+            BDSQLServer.COMANDO.setString (3, email.getConta());
 
             BDSQLServer.COMANDO.executeUpdate ();
             BDSQLServer.COMANDO.commit        ();
@@ -129,7 +134,7 @@ public class Emails
         if (email==null)
             throw new Exception ("Email nao fornecido");
 
-        if (!cadastrado (email.getUsuario()))
+        if (!cadastrado (email.getUsuario(), email.getConta()))
             throw new Exception ("Nao cadastrado");
 
         try
@@ -138,12 +143,13 @@ public class Emails
 
             sql = "UPDATE Email " +
                   "SET porta=? " +
-                  "WHERE usuario = ?";
+                  "WHERE usuario = ? and conta=?";
 
             BDSQLServer.COMANDO.prepareStatement (sql);
 
             BDSQLServer.COMANDO.setInt    (1, email.getPorta());
             BDSQLServer.COMANDO.setString (2, email.getUsuario());
+            BDSQLServer.COMANDO.setString (3, email.getConta());
 
             BDSQLServer.COMANDO.executeUpdate ();
             BDSQLServer.COMANDO.commit        ();
@@ -159,7 +165,7 @@ public class Emails
         if (email==null)
             throw new Exception ("Email nao fornecido");
 
-        if (!cadastrado (email.getUsuario()))
+        if (!cadastrado (email.getUsuario(), email.getConta()))
             throw new Exception ("Nao cadastrado");
 
         try
@@ -168,12 +174,13 @@ public class Emails
 
             sql = "UPDATE Email " +
                   "SET seguranca=? " +
-                  "WHERE usuario = ?";
+                  "WHERE usuario = ? and conta=?";
 
             BDSQLServer.COMANDO.prepareStatement (sql);
 
             BDSQLServer.COMANDO.setInt (1, email.getSeguranca().getId());
             BDSQLServer.COMANDO.setString (2, email.getUsuario());
+            BDSQLServer.COMANDO.setString (3, email.getConta());
 
             BDSQLServer.COMANDO.executeUpdate ();
             BDSQLServer.COMANDO.commit        ();
@@ -189,7 +196,7 @@ public class Emails
         if (email==null)
             throw new Exception ("Email nao fornecido");
 
-        if (!cadastrado (email.getUsuario()))
+        if (!cadastrado (email.getUsuario(),email.getConta()))
             throw new Exception ("Nao cadastrado");
 
         try
@@ -198,12 +205,13 @@ public class Emails
 
             sql = "UPDATE Email " +
                   "SET host=? " +
-                  "WHERE usuario = ?";
+                  "WHERE usuario = ? and conta=?";
 
             BDSQLServer.COMANDO.prepareStatement (sql);
 
             BDSQLServer.COMANDO.setInt    (1, email.getHost().getId());
             BDSQLServer.COMANDO.setString (2, email.getUsuario());
+            BDSQLServer.COMANDO.setString (3, email.getConta());
 
             BDSQLServer.COMANDO.executeUpdate ();
             BDSQLServer.COMANDO.commit        ();
@@ -219,7 +227,7 @@ public class Emails
         if (email==null)
             throw new Exception ("Email nao fornecido");
 
-        if (!cadastrado (email.getUsuario()))
+        if (!cadastrado (email.getUsuario(), email.getConta()))
             throw new Exception ("Nao cadastrado");
 
         try
@@ -228,12 +236,13 @@ public class Emails
 
             sql = "UPDATE Email " +
                   "SET servidor=? " +
-                  "WHERE usuario = ?";
+                  "WHERE usuario = ? and conta=?";
 
             BDSQLServer.COMANDO.prepareStatement (sql);
 
             BDSQLServer.COMANDO.setString (1, email.getServidor());
             BDSQLServer.COMANDO.setString (2, email.getUsuario());
+            BDSQLServer.COMANDO.setString (3, email.getConta());
 
             BDSQLServer.COMANDO.executeUpdate ();
             BDSQLServer.COMANDO.commit        ();
@@ -250,7 +259,7 @@ public class Emails
         if (email==null)
             throw new Exception ("Email nao fornecido");
 
-        if (!cadastrado (email.getUsuario()))
+        if (!cadastrado (email.getUsuario(), email.getConta()))
             throw new Exception ("Nao cadastrado");
 
         try
@@ -259,12 +268,13 @@ public class Emails
 
             sql = "UPDATE Email " +
                   "SET nome=? " +
-                  "WHERE usuario = ?";
+                  "WHERE usuario = ? and conta=?";
 
             BDSQLServer.COMANDO.prepareStatement (sql);
 
             BDSQLServer.COMANDO.setString (1, email.getNome());
             BDSQLServer.COMANDO.setString (2, email.getUsuario());
+            BDSQLServer.COMANDO.setString (3, email.getConta());
 
             BDSQLServer.COMANDO.executeUpdate ();
             BDSQLServer.COMANDO.commit        ();
@@ -280,7 +290,7 @@ public class Emails
         if (email==null)
             throw new Exception ("Email nao fornecido");
 
-        if (!cadastrado (email.getUsuario()))
+        if (!cadastrado (email.getUsuario(), email.getConta()))
             throw new Exception ("Nao cadastrado");
 
         try
@@ -289,12 +299,13 @@ public class Emails
 
             sql = "UPDATE Email " +
                   "SET sobrenome=? " +
-                  "WHERE usuario = ?";
+                  "WHERE usuario = ? and conta=?";
 
             BDSQLServer.COMANDO.prepareStatement (sql);
 
             BDSQLServer.COMANDO.setString (1, email.getSobrenome());
             BDSQLServer.COMANDO.setString (2, email.getUsuario());
+            BDSQLServer.COMANDO.setString (3, email.getConta());
 
             BDSQLServer.COMANDO.executeUpdate ();
             BDSQLServer.COMANDO.commit        ();
@@ -305,7 +316,7 @@ public class Emails
         }
     }
 
-    public static Email getUsuario (String usuario) throws Exception
+    public static Email getEmail (String usuario, String conta) throws Exception
     {
         Email email = null;
 
@@ -315,20 +326,20 @@ public class Emails
 
             sql = "SELECT * " +
                   "FROM Email " +
-                  "WHERE USUARIO = ?";
+                  "WHERE USUARIO = ? and conta=?";
 
             BDSQLServer.COMANDO.prepareStatement (sql);
 
             BDSQLServer.COMANDO.setString (1, usuario);
+            BDSQLServer.COMANDO.setString (2, conta);
 
             MeuResultSet resultado = (MeuResultSet)BDSQLServer.COMANDO.executeQuery ();
 
             if (!resultado.first())
                 throw new Exception ("Nao cadastrado");
             
-            email = new Email ( resultado.getString("nome"), resultado.getString("sobrenome"), resultado.getString("usuario"), resultado.getString("SENHA"),
-            					resultado.getInt   ("Porta"), Segurancas.getSeguranca(resultado.getInt("Seguranca")), Hosts.getHost(resultado.getInt ("HOST")),
-            					resultado.getString("servidor"));
+            email = new Email (resultado.getString("usuario"), resultado.getString("SENHA"), resultado.getInt   ("Porta"), Segurancas.getSeguranca(resultado.getInt("Seguranca")), 
+            		Hosts.getHost(resultado.getInt ("HOST")), resultado.getString("nome"), resultado.getString("sobrenome"), resultado.getString("servidor"), resultado.getString("conta"));
         }
         catch (SQLException erro)
         {
@@ -337,6 +348,30 @@ public class Emails
 
         return email;
     }
+    
+    public static MeuResultSet contaTemEmails(String conta) throws Exception
+	{
+		MeuResultSet resultado = null;
+		
+		try
+		{
+			String sql;
+			
+			sql = "SELECT * " + "FROM EMAIL " + "WHERE CONTA = ?";	
+			
+			BDSQLServer.COMANDO.prepareStatement(sql);
+			
+			BDSQLServer.COMANDO.setString (1, conta);
+			
+			resultado = (MeuResultSet)BDSQLServer.COMANDO.executeQuery();
+		}
+		catch(SQLException erro)
+		{
+			throw new Exception("Erro ao procurar emails da conta.");
+		}
+		
+		return resultado;
+	}
 
     public static MeuResultSet getUsuarios () throws Exception
     {

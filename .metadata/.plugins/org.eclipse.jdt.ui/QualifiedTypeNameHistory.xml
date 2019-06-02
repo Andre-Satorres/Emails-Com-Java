@@ -15,4 +15,7 @@
 <fullyQualifiedTypeName name="bd.daos.Segurancas"/>
 <fullyQualifiedTypeName name="bd.daos.Hosts"/>
 <fullyQualifiedTypeName name="javax.mail.internet.MimeMultipart"/>
+<fullyQualifiedTypeName name="javax.mail.Folder"/>
+<fullyQualifiedTypeName name="javax.mail.search.FlagTerm"/>
+<fullyQualifiedTypeName name="javax.mail.Message.RecipientType"/>
 </qualifiedTypeNameHistroy>

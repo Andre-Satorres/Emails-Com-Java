@@ -1,4 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" import="javax.mail.internet.*, javax.mail.*, java.util.Properties, javax.mail.search.*, md5util.*"
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" import="javax.mail.internet.*, javax.mail.*, 
+                                                 java.util.Properties, javax.mail.search.*, md5util.*, bd.dbos.*, emailmanipulator.*"
     pageEncoding="ISO-8859-1"%>
     
 <!DOCTYPE html>
@@ -17,39 +18,26 @@
 	if(session.getAttribute("usuario") == null)
 		response.sendRedirect("../index.jsp");
 
-	String host = "pop.gmail.com";
-	String user = "mommavalos@gmail.com";
-	String password = "Sem1seiji";
+	//String host = "pop.gmail.com";
+	//String user = "mommavalos@gmail.com";
+	//String password = "Sem1seiji";
 	
-	session.setAttribute("usuario", user);
+	//session.setAttribute("usuario", user);
 	// connect to my pop3 inbox in read-only mode
-	Properties properties = System.getProperties();
 	
-	properties.put("mail.pop3.host", host); //indica que será usado o pop3 do GMAIL
-    properties.put("mail.pop3.port", "995"); // indica a porta que será utilizada 
-    
-    properties.put("mail.pop3.socketFactory.class", "javax.net.pop3.SSLSocketFactory");
-    properties.put("mail.pop3.ssl.enable", "true");
-    
-    properties.put("mail.pop3.auth", "true");
-    
-	Session sessao = Session.getDefaultInstance(properties);
-	Store store = sessao.getStore("pop3");
-	store.connect(host, user, password);
-	Folder inbox = store.getFolder("inbox");
-	inbox.open(Folder.READ_ONLY);
+	if(session.getAttribute("Email1") == null)
+		request.getRequestDispatcher("../index.jsp").forward(request, response);
 	
-	// search for all "unseen" messages
-	Flags seen = new Flags(Flags.Flag.SEEN);
-	FlagTerm unseenFlagTerm = new FlagTerm(seen, false);
-	Message messages[] = inbox.search(unseenFlagTerm); //messages.length eh a qtd de n lidas...
+	Email em = (Email)session.getAttribute("Email1");
+	
+	EmailManipulator email = new EmailManipulator(em);
 %>
 <title><%=session.getAttribute("usuario")%> - uMail</title>
 <body>
         <div class="preloader" style="display: none;">
             <div class="loader">
                 <div class="loader__figure"></div>
-                <p class="loader__label">uMail</p>
+                <p class="loader__label"><%=email.getNome() %></p>
             </div>
         </div>
         <div class="page-wrapper">
@@ -64,9 +52,30 @@
                             <li>
                                 <small class="p-15 grey-text text-lighten-1 db">Pastas</small>
                             </li>
-                            <li class="list-group-item">
-                                <a href="javascript:void(0)" class="active"><i class="material-icons">inbox</i> Inbox <span class="label label-success right">6</span></a>
-                            </li>
+                            <%
+                            	Folder[] pastas = email.obterTodasAsPastas();
+                            	
+                            	for(Folder fd:pastas)
+                            	{
+                            		%>
+                            			<li class="list-group-item">
+                            			<%if(fd.equals(pastas[0])) 
+                            			  {
+                            			  	%>
+                                			<a href="javascript:void(0)" class="active">
+                                			<i class="material-icons">inbox</i><%=fd.getName().substring(0, 1).toUpperCase() + fd.getName().substring(1).toLowerCase() %>
+                                			<span class="label label-success right"><%=email.quantidadeNaoLidas(fd.getName()) %></span></a>
+                                			<%
+                                		  }else {%>
+                                			<a href="javascript:void(0)">
+                                			<i class="material-icons"><%=fd.getName() %></i><%=fd.getName().substring(0, 1).toUpperCase() + fd.getName().substring(1).toLowerCase() %>
+                                			<span class="label label-success right"><%=email.quantidadeNaoLidas(fd.getName()) %></span></a>
+                                			<%} %>
+                            			</li>
+                            		<%
+                            	}
+                            
+                            %>
                             <li class="list-group-item">
                                 <a href="javascript:void(0)"> <i class="material-icons">star</i> Arquivado </a>
                             </li>
@@ -124,24 +133,24 @@
 <%
 	try
 	{
-		Folder emailFolder = store.getFolder("INBOX");
-		emailFolder.open(Folder.READ_WRITE);
-	
-		Message[] emails = emailFolder.getMessages();
-	
+		Message[] emails = email.mensagens("inbox");
+		
 		int qtd = 0;
 		
-		if(request.getParameter("int") != null)
-			qtd = Integer.parseInt(request.getParameter("int")); 
+		if(request.getParameter("i") != null)
+			qtd = Integer.parseInt(request.getParameter("i"));
 		
+		int max = emails.length - qtd*7 - 1;
 			
-		for(int i =qtd+7; i>=qtd; i--)
+		for(int i =max; max-i<7; i--)
 		{   
-            if(i > emails.length-1)
+            if(i > emails.length-1 || i<0)
             	break;
-            %>
-
-            <tr class="unread">
+            
+             if(email.isMessageRead("inbox", emails[i])){%>
+            <tr class="unread">            
+            <%}else{ %>
+            <tr><%} %>
                 <td class="chb">
                     <label>
                         <input type="checkbox"><span></span>
@@ -167,29 +176,42 @@
 
     <div class="p-15 center-align m-t-30">
         <ul class="pagination">
-            <li class="disabled"><a href=""><i class="material-icons">chevron_left</i></a></li>
+        <%int menorPag = 0; int qtdPags = (int)(emails.length/7); int qtdFolhas = (int)(qtdPags/5);%>
+           <%if(qtd==0) {%>
+            <li class="disabled"><a href="#"><i class="material-icons">chevron_left</i></a></li>
+	        <%}else{ %>
+	        <li class="waves-effect"><a href="?i=<%=qtd>0?qtd-1:0%>"><i class="material-icons">chevron_left</i></a></li>
+	        <%} 
+            if(qtd+2 >= qtdPags)
+            	for(int i=0; i<5; i++)
+    	        {
+    	        	if(qtd+i-2<=qtdPags && qtd+2==qtdPags){%><li class="waves-effect"><a href="?i=<%=qtd+i-3  %>"><%=qtd+i-2 %></a></li><%}
+    	        	else if(qtd+i-3<=qtdPags)
+    	        	{%><li class="waves-effect"><a href="?i=<%=qtd+i-4  %>"><%=qtd+i-3 %></a></li><%}
+    	        }
+            else
+            if(qtd==0)
+	        for(int i=0; i<5; i++)
+	        {
+	        	if(qtd+i<qtdPags){%><li class="waves-effect"><a href="?i=<%=qtd+i %>"><%=qtd+i+1 %></a></li><%}
+	        }
+            else
+            	for(int i=0; i<5; i++)
+    	        {
+    	        	if(qtd+i-2<qtdPags){%><li class="waves-effect"><a href="?i=<%=qtd+i-2 %>"><%=qtd+i-1 %></a></li><%}
+    	        }	
+	        
+			if(qtd+1==qtdPags){%>
+				<li class="disabled"><a href="#"><i class="material-icons">chevron_right</i></a></li><%}
+			else{%>
+        	<li class="waves-effect"><a href="?i=<%=qtd<qtdPags?qtd+1:qtdPags%>"><i class="material-icons">chevron_right</i></a></li>
+        	<%}
             
-            <%
-			
-	            for(int i=0; i<emails.length-1;)
-	            {
-	            	if(i!=qtd){%>
-	            	<li class="waves-effect"><a href="?int=<%=i%>"><%=i/7 +1%></a></li>
-	            	<%}
-	            	else
-	            	{%>
-	            		<li class="active"><a href="?int=<%=i%>"><%=i/7 + 1 %></a></li>
-	            	<%}
-	            	
-	            	i+=7;
-	            }
-			}
-        	catch (NoSuchProviderException e) 
-        	{}  
-            %>
-            
-            <li class="waves-effect"><a href=""><i class="material-icons">chevron_right</i></a></li>
-        </ul>
+		}
+    	catch (NoSuchProviderException e) 
+    	{}  
+        %>
+    </ul>
     </div>
 </div>
 <div class="right-part mail-compose" style="display: none;">

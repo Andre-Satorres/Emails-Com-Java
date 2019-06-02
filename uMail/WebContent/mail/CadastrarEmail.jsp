@@ -5,7 +5,7 @@
 <head>
 <meta charset="ISO-8859-1">
 <link rel="stylesheet" type="text/css" href="../css/master.css">
-<title>Insert title here</title>
+<title>Cadastro de contas email - <%=session.getAttribute("usuario")%></title>
 </head>
 <body>
 <div class="flex-form">

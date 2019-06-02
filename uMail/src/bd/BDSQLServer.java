@@ -1,5 +1,7 @@
 package bd;
 
+import java.sql.SQLException;
+
 import bd.core.*;
 import bd.daos.*;
 
@@ -21,6 +23,8 @@ public class BDSQLServer
         }
         catch (Exception erro)
         {
+        	erro.printStackTrace();
+
             System.err.println ("Problemas de conexao com o BD");
             System.exit(0); // aborta o programa
         }

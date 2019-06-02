@@ -9,15 +9,16 @@
 <body>
 <%
 	try
-	{
-		String seg       = request.getParameter("seguranca");
-		int porta        = Integer.parseInt(request.getParameter("porta"));
-		String host      = request.getParameter("host");
+	{	
 		String nome      = request.getParameter("nome");
 		String sobrenome = request.getParameter("sobrenome");
 		String usuario   = request.getParameter("usuario");
 		String senha     = request.getParameter("senha");
 		String confSenha = request.getParameter("confSenha");
+		String host      = request.getParameter("host");
+		int porta        = Integer.parseInt(request.getParameter("porta"));
+		String seg       = request.getParameter("seguranca");
+		String conta     = (String)session.getAttribute("usuario");
 		
 		if(!(senha.equals(confSenha)))
 		{
@@ -25,23 +26,29 @@
 			request.getRequestDispatcher("/index.jsp").forward(request, response);
 		}
 		
-		int seguranca, servidor;
+		Seguranca seguranca;
+		Host host_certo;
 		
 		if(seg.equals("SSL"))
-			seguranca = 2;
+			seguranca = Segurancas.getSeguranca(2);
 		else
-			seguranca = 2;
+			seguranca = Segurancas.getSeguranca(1);
+		
 		
 		if(host.equals("POP3"))
-			servidor = 1;
+			host_certo = Hosts.getHost(1);
 		else
-			servidor = 2;
+			host_certo = Hosts.getHost(2);
 		
-		Email email = new Email(nome, sobrenome, usuario, senha, porta, seguranca, host, servidor);
+		String servidor = usuario.substring(usuario.indexOf("@")+1, usuario.length()-1);
+		
+		Email email = new Email(usuario, senha, porta, seguranca, host_certo, nome, sobrenome, servidor, conta);
 		
 		Emails.incluir(email);
+		
+		session.setAttribute("Email"+session.getAttribute("QtdEmailsUsuario"), email);
 	
-		response.sendRedirect("mail/index.jsp");
+		response.sendRedirect("inbox.jsp");
 	}
 	catch(Exception e)
 	{
