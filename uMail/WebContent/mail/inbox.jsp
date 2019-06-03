@@ -176,8 +176,14 @@
 
     <div class="p-15 center-align m-t-30">
         <ul class="pagination">
-        <%int menorPag = 0; int qtdPags = (int)(emails.length/7)+1; int qtdFolhas = (int)(qtdPags/5);%>
-           <%if(qtd==0) {%>
+        <%int menorPag, qtdPags = 0; 
+        if(emails.length % 7 == 0)
+        	qtdPags = emails.length/7;
+        else
+        	qtdPags = (int)(emails.length/7)+1;
+        
+		
+        if(qtd==0) {%>
             <li class="disabled"><a href="#"><i class="material-icons">chevron_left</i></a></li>
 	        <%}else{ %>
 	        <li class="waves-effect"><a href="?i=<%=qtd>0?qtd-1:0%>"><i class="material-icons">chevron_left</i></a></li>
@@ -198,19 +204,19 @@
         	   	{
         		   	if(qtdPags == qtd+2) //penultima pag
         		   	{
-        		   		if(i==qtd){%><li class="active"><a href="?i=<%=qtd-3+i %>"><%=qtd-2+i %></a></li><%}
+        		   		if(i==3){%><li class="active"><a href="?i=<%=qtd-3+i %>"><%=qtd-2+i %></a></li><%}
         		   		else{%><li class="waves-effect"><a href="?i=<%=qtd-3+i %>"><%=qtd-2+i %></a></li><%}
         		   	}
   	        		else
-  	        		if(qtdPags == qtd) //ultima pag
+  	        		if(qtdPags == qtd+1) //ultima pag
   	        		{
-  	        			if(i==qtd){%><li class="active"><a href="?i=<%=qtd-4+i %>"><%=qtd-3+i %></a></li><%}
+  	        			if(i==4){%><li class="active"><a href="?i=<%=qtd-4+i %>"><%=qtd-3+i %></a></li><%}
         		   		else{%><li class="waves-effect"><a href="?i=<%=qtd-4+i %>"><%=qtd-3+i %></a></li><%}
   	        		}
   	        		else
   	        		{
-  	        			if(i==qtd){%><li class="active"><a href="?i=<%=qtd-2+i %>"><%=qtd-2+i %></a></li><%}
-        		   		else{%><li class="waves-effect"><a href="?i=<%=qtd-2+i %>"><%=qtd-2+i %></a></li><%}
+  	        			if(qtd + (i - 2)==qtd){%><li class="active"><a href="?i=<%=qtd-2+i %>"><%=qtd-1+i %></a></li><%}
+        		   		else{%><li class="waves-effect"><a href="?i=<%=qtd-2+i %>"><%=qtd-1+i %></a></li><%}
   	        		}
         	   	}
 
