@@ -176,31 +176,44 @@
 
     <div class="p-15 center-align m-t-30">
         <ul class="pagination">
-        <%int menorPag = 0; int qtdPags = (int)(emails.length/7); int qtdFolhas = (int)(qtdPags/5);%>
+        <%int menorPag = 0; int qtdPags = (int)(emails.length/7)+1; int qtdFolhas = (int)(qtdPags/5);%>
            <%if(qtd==0) {%>
             <li class="disabled"><a href="#"><i class="material-icons">chevron_left</i></a></li>
 	        <%}else{ %>
 	        <li class="waves-effect"><a href="?i=<%=qtd>0?qtd-1:0%>"><i class="material-icons">chevron_left</i></a></li>
 	        <%} 
-            if(qtd+2 >= qtdPags)
-            	for(int i=0; i<5; i++)
-    	        {
-    	        	if(qtd+i-2<=qtdPags && qtd+2==qtdPags){%><li class="waves-effect"><a href="?i=<%=qtd+i-3  %>"><%=qtd+i-2 %></a></li><%}
-    	        	else if(qtd+i-3<=qtdPags)
-    	        	{%><li class="waves-effect"><a href="?i=<%=qtd+i-4  %>"><%=qtd+i-3 %></a></li><%}
-    	        }
-            else
-            if(qtd==0)
-	        for(int i=0; i<5; i++)
-	        {
-	        	if(qtd+i<qtdPags){%><li class="waves-effect"><a href="?i=<%=qtd+i %>"><%=qtd+i+1 %></a></li><%}
-	        }
-            else
-            	for(int i=0; i<5; i++)
-    	        {
-    	        	if(qtd+i-2<qtdPags){%><li class="waves-effect"><a href="?i=<%=qtd+i-2 %>"><%=qtd+i-1 %></a></li><%}
-    	        }	
-	        
+           
+            if(qtd<3) //0, 1 ou 2, porque n vou girar o bglh se ainda nem chegou no meio (2)
+   	        	for(int i=0; i<5; i++)
+   	        	{
+   	        		if(i<qtdPags)
+   	        		{
+   	        			if(i==qtd){%><li class="active"><a href="?i=<%=i %>"><%=i+1 %></a></li><%}
+   	        			else{%><li class="waves-effect"><a href="?i=<%=i %>"><%=i+1 %></a></li><%}
+   	        		}
+   	        	}
+           
+           	if(qtd>=3)
+        	   	for(int i=0; i<5; i++)
+        	   	{
+        		   	if(qtdPags == qtd+2) //penultima pag
+        		   	{
+        		   		if(i==qtd){%><li class="active"><a href="?i=<%=qtd-3+i %>"><%=qtd-2+i %></a></li><%}
+        		   		else{%><li class="waves-effect"><a href="?i=<%=qtd-3+i %>"><%=qtd-2+i %></a></li><%}
+        		   	}
+  	        		else
+  	        		if(qtdPags == qtd) //ultima pag
+  	        		{
+  	        			if(i==qtd){%><li class="active"><a href="?i=<%=qtd-4+i %>"><%=qtd-3+i %></a></li><%}
+        		   		else{%><li class="waves-effect"><a href="?i=<%=qtd-4+i %>"><%=qtd-3+i %></a></li><%}
+  	        		}
+  	        		else
+  	        		{
+  	        			if(i==qtd){%><li class="active"><a href="?i=<%=qtd-2+i %>"><%=qtd-2+i %></a></li><%}
+        		   		else{%><li class="waves-effect"><a href="?i=<%=qtd-2+i %>"><%=qtd-2+i %></a></li><%}
+  	        		}
+        	   	}
+
 			if(qtd+1==qtdPags){%>
 				<li class="disabled"><a href="#"><i class="material-icons">chevron_right</i></a></li><%}
 			else{%>
@@ -244,48 +257,48 @@
                 	      <div id="mceu_18" class="mce-widget mce-btn mce-menubtn mce-flow-layout-item mce-first mce-btn-has-text" 
                 	 	       tabindex="-1" aria-labelledby="mceu_18" role="menuitem" aria-haspopup="true">
                 	       <button id="mceu_18-open" role="presentation" type="button" tabindex="-1">
-                	        <span class="mce-txt">File</span> 
+                	        <span class="mce-txt">Arquivo</span> 
                 	        <i class="mce-caret"></i>
                 	       </button>
                 	      </div>
                 	      <div id="mceu_19" class="mce-widget mce-btn mce-menubtn mce-flow-layout-item mce-btn-has-text" 
                 	           tabindex="-1" aria-labelledby="mceu_19" role="menuitem" aria-haspopup="true">
                 	           <button id="mceu_19-open" role="presentation" type="button" tabindex="-1">
-                	            <span class="mce-txt">Edit</span> 
+                	            <span class="mce-txt">Editar</span> 
                 	            <i class="mce-caret"></i>
                 	           </button>
                 	      </div>
                 	      <div id="mceu_20" class="mce-widget mce-btn mce-menubtn mce-flow-layout-item mce-btn-has-text" 
                 	           tabindex="-1" aria-labelledby="mceu_20" role="menuitem" aria-haspopup="true">
                 	           <button id="mceu_20-open" role="presentation" type="button" tabindex="-1">
-                	            <span class="mce-txt">View</span> 
+                	            <span class="mce-txt">Ver</span> 
                 	            <i class="mce-caret"></i>
                 	           </button>
                 	      </div>
                 	      <div id="mceu_21" class="mce-widget mce-btn mce-menubtn mce-flow-layout-item mce-btn-has-text" 
                 	           tabindex="-1" aria-labelledby="mceu_21" role="menuitem" aria-haspopup="true">
                 	       <button id="mceu_21-open" role="presentation" type="button" tabindex="-1">
-                	        <span class="mce-txt">Insert</span> 
+                	        <span class="mce-txt">Inserir</span> 
                 	        <i class="mce-caret"></i>
                 	       </button>
                 	      </div>
                 	      <div id="mceu_22" class="mce-widget mce-btn mce-menubtn mce-flow-layout-item mce-btn-has-text" tabindex="-1" 
                 	           aria-labelledby="mceu_22" role="menuitem" aria-haspopup="true">
                 	           <button id="mceu_22-open" role="presentation" type="button" tabindex="-1">
-                	            <span class="mce-txt">Format</span> 
+                	            <span class="mce-txt">Formato</span> 
                 	            <i class="mce-caret"></i>
                 	           </button>
                 	          </div>
                 	          <div id="mceu_23" class="mce-widget mce-btn mce-menubtn mce-flow-layout-item mce-btn-has-text" 
                 	               tabindex="-1" aria-labelledby="mceu_23" role="menuitem" aria-haspopup="true">
                 	               <button id="mceu_23-open" role="presentation" type="button" tabindex="-1">
-                	               <span class="mce-txt">Tools</span> 
+                	               <span class="mce-txt">Ferramentas</span> 
                 	               <i class="mce-caret"></i></button></div>
                 	               
                 	          <div id="mceu_24" class="mce-widget mce-btn mce-menubtn mce-flow-layout-item mce-last mce-btn-has-text" 
                 	               tabindex="-1" aria-labelledby="mceu_24" role="menuitem" aria-haspopup="true">
                 	               <button id="mceu_24-open" role="presentation" type="button" tabindex="-1">
-                	               <span class="mce-txt">Table</span> 
+                	               <span class="mce-txt">Tabela</span> 
                 	               <i class="mce-caret"></i></button>
                 	          </div>
                 	       </div>
@@ -316,7 +329,7 @@
                 	      <div id="mceu_2" class="mce-widget mce-btn mce-menubtn mce-first mce-last mce-btn-has-text" tabindex="-1" 
                 	           aria-labelledby="mceu_2" role="button" aria-haspopup="true">
                 	           <button id="mceu_2-open" role="presentation" type="button" tabindex="-1">
-                	           <span class="mce-txt">Formats</span> 
+                	           <span class="mce-txt">Formatos</span> 
                 	           <i class="mce-caret"></i></button>
                 	      </div>
                 	      </div>
@@ -426,14 +439,14 @@
                 	</div>
                    	<textarea id="mymce" name="email-body" style="display: none;" aria-hidden="true"></textarea>
                 </div>
-                <h5 class="card-title"><i class="ti-link"></i> Anexo</h5>
+                <h5 class="card-title"><i class="ti-link"></i>Anexo</h5>
                 <div class="file-field input-field">
                     <div class="btn">
                         <span>Arquivo</span>
-                        <input type="file" multiple="">
+                        <input type="file" multiple>
                     </div>
                     <div class="file-path-wrapper">
-                        <input class="file-path validate" type="text" placeholder="axene um ou mais arquivos">
+                        <input class="file-path validate" type="text" placeholder="Axene um ou mais arquivos">
                     </div>
                 </div>
                 <button type="submit" class="btn green m-t-20">Enviar</button>

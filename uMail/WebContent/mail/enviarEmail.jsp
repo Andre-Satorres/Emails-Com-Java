@@ -6,6 +6,19 @@
 <%@ page import = "javax.servlet.http.*,javax.servlet.*" %>
 
 <%
+
+/*try {
+String[] to = { "mommavalos@gmail.com" };
+	String[] cc = { "aa.satorres@gmail.com" };
+String[] cco = { "cc17162@g.unicamp.br" };
+String[] an = { "C:\\Users\\User\\Pictures\\Saved Pictures\\1.png" };
+EmailManipulator em = new EmailManipulator("andre", "satorres", "mommavalos@gmail.com", "Sem1seiji", 465, Segurancas.getSeguranca(2), Hosts.getHost(3), "gmail.com");
+em.createEmailMessage(to, cc, cco, "DEU CERTO?", "MEGALOVANIAAAA", an);
+} catch (Exception e) {
+// TODO Auto-generated catch block
+e.printStackTrace();
+}*/
+
    String result;
    
    // Recipient's email ID needs to be mentioned.
