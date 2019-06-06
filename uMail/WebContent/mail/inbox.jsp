@@ -147,7 +147,7 @@
             if(i > emails.length-1 || i<0)
             	break;
             
-             if(email.isMessageRead("inbox", emails[i])){%>
+             if(!email.isMessageRead("inbox", emails[i])){%>
             <tr class="unread">            
             <%}else{ %>
             <tr><%} %>
@@ -159,7 +159,7 @@
                 <td class="starred"><i class="fa fa-star-o"></i></td>
                 <td class="user-image"><img src="https://www.gravatar.com/avatar/<%=MD5Util.md5Hex(((InternetAddress)emails[i].getFrom()[0]).getAddress()) %>" alt="user" class="circle" width="30"></td>
                 <td class="user-name" id="<%=i%>">
-                    <h6 class="m-b-0"><%=((InternetAddress)emails[i].getFrom()[0]).getPersonal() %></h6>
+                    <h6 class="m-b-0"><%=((InternetAddress)emails[i].getFrom()[0]).getPersonal() == null?email.getNome():((InternetAddress)emails[i].getFrom()[0]).getPersonal() %></h6>
                 </td>
                 <td class="max-texts"> <a href="javascript: void(0)"><%= emails[i].getSubject()%></a></td>
                 <td class="clip"><i class="fa fa-paperclip"></i></td>
@@ -176,19 +176,15 @@
 
     <div class="p-15 center-align m-t-30">
         <ul class="pagination">
-<<<<<<< HEAD
-        <%int menorPag = 0; int qtdPags = (int)(emails.length/10)+1;%>
-           <%if(qtd==0) {%>
-=======
-        <%int menorPag, qtdPags = 0; 
-        if(emails.length % 7 == 0)
-        	qtdPags = emails.length/7;
+        <%int menorPag = 0; int qtdPags = (int)(emails.length/10)+1;
+
+        if(emails.length % 10 == 0)
+        	qtdPags = emails.length/10;
         else
-        	qtdPags = (int)(emails.length/7)+1;
+        	qtdPags = (int)(emails.length/10)+1;
         
 		
         if(qtd==0) {%>
->>>>>>> 41c92dbd6ae38ae5925c795984399eaf15e225a5
             <li class="disabled"><a href="#"><i class="material-icons">chevron_left</i></a></li>
 	        <%}else{ %>
 	        <li class="waves-effect"><a href="?i=<%=qtd>0?qtd-1:0%>"><i class="material-icons">chevron_left</i></a></li>
@@ -231,7 +227,7 @@
         	<li class="waves-effect"><a href="?i=<%=qtd<qtdPags?qtd+1:qtdPags%>"><i class="material-icons">chevron_right</i></a></li>
         	<%}
             
-		}
+           }
     	catch (NoSuchProviderException e) 
     	{}  
         %>
