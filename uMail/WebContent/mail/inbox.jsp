@@ -245,7 +245,7 @@
                    <button id="cancel_compose" class="btn grey darken-4">Cancelar</button>
                </div>
            </div>
-           <form action="enviarEmail.jsp" class="dropzone">
+           <form action="enviarEmail.jsp" method="post" class="dropzone">
            
           <!-- -----------------PARA, CC, CCO --------------------->
                <div class="Input-field">
@@ -460,7 +460,8 @@
                 	   </div>
                 	</div>
                 	<!--  TEXT AREA -->
-                   	<textarea id="mymce" name="email-body" style="display: none;" aria-hidden="true"></textarea>
+                   	<textarea id="emailarea" name="emailarea"
+                   	placeholder="Insira seu texto aqui" cols="30" rows="5"></textarea>
                 </div>
                 <h5 class="card-title"><i class="ti-link"></i>Anexo</h5>
                 <div class="file-field input-field">
