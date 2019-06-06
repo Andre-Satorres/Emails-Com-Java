@@ -50,7 +50,6 @@
    				session.setAttribute("QtdEmailsUsuario", i);
    				response.sendRedirect("mail/inbox.jsp");
    			}
-   			
    		}
    }
    catch(Exception e)

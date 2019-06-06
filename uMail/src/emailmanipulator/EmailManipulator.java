@@ -146,7 +146,7 @@ public class EmailManipulator extends Email
 		try
 		{
 			if(!this.isAuthenticated)
-				this.authenticate(1);
+				this.authenticate(0);
 			
 			emailMessage = new MimeMessage(emailSession);
 			emailMessage.setFrom(this.getUsuario());

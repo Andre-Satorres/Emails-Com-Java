@@ -140,9 +140,9 @@
 		if(request.getParameter("i") != null)
 			qtd = Integer.parseInt(request.getParameter("i"));
 		
-		int max = emails.length - qtd*7 - 1;
+		int max = emails.length - qtd*10 - 1;
 			
-		for(int i =max; max-i<7; i--)
+		for(int i =max; max-i<10; i--)
 		{   
             if(i > emails.length-1 || i<0)
             	break;
@@ -176,7 +176,7 @@
 
     <div class="p-15 center-align m-t-30">
         <ul class="pagination">
-        <%int menorPag = 0; int qtdPags = (int)(emails.length/7)+1; int qtdFolhas = (int)(qtdPags/5);%>
+        <%int menorPag = 0; int qtdPags = (int)(emails.length/10)+1;%>
            <%if(qtd==0) {%>
             <li class="disabled"><a href="#"><i class="material-icons">chevron_left</i></a></li>
 	        <%}else{ %>
@@ -239,12 +239,25 @@
                </div>
            </div>
            <form action="enviarEmail.jsp" class="dropzone">
+           
+          <!-- -----------------PARA, CC, CCO --------------------->
                <div class="Input-field">
                    <input placeholder="Para:" name="para" id="para">
                </div>
                <div class="Input-field">
+                   <input placeholder="CC:" name="cc" id="cco">
+               </div>
+               <div class="Input-field">
+                   <input placeholder="CCO:" name="cco" id="cco">
+               </div>                       
+          <!-- -----------------PARA, CC, CCO --------------------->
+          
+          
+               <div class="Input-field">
                    <input placeholder="Assunto:" name="assunto" id="assunto">
                </div>
+               
+               
                <div class="Input-field m-t-20 m-b-20">
                 <div id="mceu_15" class="mce-tinymce mce-container mce-panel" 
                 	 hidefocus="1" tabindex="-1" role="application" style="visibility: hidden; 
@@ -256,10 +269,12 @@
                 	     <div id="mceu_17-body" class="mce-container-body mce-flow-layout">
                 	      <div id="mceu_18" class="mce-widget mce-btn mce-menubtn mce-flow-layout-item mce-first mce-btn-has-text" 
                 	 	       tabindex="-1" aria-labelledby="mceu_18" role="menuitem" aria-haspopup="true">
+       	 	       
                 	       <button id="mceu_18-open" role="presentation" type="button" tabindex="-1">
                 	        <span class="mce-txt">Arquivo</span> 
                 	        <i class="mce-caret"></i>
                 	       </button>
+       
                 	      </div>
                 	      <div id="mceu_19" class="mce-widget mce-btn mce-menubtn mce-flow-layout-item mce-btn-has-text" 
                 	           tabindex="-1" aria-labelledby="mceu_19" role="menuitem" aria-haspopup="true">
@@ -437,6 +452,7 @@
                 	      </div>
                 	   </div>
                 	</div>
+                	<!--  TEXT AREA -->
                    	<textarea id="mymce" name="email-body" style="display: none;" aria-hidden="true"></textarea>
                 </div>
                 <h5 class="card-title"><i class="ti-link"></i>Anexo</h5>
@@ -446,7 +462,7 @@
                         <input type="file" multiple>
                     </div>
                     <div class="file-path-wrapper">
-                        <input class="file-path validate" type="text" placeholder="Axene um ou mais arquivos">
+                        <input class="file-path validate" type="text" placeholder="Axene um ou mais arquivos" name="anexos">
                     </div>
                 </div>
                 <button type="submit" class="btn green m-t-20">Enviar</button>
