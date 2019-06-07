@@ -161,7 +161,7 @@
                 <td class="user-name" id="<%=i%>">
                     <h6 class="m-b-0"><%=((InternetAddress)emails[i].getFrom()[0]).getPersonal() == null?((InternetAddress)emails[i].getFrom()[0]).getAddress():((InternetAddress)emails[i].getFrom()[0]).getPersonal() %></h6>
                 </td>
-                <td class="max-texts"> <a onClick="<%session.setAttribute("email", emails[i]); %>" href="javascript: void(0)"><%= emails[i].getSubject()%></a></td>
+                <td class="max-texts"> <a onClick="<%setSession(session, emails[i]);%>" href="javascript: void(0)"><%= emails[i].getSubject()%></a></td>
                 <td class="clip"><i class="fa fa-paperclip"></i></td>
                 <td class="time"><%=emails[i].getSentDate() %></td>
             </tr>
@@ -175,9 +175,9 @@
 </div>
 
 <%!
-public void setSession()
+public void setSession(HttpSession session, Message msg)
 {
-	
+	session.setAttribute("email", msg);
 }
 
 %>
@@ -489,7 +489,7 @@ public void setSession()
           
 <div class="right-part mail-details active" style="display: none;">
 <div class="grey lighten-5 p-15 d-flex no-block">
-    <a id="back_to_inbox" class="m-l-5 tooltipped" href="" data-tooltip="back to inbox" data-position="top">
+    <a id="back_to_inbox" class="m-l-5 tooltipped" href="#" data-tooltip="back to inbox" data-position="top">
     	<i class="material-icons font-20">arrow_back</i></a>
     <a class="m-l-5 tooltipped" href="" data-tooltip="Reply" data-position="top">
     <i class="material-icons font-20">reply</i></a>
@@ -557,26 +557,6 @@ public void setSession()
 
 		<%= getTextFromMessage(msg) %>
 		
-		<%if(msg.getContentType().contains("multipart"))
-		 {
-				int qtdAnexos=0; 
-				// essa parte é multipart, então pode conter anexos.
-				Multipart multiPart= (Multipart) msg.getContent();
-				int numberOfParts = multiPart.getCount();
-				for (int partCount = 0; partCount < numberOfParts; partCount++)
-				{
-					//pega uma parte de cada vez no "for"
-					MimeBodyPart part = (MimeBodyPart) multiPart.getBodyPart(partCount);
-					//checa se o "disposition" (descreve como a parte deve ser apresentada ao usuaio e um anexo.
-					if (javax.mail.Part.ATTACHMENT.equalsIgnoreCase(part.getDisposition())) 		
-					{
-						qtdAnexos++;
-						String fileName = part.getFileName();
-					}
-					
-				}
-		}%>
-		
 <%!
 	private String getTextFromMessage(Message message) throws MessagingException, IOException
 	{
@@ -630,24 +610,63 @@ public String pegaTextoDeCadaParte(BodyPart bodyPart) throws MessagingException,
 	return result;
 }
 %>
+
+<%
+int qtdAnexos=0; 
+if(msg.getContentType().contains("multipart"))
+{
+		// essa parte é multipart, então pode conter anexos.
+		Multipart multiPart= (Multipart) msg.getContent();
+		int numberOfParts = multiPart.getCount();
+		for (int partCount = 0; partCount < numberOfParts; partCount++)
+		{
+			//pega uma parte de cada vez no "for"
+			MimeBodyPart part = (MimeBodyPart) multiPart.getBodyPart(partCount);
+			//checa se o "disposition" (descreve como a parte deve ser apresentada ao usuaio e um anexo.
+			if (javax.mail.Part.ATTACHMENT.equalsIgnoreCase(part.getDisposition())) 		
+			{
+				qtdAnexos++;
+				String fileName = part.getFileName();
+			}
+			
+		}
+}
+		if(qtdAnexos>0){%>
 		<br>
-        <h6 class="m-t-30 font-medium">Attachment (3)</h6>
+        <h6 class="m-t-30 font-medium">Anexos (<%=qtdAnexos %>)</h6>
         <div class="row row-minus m-t-20">
-            <div class="col s12 l3">
-                <img src="./Materialart Admin Template_files/img1.jpg" class="responsive-img">
-                <a href="" class="m-r-10">View</a><a href="">Download</a>
-            </div>
-            <div class="col s12 l3">
-                <img src="./Materialart Admin Template_files/img2.jpg" class="responsive-img">
-                <a href="" class="m-r-10">View</a><a href="">Download</a>
-            </div>
-            <div class="col s12 l3">
-                <img src="./Materialart Admin Template_files/img3.jpg" class="responsive-img">
-                <a href="" class="m-r-10">View</a><a href="">Download</a>
-            </div>
+        <%
+			if(msg.getContentType().contains("multipart"))
+			{
+				// essa parte é multipart, então pode conter anexos.
+				Multipart multiPart= (Multipart) msg.getContent();
+				int numberOfParts = multiPart.getCount();
+				for (int partCount = 0; partCount < numberOfParts; partCount++)
+				{
+					//pega uma parte de cada vez no "for"
+					MimeBodyPart part = (MimeBodyPart) multiPart.getBodyPart(partCount);
+					//checa se o "disposition" (descreve como a parte deve ser apresentada ao usuaio e um anexo.
+					if (javax.mail.Part.ATTACHMENT.equalsIgnoreCase(part.getDisposition())) 		
+					{
+						String fileName = part.getFileName();
+
+						%>
+			            <div class="col s12 l3">
+			                <img src="./Materialart Admin Template_files/img1.jpg" class="responsive-img">
+			                <a href="" class="m-r-10">Visualizar</a><a href="">Baixar</a>
+			            </div>
+			            <%
+            		}
+						
+				}}
+			}%>
+            
         </div>
     </div>
 </li>
+
+
+
 <li>
     <div class="collapsible-header" tabindex="0">
         <div class="d-flex no-block align-items-center">
