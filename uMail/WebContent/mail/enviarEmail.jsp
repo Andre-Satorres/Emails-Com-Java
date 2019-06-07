@@ -40,6 +40,5 @@ catch(Exception e)
 	e.printStackTrace();
 	request.setAttribute("errorMessageEnv", e.getMessage());
 }
-   
 	request.getRequestDispatcher("inbox.jsp").forward(request, response);
 %>

@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" import="javax.mail.internet.*, javax.mail.*, 
-                                                 java.util.Properties, javax.mail.search.*, md5util.*, bd.dbos.*, emailmanipulator.*"
+                         java.io.*, java.util.Properties, javax.mail.search.*, md5util.*, bd.dbos.*, emailmanipulator.*"
     pageEncoding="ISO-8859-1"%>
     
 <!DOCTYPE html>
@@ -159,9 +159,9 @@
                 <td class="starred"><i class="fa fa-star-o"></i></td>
                 <td class="user-image"><img src="https://www.gravatar.com/avatar/<%=MD5Util.md5Hex(((InternetAddress)emails[i].getFrom()[0]).getAddress()) %>" alt="user" class="circle" width="30"></td>
                 <td class="user-name" id="<%=i%>">
-                    <h6 class="m-b-0"><%=((InternetAddress)emails[i].getFrom()[0]).getPersonal() == null?email.getNome():((InternetAddress)emails[i].getFrom()[0]).getPersonal() %></h6>
+                    <h6 class="m-b-0"><%=((InternetAddress)emails[i].getFrom()[0]).getPersonal() == null?((InternetAddress)emails[i].getFrom()[0]).getAddress():((InternetAddress)emails[i].getFrom()[0]).getPersonal() %></h6>
                 </td>
-                <td class="max-texts"> <a href="javascript: void(0)"><%= emails[i].getSubject()%></a></td>
+                <td class="max-texts"> <a onClick="<%session.setAttribute("email", emails[i]); %>" href="javascript: void(0)"><%= emails[i].getSubject()%></a></td>
                 <td class="clip"><i class="fa fa-paperclip"></i></td>
                 <td class="time"><%=emails[i].getSentDate() %></td>
             </tr>
@@ -259,12 +259,10 @@
                </div>                       
           <!-- -----------------PARA, CC, CCO --------------------->
           
-          
                <div class="Input-field">
                    <input placeholder="Assunto:" name="assunto" id="assunto">
                </div>
-               
-               
+
                <div class="Input-field m-t-20 m-b-20">
                 <div id="mceu_15" class="mce-tinymce mce-container mce-panel" 
                 	 hidefocus="1" tabindex="-1" role="application" style="visibility: hidden; 
@@ -461,7 +459,7 @@
                 	</div>
                 	<!--  TEXT AREA -->
                    	<textarea id="emailarea" name="emailarea"
-                   	placeholder="Insira seu texto aqui" cols="30" rows="5"></textarea>
+                   	placeholder="Insira seu texto aqui" cols="30" rows="35"></textarea>
                 </div>
                 <h5 class="card-title"><i class="ti-link"></i>Anexo</h5>
                 <div class="file-field input-field">
@@ -483,70 +481,161 @@
           
 <div class="right-part mail-details active" style="display: none;">
 <div class="grey lighten-5 p-15 d-flex no-block">
-    <a id="back_to_inbox" class="m-l-5 tooltipped" href="https://www.wrappixel.com/demos/admin-templates/materialart/html/ltr/inbox-email.html?email-body=#" data-tooltip="back to inbox" data-position="top"><i class="material-icons font-20">arrow_back</i></a>
-    <a class="m-l-5 tooltipped" href="https://www.wrappixel.com/demos/admin-templates/materialart/html/ltr/inbox-email.html?email-body=#" data-tooltip="Reply" data-position="top"><i class="material-icons font-20">reply</i></a>
-    <a class="m-l-10 tooltipped" href="https://www.wrappixel.com/demos/admin-templates/materialart/html/ltr/inbox-email.html?email-body=#" data-tooltip="Report Spam" data-position="top"><i class="material-icons font-20">sim_card_alert</i></a>
+    <a id="back_to_inbox" class="m-l-5 tooltipped" href="" data-tooltip="back to inbox" data-position="top">
+    	<i class="material-icons font-20">arrow_back</i></a>
+    <a class="m-l-5 tooltipped" href="" data-tooltip="Reply" data-position="top">
+    <i class="material-icons font-20">reply</i></a>
+    <a class="m-l-10 tooltipped" href="" data-tooltip="Report Spam" data-position="top">
+    <i class="material-icons font-20">sim_card_alert</i></a>
     <div class="ml-auto">
-        <a class="dropdown-trigger font-20" href="https://www.wrappixel.com/demos/admin-templates/materialart/html/ltr/inbox-email.html?email-body=#" data-target="dme"><i class="material-icons">folder</i><i class="material-icons op-5">expand_more</i></a><ul id="dme" class="dropdown-content col s4" tabindex="0" style="">
-            <li tabindex="0"><a href="https://www.wrappixel.com/demos/admin-templates/materialart/html/ltr/inbox-email.html?email-body=#!">Select Read</a></li>
+        <a class="dropdown-trigger font-20" href="" data-target="dme">
+        <i class="material-icons">folder</i>
+        <i class="material-icons op-5">expand_more</i>
+        </a><ul id="dme" class="dropdown-content col s4" tabindex="0" style="">
+            
+            <li tabindex="0"><a href="">Select Read</a></li>
             <li class="divider" tabindex="-1"></li>
-            <li tabindex="0"><a href="https://www.wrappixel.com/demos/admin-templates/materialart/html/ltr/inbox-email.html?email-body=#!">Select Unread</a></li>
-            <li tabindex="0"><a href="https://www.wrappixel.com/demos/admin-templates/materialart/html/ltr/inbox-email.html?email-body=#!"><i class="material-icons">view_module</i>Action</a></li>
-            <li tabindex="0"><a href="https://www.wrappixel.com/demos/admin-templates/materialart/html/ltr/inbox-email.html?email-body=#!"><i class="material-icons">cloud</i>Clear All</a></li>
+            <li tabindex="0"><a href="">Select Unread</a></li>
+            <li tabindex="0"><a href=""><i class="material-icons">view_module</i>Action</a></li>
+            <li tabindex="0"><a href=""><i class="material-icons">cloud</i>Clear All</a></li>
         </ul>
         <ul id="dme" class="dropdown-content col s4">
-            <li><a href="https://www.wrappixel.com/demos/admin-templates/materialart/html/ltr/inbox-email.html?email-body=#!">Select Read</a></li>
+            <li><a href="">Select Read</a></li>
             <li class="divider" tabindex="-1"></li>
-            <li><a href="https://www.wrappixel.com/demos/admin-templates/materialart/html/ltr/inbox-email.html?email-body=#!">Select Unread</a></li>
-            <li><a href="https://www.wrappixel.com/demos/admin-templates/materialart/html/ltr/inbox-email.html?email-body=#!"><i class="material-icons">view_module</i>Action</a></li>
-            <li><a href="https://www.wrappixel.com/demos/admin-templates/materialart/html/ltr/inbox-email.html?email-body=#!"><i class="material-icons">cloud</i>Clear All</a></li>
+            <li><a href="">Select Unread</a></li>
+            <li><a href=""><i class="material-icons">view_module</i>Action</a></li>
+            <li><a href=""><i class="material-icons">cloud</i>Clear All</a></li>
         </ul>
-        <a class="font-20 m-l-5" href="https://www.wrappixel.com/demos/admin-templates/materialart/html/ltr/inbox-email.html?email-body=#"><i class="material-icons">delete</i></a>
-        <a class="font-20 m-l-10" href="https://www.wrappixel.com/demos/admin-templates/materialart/html/ltr/inbox-email.html?email-body=#"><i class="material-icons">refresh</i></a>
+        <a class="font-20 m-l-5" href=""><i class="material-icons">delete</i></a>
+        <a class="font-20 m-l-10" href=""><i class="material-icons">refresh</i></a>
     </div>
 </div>
+<!-- ------------------------------------------------------------------------------------- -->
+<%Message msg = (Message)session.getAttribute("email"); %>
 <div class="email-body" style="display: block;">
 <div class="p-15 b-t">
-    <h5 class="m-b-0">Your message title goes here</h5>
+    <h5 class="m-b-0"><%=msg.getSubject() %></h5>
 </div>
 <div class="divider"></div>
 <ul class="collapsible expandable b-0 m-t-0">
     <li class="active">
         <div class="collapsible-header" tabindex="0">
             <div class="d-flex no-block align-items-center">
-                <div class="m-r-10"><img src="./Materialart Admin Template_files/1.jpg" alt="user" class="circle" width="45"></div>
+                <div class="m-r-10">
+                	<img src="./Materialart Admin Template_files/1.jpg" alt="user" 
+                		 class="circle" width="45"></div>
                 <div class="">
-                    <h5 class="m-b-0 font-16 font-medium">Hanna Gover <small> ( hgover@gmail.com )</small></h5><span>to Suniljoshi19@gmail.com</span>
+                    <h5 class="m-b-0 font-16 font-medium">
+                    <%=((InternetAddress)msg.getFrom()[0]).getPersonal() %> 
+                    <small> ( <%=((InternetAddress)msg.getFrom()[0]).getAddress() %> )</small>
+                    </h5><span>para <%=((InternetAddress)msg.getAllRecipients()[0]).getAddress() %>
+                    </span>
                 </div>
             </div>
         </div>
         <div class="collapsible-body" style="display: block;">
-        <a class="dropdown-trigger font-20 right" href="https://www.wrappixel.com/demos/admin-templates/materialart/html/ltr/inbox-email.html?email-body=#" data-target="ddme"><i class="material-icons">more_vert</i></a><ul id="ddme" class="dropdown-content" tabindex="0">
-            <li tabindex="0" class="active"><a href="https://www.wrappixel.com/demos/admin-templates/materialart/html/ltr/inbox-email.html?email-body=#!" class="active">Reply</a></li>
+        <a class="dropdown-trigger font-20 right" href="" data-target="ddme">
+        	<i class="material-icons">more_vert</i></a>
+        	<ul id="ddme" class="dropdown-content" tabindex="0">
+        	
+            <li tabindex="0" class="active"><a href="" class="active">Responder</a></li>
             <li class="divider" tabindex="-1"></li>
-            <li tabindex="0" class="active"><a href="https://www.wrappixel.com/demos/admin-templates/materialart/html/ltr/inbox-email.html?email-body=#!" class="active">Forword</a></li>
-            <li tabindex="0" class="active"><a href="https://www.wrappixel.com/demos/admin-templates/materialart/html/ltr/inbox-email.html?email-body=#!" class="active"><i class="material-icons">view_module</i>Delete</a></li>
-            <li tabindex="0" class="active"><a href="https://www.wrappixel.com/demos/admin-templates/materialart/html/ltr/inbox-email.html?email-body=#!" class="active"><i class="material-icons">cloud</i>Clear All</a></li>
+            <li tabindex="0" class="active"><a href="" class="active">Encaminhar</a></li>
+            <li tabindex="0" class="active"><a href="" 
+            	class="active"><i class="material-icons">view_module</i>Excluir</a></li>
+            <li tabindex="0" class="active"><a href="" 
+            	class="active"><i class="material-icons">cloud</i>Clear All</a></li>
         </ul>
 
-        <h6>Dear User</h6>
-        <br>
-        <p>
-            Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi.</p>
-        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi.</p>
+		<%= getTextFromMessage(msg) %>
+		
+		<%if(msg.getContentType().contains("multipart"))
+		 {
+				int qtdAnexos=0; 
+				// essa parte é multipart, então pode conter anexos.
+				Multipart multiPart= (Multipart) msg.getContent();
+				int numberOfParts = multiPart.getCount();
+				for (int partCount = 0; partCount < numberOfParts; partCount++)
+				{
+					//pega uma parte de cada vez no "for"
+					MimeBodyPart part = (MimeBodyPart) multiPart.getBodyPart(partCount);
+					//checa se o "disposition" (descreve como a parte deve ser apresentada ao usuaio e um anexo.
+					if (javax.mail.Part.ATTACHMENT.equalsIgnoreCase(part.getDisposition())) 		
+					{
+						qtdAnexos++;
+						String fileName = part.getFileName();
+					}
+					
+				}
+		}%>
+		
+<%!
+	private String getTextFromMessage(Message message) throws MessagingException, IOException
+	{
+		String result = "";
+		if (message.isMimeType("text/plain")) //se o conteúdo for meramente textual
+		{
+		result = message.getContent().toString(); //siplesmente printa o texto
+		}
+		else if (message.isMimeType("multipart/*")) //se tiver múltiplas partes
+		{
+			//obtenho o conteúdo como um texto MIME
+			MimeMultipart mimeMultipart= (MimeMultipart) message.getContent();
+		
+			result = getTextFromMimeMultipart(mimeMultipart); //receberá o texto em MIME ou HTML.
+		}
+	
+		return result;
+	}
+%>
+
+<%!
+private String getTextFromMimeMultipart(MimeMultipart mimeMultipart) throws MessagingException, IOException
+{
+	String result = "";
+	int count = mimeMultipart.getCount();
+	for (int i = 0; i < count; i++)
+	{
+		result += pegaTextoDeCadaParte(mimeMultipart.getBodyPart(i));
+	}
+	return result;
+}
+%>
+
+<%!
+public String pegaTextoDeCadaParte(BodyPart bodyPart) throws MessagingException, IOException
+{
+	String result = "";
+	if (bodyPart.isMimeType("text/plain"))
+	{
+		return result + "\n" + bodyPart.getContent();
+	}
+	else if (bodyPart.isMimeType("text/html"))
+	{
+		String html = (String) bodyPart.getContent();
+		//return result + "\n" + org.jsoup.Jsoup.parse(html).text();
+	}
+	else if (bodyPart.getContent() instanceof MimeMultipart)
+	{
+		return result + getTextFromMimeMultipart((MimeMultipart)bodyPart.getContent());
+	}
+	return result;
+}
+%>
+		<br>
         <h6 class="m-t-30 font-medium">Attachment (3)</h6>
         <div class="row row-minus m-t-20">
             <div class="col s12 l3">
                 <img src="./Materialart Admin Template_files/img1.jpg" class="responsive-img">
-                <a href="https://www.wrappixel.com/demos/admin-templates/materialart/html/ltr/inbox-email.html?email-body=#" class="m-r-10">View</a><a href="https://www.wrappixel.com/demos/admin-templates/materialart/html/ltr/inbox-email.html?email-body=#">Download</a>
+                <a href="" class="m-r-10">View</a><a href="">Download</a>
             </div>
             <div class="col s12 l3">
                 <img src="./Materialart Admin Template_files/img2.jpg" class="responsive-img">
-                <a href="https://www.wrappixel.com/demos/admin-templates/materialart/html/ltr/inbox-email.html?email-body=#" class="m-r-10">View</a><a href="https://www.wrappixel.com/demos/admin-templates/materialart/html/ltr/inbox-email.html?email-body=#">Download</a>
+                <a href="" class="m-r-10">View</a><a href="">Download</a>
             </div>
             <div class="col s12 l3">
                 <img src="./Materialart Admin Template_files/img3.jpg" class="responsive-img">
-                <a href="https://www.wrappixel.com/demos/admin-templates/materialart/html/ltr/inbox-email.html?email-body=#" class="m-r-10">View</a><a href="https://www.wrappixel.com/demos/admin-templates/materialart/html/ltr/inbox-email.html?email-body=#">Download</a>
+                <a href="" class="m-r-10">View</a><a href="">Download</a>
             </div>
         </div>
     </div>
@@ -884,7 +973,7 @@
     <script src="./Materialart Admin Template_files/tinymce.min.js.download"></script>
     <script>
     $(function() {
-        if ($("#mymce").length > 0) {
+        if ($("#emailarea").length > 0) {
             tinymce.init({
                 selector: "textarea#mymce",
                 theme: "modern",

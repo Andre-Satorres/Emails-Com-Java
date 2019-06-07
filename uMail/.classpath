@@ -14,5 +14,6 @@
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="lib" path="C:/Users/u17162/Documents/GitHub/Emails-Com-Java/javax.jar"/>
+	<classpathentry kind="lib" path="C:/Users/u17162/Downloads/jsoup-1.12.1.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
