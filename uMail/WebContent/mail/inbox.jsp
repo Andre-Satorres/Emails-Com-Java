@@ -174,6 +174,14 @@
 
 </div>
 
+<%!
+public void setSession()
+{
+	
+}
+
+%>
+
     <div class="p-15 center-align m-t-30">
         <ul class="pagination">
         <%int menorPag = 0; int qtdPags = (int)(emails.length/10)+1;
@@ -613,7 +621,7 @@ public String pegaTextoDeCadaParte(BodyPart bodyPart) throws MessagingException,
 	else if (bodyPart.isMimeType("text/html"))
 	{
 		String html = (String) bodyPart.getContent();
-		//return result + "\n" + org.jsoup.Jsoup.parse(html).text();
+		return result + "\n" + org.jsoup.Jsoup.parse(html).text();
 	}
 	else if (bodyPart.getContent() instanceof MimeMultipart)
 	{
