@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" import="javax.mail.internet.*, javax.mail.*, 
-                         java.io.*, java.util.Properties, javax.mail.search.*, md5util.*, bd.dbos.*, emailmanipulator.*"
+                         java.io.*, java.util.Properties, javax.mail.search.*, md5util.*, bd.daos.*, bd.dbos.*, emailmanipulator.*"
     pageEncoding="ISO-8859-1"%>
     
 <!DOCTYPE html>
@@ -15,22 +15,27 @@
     <link rel="stylesheet" type="text/css" id="u0" href="./Materialart Admin Template_files/skin.min.css"></head>   
     
     <%
-	if(session.getAttribute("usuario") == null)
-		response.sendRedirect("../index.jsp");
+	//if(session.getAttribute("usuario") == null)
+	//	response.sendRedirect("../index.jsp");
 
-	//String host = "pop.gmail.com";
-	//String user = "mommavalos@gmail.com";
-	//String password = "Sem1seiji";
+	String host = "pop.gmail.com";
+	String user = "mommavalos@gmail.com";
+	String password = "Sem1seiji";
 	
 	//session.setAttribute("usuario", user);
 	// connect to my pop3 inbox in read-only mode
 	
-	if(session.getAttribute("Email1") == null)
-		request.getRequestDispatcher("../index.jsp").forward(request, response);
+	//if(session.getAttribute("Email1") == null)
+	//	request.getRequestDispatcher("../index.jsp").forward(request, response);
 	
-	Email em = (Email)session.getAttribute("Email1");
+	//Email em = (Email)session.getAttribute("Email1");
 	
-	EmailManipulator email = new EmailManipulator(em);
+	//EmailManipulator email = new EmailManipulator(em);
+	
+	EmailManipulator email = new EmailManipulator("Felipe", "Seiji", user, password, 465, new Seguranca(1, "ssl"), 
+								new Host(1, "pop3"), "gmail.com", "d");
+	
+	session.setAttribute("Email1", email);
 %>
 <title><%=session.getAttribute("usuario")%> - uMail</title>
 <body>
@@ -54,7 +59,7 @@
                             </li>
                             <%
                             	Folder[] pastas = email.obterTodasAsPastas();
-                            	
+                            	session.setAttribute("pastaAtual", "inbox");
                             	for(Folder fd:pastas)
                             	{
                             		%>
@@ -135,10 +140,14 @@
 	{
 		Message[] emails = email.mensagens("inbox");
 		
+		session.setAttribute("emails", emails);
+		
 		int qtd = 0;
 		
 		if(request.getParameter("i") != null)
 			qtd = Integer.parseInt(request.getParameter("i"));
+		
+		session.setAttribute("qtd", qtd);
 		
 		int max = emails.length - qtd*10 - 1;
 			
@@ -161,7 +170,7 @@
                 <td class="user-name" id="<%=i%>">
                     <h6 class="m-b-0"><%=((InternetAddress)emails[i].getFrom()[0]).getPersonal() == null?((InternetAddress)emails[i].getFrom()[0]).getAddress():((InternetAddress)emails[i].getFrom()[0]).getPersonal() %></h6>
                 </td>
-                <td class="max-texts"><a href="verEmail.jsp?i=<%=i%>"><%=emails[i].getSubject() %></a></td>
+                <td class="max-texts"><a id="mail" href="verEmail.jsp?i=<%=i%>"><%=emails[i].getSubject() %></a></td>
                 <td class="clip"><i class="fa fa-paperclip"></i></td>
                 <td class="time"><%=emails[i].getSentDate() %></td>
             </tr>

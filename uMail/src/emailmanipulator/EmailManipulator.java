@@ -300,6 +300,12 @@ public class EmailManipulator extends Email
 		return fd.getMessages();
 	}
 	
+	public Message getMensagem(String nomePasta, int index) throws Exception
+	{
+		Folder fd = this.abrirPasta(nomePasta, 0);
+		return fd.getMessages()[index];
+	}
+	
 	public int quantidadeNaoLidas(String nomePasta)
 	{
 		return this.mensagensNaoLidas(nomePasta).length;

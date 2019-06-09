@@ -14,13 +14,40 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" type="text/css" id="u0" href="./Materialart Admin Template_files/skin.min.css">
 
+	<script src="./Materialart Admin Template_files/jquery.min.js.download"></script>
+    <script src="./Materialart Admin Template_files/materialize.min.js.download"></script>
+    <script src="./Materialart Admin Template_files/perfect-scrollbar.jquery.min.js.download"></script>
+    <script src="./Materialart Admin Template_files/app.js.download"></script>
+    <script src="./Materialart Admin Template_files/app.init.js.download"></script>
+    <script src="./Materialart Admin Template_files/app-style-switcher.js.download"></script>
+    <script src="./Materialart Admin Template_files/custom.min.js.download"></script>
+    <script src="./Materialart Admin Template_files/email.js.download"></script>
+    <script src="./Materialart Admin Template_files/tinymce.min.js.download"></script>
+    <script>
+    $(function() {
+        if ($("#emailarea").length > 0) {
+            tinymce.init({
+                selector: "textarea#mymce",
+                theme: "modern",
+                height: 250,
+                plugins: [
+                    "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
+                    "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+                    "save table contextmenu directionality emoticons template paste textcolor"
+                ],
+                toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+            });
+        }
+    });
+    </script>
+
 <%
 Email em = (Email)session.getAttribute("Email1");
 
 EmailManipulator email = new EmailManipulator(em);
 Message[] emails = email.mensagens("inbox");
 int i = Integer.parseInt(request.getParameter("i"));
-  Message msg = emails[i]; %>
+Message msg = emails[i]; %>
   
 
 <title><%=msg.getSubject() %></title>
@@ -101,7 +128,7 @@ int i = Integer.parseInt(request.getParameter("i"));
 <div class="grey lighten-5 p-15 d-flex no-block">
     <a id="back_to_inbox" class="m-l-5 tooltipped" href="inbox.jsp" data-tooltip="back to inbox" data-position="top">
     	<i class="material-icons font-20">arrow_back</i></a>
-    <a class="m-l-5 tooltipped" href="" data-tooltip="Reply" data-position="top">
+    <a class="m-l-5 tooltipped" href="responderEmail.jsp?i=<%=i %>" data-tooltip="Reply" data-position="top">
     <i class="material-icons font-20">reply</i></a>
     <a class="m-l-10 tooltipped" href="" data-tooltip="Report Spam" data-position="top">
     <i class="material-icons font-20">sim_card_alert</i></a>
@@ -156,12 +183,12 @@ int i = Integer.parseInt(request.getParameter("i"));
         	<i class="material-icons">more_vert</i></a>
         	<ul id="ddme" class="dropdown-content" tabindex="0">
         	
-            <li tabindex="0" class="active"><a href="" class="active">Responder</a></li>
+            <li tabindex="0" class="active"><a href="responderEmail.jsp?i=<%=i %>" class="active">Responder</a></li>
             <li class="divider" tabindex="-1"></li>
-            <li tabindex="0" class="active"><a href="" class="active">Encaminhar</a></li>
-            <li tabindex="0" class="active"><a href="" 
+            <li tabindex="0" class="active"><a href="encaminharEmail.jsp?i=<%=i %>" class="active">Encaminhar</a></li>
+            <li tabindex="0" class="active"><a href="excluirEmail.jsp?i=<%=i %>" 
             	class="active"><i class="material-icons">view_module</i>Excluir</a></li>
-            <li tabindex="0" class="active"><a href="" 
+            <li tabindex="0" class="active"><a href="excluirTodos.jsp" 
             	class="active"><i class="material-icons">cloud</i>Clear All</a></li>
         </ul>
 
@@ -284,8 +311,8 @@ if(msg.getContentType().contains("multipart"))
         		<div class="d-flex no-block align-items-center">
             		<div class="m-r-10"><img src="./Materialart Admin Template_files/4.jpg" alt="user" class="circle" width="45"></div>
             			<div class="">
-                			<h5 class="m-b-0 font-16 font-medium"><%=((InternetAddress)msg.getReplyTo()[i]).getPersonal()%>
-                				<small> ( <%=((InternetAddress)msg.getReplyTo()[i]).getAddress() %> )</small></h5>
+                			<h5 class="m-b-0 font-16 font-medium"><%=((InternetAddress)msg.getReplyTo()[j]).getPersonal()%>
+                				<small> ( <%=((InternetAddress)msg.getReplyTo()[j]).getAddress() %> )</small></h5>
                 					<span>to <%=((InternetAddress)msg.getFrom()[0]).getPersonal() %></span>
             			</div>
         			</div>
