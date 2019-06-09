@@ -151,13 +151,15 @@ public class EmailManipulator extends Email
 			emailMessage = new MimeMessage(emailSession);
 			emailMessage.setFrom(this.getUsuario());
 			
+			if(toEmails.length>0)
 			for (int i = 0; i < toEmails.length; i++) 
 				emailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(toEmails[i]));
 			
-			
+			if(cc.length>0)
 			for(int i=0; i<cc.length; i++)
 				emailMessage.addRecipient(Message.RecipientType.CC, new InternetAddress(cc[i]));
 			
+			if(cco.length>0)
 			for(int i=0; i<cco.length; i++)
 				emailMessage.addRecipient(Message.RecipientType.BCC, new InternetAddress(cco[i]));
 			

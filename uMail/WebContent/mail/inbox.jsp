@@ -147,7 +147,7 @@
             if(i > emails.length-1 || i<0)
             	break;
             
-             if(!email.isMessageRead("inbox", emails[i])){%>
+             if(i==i/*!email.isMessageRead("inbox", emails[i])*/){%>
             <tr class="unread">            
             <%}else{ %>
             <tr><%} %>
@@ -161,7 +161,7 @@
                 <td class="user-name" id="<%=i%>">
                     <h6 class="m-b-0"><%=((InternetAddress)emails[i].getFrom()[0]).getPersonal() == null?((InternetAddress)emails[i].getFrom()[0]).getAddress():((InternetAddress)emails[i].getFrom()[0]).getPersonal() %></h6>
                 </td>
-                <td class="max-texts"> <a onClick="<%setSession(session, emails[i]);%>" href="javascript: void(0)"><%= emails[i].getSubject()%></a></td>
+                <td class="max-texts"><a href="verEmail.jsp?i=<%=i%>"><%=emails[i].getSubject() %></a></td>
                 <td class="clip"><i class="fa fa-paperclip"></i></td>
                 <td class="time"><%=emails[i].getSentDate() %></td>
             </tr>
@@ -172,15 +172,13 @@
 </tbody>
 </table>
 
-</div>
-
-<%!
-public void setSession(HttpSession session, Message msg)
-{
-	session.setAttribute("email", msg);
-}
-
+<%! public void chamar(int i)
+	{
+		System.out.print(i);
+	}
 %>
+
+</div>
 
     <div class="p-15 center-align m-t-30">
         <ul class="pagination">
@@ -270,7 +268,8 @@ public void setSession(HttpSession session, Message msg)
                <div class="Input-field">
                    <input placeholder="Assunto:" name="assunto" id="assunto">
                </div>
-
+               
+               
                <div class="Input-field m-t-20 m-b-20">
                 <div id="mceu_15" class="mce-tinymce mce-container mce-panel" 
                 	 hidefocus="1" tabindex="-1" role="application" style="visibility: hidden; 
@@ -465,6 +464,7 @@ public void setSession(HttpSession session, Message msg)
                 	      </div>
                 	   </div>
                 	</div>
+
                 	<!--  TEXT AREA -->
                    	<textarea id="emailarea" name="emailarea"
                    	placeholder="Insira seu texto aqui" cols="30" rows="35"></textarea>
@@ -485,213 +485,12 @@ public void setSession(HttpSession session, Message msg)
         </div>
     </div>
 </div>
+
+<!-- -------------------------------------------------------------------------------------------------------------- -->
           
-          
-<div class="right-part mail-details active" style="display: none;">
-<div class="grey lighten-5 p-15 d-flex no-block">
-    <a id="back_to_inbox" class="m-l-5 tooltipped" href="#" data-tooltip="back to inbox" data-position="top">
-    	<i class="material-icons font-20">arrow_back</i></a>
-    <a class="m-l-5 tooltipped" href="" data-tooltip="Reply" data-position="top">
-    <i class="material-icons font-20">reply</i></a>
-    <a class="m-l-10 tooltipped" href="" data-tooltip="Report Spam" data-position="top">
-    <i class="material-icons font-20">sim_card_alert</i></a>
-    <div class="ml-auto">
-        <a class="dropdown-trigger font-20" href="" data-target="dme">
-        <i class="material-icons">folder</i>
-        <i class="material-icons op-5">expand_more</i>
-        </a><ul id="dme" class="dropdown-content col s4" tabindex="0" style="">
-            
-            <li tabindex="0"><a href="">Select Read</a></li>
-            <li class="divider" tabindex="-1"></li>
-            <li tabindex="0"><a href="">Select Unread</a></li>
-            <li tabindex="0"><a href=""><i class="material-icons">view_module</i>Action</a></li>
-            <li tabindex="0"><a href=""><i class="material-icons">cloud</i>Clear All</a></li>
-        </ul>
-        <ul id="dme" class="dropdown-content col s4">
-            <li><a href="">Select Read</a></li>
-            <li class="divider" tabindex="-1"></li>
-            <li><a href="">Select Unread</a></li>
-            <li><a href=""><i class="material-icons">view_module</i>Action</a></li>
-            <li><a href=""><i class="material-icons">cloud</i>Clear All</a></li>
-        </ul>
-        <a class="font-20 m-l-5" href=""><i class="material-icons">delete</i></a>
-        <a class="font-20 m-l-10" href=""><i class="material-icons">refresh</i></a>
-    </div>
-</div>
-<!-- ------------------------------------------------------------------------------------- -->
-<%Message msg = (Message)session.getAttribute("email"); %>
-<div class="email-body" style="display: block;">
-<div class="p-15 b-t">
-    <h5 class="m-b-0"><%=msg.getSubject() %></h5>
-</div>
-<div class="divider"></div>
-<ul class="collapsible expandable b-0 m-t-0">
-    <li class="active">
-        <div class="collapsible-header" tabindex="0">
-            <div class="d-flex no-block align-items-center">
-                <div class="m-r-10">
-                	<img src="./Materialart Admin Template_files/1.jpg" alt="user" 
-                		 class="circle" width="45"></div>
-                <div class="">
-                    <h5 class="m-b-0 font-16 font-medium">
-                    <%=((InternetAddress)msg.getFrom()[0]).getPersonal() %> 
-                    <small> ( <%=((InternetAddress)msg.getFrom()[0]).getAddress() %> )</small>
-                    </h5><span>para <%=((InternetAddress)msg.getAllRecipients()[0]).getAddress() %>
-                    </span>
-                </div>
-            </div>
-        </div>
-        <div class="collapsible-body" style="display: block;">
-        <a class="dropdown-trigger font-20 right" href="" data-target="ddme">
-        	<i class="material-icons">more_vert</i></a>
-        	<ul id="ddme" class="dropdown-content" tabindex="0">
-        	
-            <li tabindex="0" class="active"><a href="" class="active">Responder</a></li>
-            <li class="divider" tabindex="-1"></li>
-            <li tabindex="0" class="active"><a href="" class="active">Encaminhar</a></li>
-            <li tabindex="0" class="active"><a href="" 
-            	class="active"><i class="material-icons">view_module</i>Excluir</a></li>
-            <li tabindex="0" class="active"><a href="" 
-            	class="active"><i class="material-icons">cloud</i>Clear All</a></li>
-        </ul>
 
-		<%= getTextFromMessage(msg) %>
-		
-<%!
-	private String getTextFromMessage(Message message) throws MessagingException, IOException
-	{
-		String result = "";
-		if (message.isMimeType("text/plain")) //se o conteúdo for meramente textual
-		{
-		result = message.getContent().toString(); //siplesmente printa o texto
-		}
-		else if (message.isMimeType("multipart/*")) //se tiver múltiplas partes
-		{
-			//obtenho o conteúdo como um texto MIME
-			MimeMultipart mimeMultipart= (MimeMultipart) message.getContent();
-		
-			result = getTextFromMimeMultipart(mimeMultipart); //receberá o texto em MIME ou HTML.
-		}
-	
-		return result;
-	}
-%>
+<!-- ------------------------------------------------------------------------------------------------------------ -->
 
-<%!
-private String getTextFromMimeMultipart(MimeMultipart mimeMultipart) throws MessagingException, IOException
-{
-	String result = "";
-	int count = mimeMultipart.getCount();
-	for (int i = 0; i < count; i++)
-	{
-		result += pegaTextoDeCadaParte(mimeMultipart.getBodyPart(i));
-	}
-	return result;
-}
-%>
-
-<%!
-public String pegaTextoDeCadaParte(BodyPart bodyPart) throws MessagingException, IOException
-{
-	String result = "";
-	if (bodyPart.isMimeType("text/plain"))
-	{
-		return result + "\n" + bodyPart.getContent();
-	}
-	else if (bodyPart.isMimeType("text/html"))
-	{
-		String html = (String) bodyPart.getContent();
-		return result + "\n" + org.jsoup.Jsoup.parse(html).text();
-	}
-	else if (bodyPart.getContent() instanceof MimeMultipart)
-	{
-		return result + getTextFromMimeMultipart((MimeMultipart)bodyPart.getContent());
-	}
-	return result;
-}
-%>
-
-<%
-int qtdAnexos=0; 
-if(msg.getContentType().contains("multipart"))
-{
-		// essa parte é multipart, então pode conter anexos.
-		Multipart multiPart= (Multipart) msg.getContent();
-		int numberOfParts = multiPart.getCount();
-		for (int partCount = 0; partCount < numberOfParts; partCount++)
-		{
-			//pega uma parte de cada vez no "for"
-			MimeBodyPart part = (MimeBodyPart) multiPart.getBodyPart(partCount);
-			//checa se o "disposition" (descreve como a parte deve ser apresentada ao usuaio e um anexo.
-			if (javax.mail.Part.ATTACHMENT.equalsIgnoreCase(part.getDisposition())) 		
-			{
-				qtdAnexos++;
-				String fileName = part.getFileName();
-			}
-			
-		}
-}
-		if(qtdAnexos>0){%>
-		<br>
-        <h6 class="m-t-30 font-medium">Anexos (<%=qtdAnexos %>)</h6>
-        <div class="row row-minus m-t-20">
-        <%
-			if(msg.getContentType().contains("multipart"))
-			{
-				// essa parte é multipart, então pode conter anexos.
-				Multipart multiPart= (Multipart) msg.getContent();
-				int numberOfParts = multiPart.getCount();
-				for (int partCount = 0; partCount < numberOfParts; partCount++)
-				{
-					//pega uma parte de cada vez no "for"
-					MimeBodyPart part = (MimeBodyPart) multiPart.getBodyPart(partCount);
-					//checa se o "disposition" (descreve como a parte deve ser apresentada ao usuaio e um anexo.
-					if (javax.mail.Part.ATTACHMENT.equalsIgnoreCase(part.getDisposition())) 		
-					{
-						String fileName = part.getFileName();
-
-						%>
-			            <div class="col s12 l3">
-			                <img src="./Materialart Admin Template_files/img1.jpg" class="responsive-img">
-			                <a href="" class="m-r-10">Visualizar</a><a href="">Baixar</a>
-			            </div>
-			            <%
-            		}
-						
-				}}
-			}%>
-            
-        </div>
-    </div>
-</li>
-
-
-
-<li>
-    <div class="collapsible-header" tabindex="0">
-        <div class="d-flex no-block align-items-center">
-            <div class="m-r-10"><img src="./Materialart Admin Template_files/4.jpg" alt="user" class="circle" width="45"></div>
-            <div class="">
-                <h5 class="m-b-0 font-16 font-medium">Sunil Joshi<small> ( suniljoshi19@gmail.com )</small></h5><span>to hgrover9@gmail.com</span>
-            </div>
-        </div>
-    </div>
-    <div class="collapsible-body"><span>Thank you so much any thing else you requered?</span></div>
-</li>
-<li>
-    <div class="collapsible-header" tabindex="0">
-        <div class="d-flex no-block align-items-center">
-            <div class="m-r-10"><img src="./Materialart Admin Template_files/1.jpg" alt="user" class="circle" width="45"></div>
-            <div class="">
-                <h5 class="m-b-0 font-16 font-medium">Hanna Gover <small> ( hgover@gmail.com )</small></h5><span>to Suniljoshi19@gmail.com</span>
-            </div>
-        </div>
-    </div>
-                <div class="collapsible-body"><span>Nope Thanks.</span></div>
-            </li>
-        </ul>
-    </div>
-</div>
         </div>
     </div>
 </div>

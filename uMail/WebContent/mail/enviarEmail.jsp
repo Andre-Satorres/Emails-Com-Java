@@ -8,15 +8,32 @@
 <%
 try
 {
-
-   String result;
+   	String result;
    
-   // Recipient's email ID needs to be mentioned.
-   String[] to = request.getParameter("para").trim().split(";");
-   String[] cc = request.getParameter("cc").trim().split(";");
-   String[] cco= request.getParameter("cco").trim().split(";");
-   String[] an = request.getParameter("anexos").trim().split(",");
-   String assunto = request.getParameter("assunto").trim();
+   	String[] to, cc, cco, an;
+   	String assunto="";
+   
+   	if(request.getParameter("para").trim().length()>0)
+   		to = request.getParameter("para").trim().split(";");
+   	else
+   		to = new String[0];
+   
+   	if( request.getParameter("cc").trim().length()>0)
+   		cc= request.getParameter("cc").trim().split(";");
+   	else
+   		cc = new String[0];
+   	
+   	if( request.getParameter("cc").trim().length()>0)
+   		cco= request.getParameter("cco").trim().split(";");
+   	else
+   		cco = new String[0];
+   	
+   	if( request.getParameter("cc").trim().length()>0)
+   		 an = request.getParameter("anexos").trim().split(",");
+   	else
+   		an = new String[0];
+   	
+   assunto = request.getParameter("assunto").trim();
    StringBuffer text = new StringBuffer(request.getParameter("emailarea"));
   
    int loc = (new String(text)).indexOf('\n');
