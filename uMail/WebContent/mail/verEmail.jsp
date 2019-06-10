@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" import="javax.mail.internet.*, javax.mail.*, 
-                         java.io.*, java.util.Properties, javax.mail.search.*, md5util.*, bd.dbos.*, emailmanipulator.*"
+                         java.io.*, java.util.Properties, javax.mail.search.*, md5util.*, bd.dbos.*, emailmanipulator.*,
+                         javax.*"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
@@ -42,13 +43,13 @@
     </script>
 
 <%
-Email em = (Email)session.getAttribute("Email1");
-
-EmailManipulator email = new EmailManipulator(em);
-Message[] emails = email.mensagens("inbox");
-int i = Integer.parseInt(request.getParameter("i"));
-Message msg = emails[i]; 
-session.setAttribute("Mensagem", msg);
+	Email em = (Email)session.getAttribute("Email1");
+	
+	EmailManipulator email = new EmailManipulator(em);
+	Message[] emails = email.mensagens((String)session.getAttribute("pastaAtual"));
+	int i = Integer.parseInt(request.getParameter("i"));
+	Message msg = emails[i]; 
+	session.setAttribute("Mensagem", msg);
 
 %>
   
@@ -288,12 +289,12 @@ if(msg.getContentType().contains("multipart"))
 					//checa se o "disposition" (descreve como a parte deve ser apresentada ao usuaio e um anexo.
 					if (javax.mail.Part.ATTACHMENT.equalsIgnoreCase(part.getDisposition())) 		
 					{
-						String fileName = part.getFileName();
-						fileName = fileName.substring(fileName.lastIndexOf('\\')+1, fileName.length());
+						String nomeArq = part.getFileName();
+						nomeArq = nomeArq.substring(nomeArq.lastIndexOf('\\')+1, nomeArq.length());				
 						
 						%>
-						<p><%=fileName%></p>
-						<button onclick="<%part.saveFile("c:\\temp" + File.separator +fileName);%>" value="Baixar">Baixar</button>
+						<h6><%=nomeArq %></h6>
+						<button onclick="<%part.saveFile("c:\\temp" + File.separator +nomeArq);%>" value="Baixar">Baixar</button>
 			            <%
             		}
 						
