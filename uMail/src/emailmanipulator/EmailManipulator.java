@@ -140,8 +140,7 @@ public class EmailManipulator extends Email
 		}
 	}
 	
-	public void createEmailMessage(String[] toEmails, String[] cc, String[] cco, String emailSubject, String emailBody, 
-			                       String[] anexos) throws AddressException, MessagingException 
+	public void createEmailMessage(Boolean responder, String[] toEmails, String[] cc, String[] cco, String emailSubject, String emailBody, String[] anexos) throws AddressException, MessagingException 
 	{
 		try
 		{
@@ -150,6 +149,9 @@ public class EmailManipulator extends Email
 			
 			emailMessage = new MimeMessage(emailSession);
 			emailMessage.setFrom(this.getUsuario());
+			
+			if(responder)
+				emailMessage = (MimeMessage) this.emailMessage.reply(false);
 			
 			if(toEmails.length>0)
 			for (int i = 0; i < toEmails.length; i++) 
@@ -193,6 +195,151 @@ public class EmailManipulator extends Email
 		}
 	}
 	
+	public void createEmailMessage(Boolean responder, String[] toEmails, String[] cc, String[] cco, String emailSubject, String emailBody) throws AddressException, MessagingException 
+	{
+		try
+		{
+			if(!this.isAuthenticated)
+				this.authenticate(0);
+			
+			emailMessage = new MimeMessage(emailSession);
+			emailMessage.setFrom(this.getUsuario());
+			
+			if(responder)
+				emailMessage = (MimeMessage) this.emailMessage.reply(false);
+			
+			if(toEmails.length>0)
+			for (int i = 0; i < toEmails.length; i++) 
+				emailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(toEmails[i]));
+			
+			if(cc.length>0)
+			for(int i=0; i<cc.length; i++)
+				emailMessage.addRecipient(Message.RecipientType.CC, new InternetAddress(cc[i]));
+			
+			if(cco.length>0)
+			for(int i=0; i<cco.length; i++)
+				emailMessage.addRecipient(Message.RecipientType.BCC, new InternetAddress(cco[i]));
+			
+			emailMessage.setSubject(emailSubject);
+			emailMessage.setContent(emailBody, "text/html");//for a html email
+			
+	        BodyPart messageBodyPart = new MimeBodyPart();
+	        
+	        messageBodyPart.setContent(emailBody, "text/html; charset=utf-8");
+	        
+	        Multipart multipart = new MimeMultipart();
+	        
+	        multipart.addBodyPart(messageBodyPart);
+	       
+	        emailMessage.setContent(multipart);
+	        this.sendEmail();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	public void createEmailMessage(Boolean responder, Address[] toEmails, Address[] cc, Address[] cco, String emailSubject, String emailBody, String[] anexos) throws AddressException, MessagingException 
+	{
+		try
+		{
+			if(!this.isAuthenticated)
+			this.authenticate(0);
+			
+			emailMessage = new MimeMessage(emailSession);
+			emailMessage.setFrom(this.getUsuario());
+			
+			if(responder)
+				emailMessage = (MimeMessage) this.emailMessage.reply(false);
+			
+			if(toEmails.length>0)
+			for (int i = 0; i < toEmails.length; i++) 
+				emailMessage.addRecipient(Message.RecipientType.TO, toEmails[i]);
+			
+			if(cc.length>0)
+			for(int i=0; i<cc.length; i++)
+				emailMessage.addRecipient(Message.RecipientType.CC, cc[i]);
+			
+			if(cco.length>0)
+			for(int i=0; i<cco.length; i++)
+				emailMessage.addRecipient(Message.RecipientType.BCC, cco[i]);
+			
+			emailMessage.setSubject(emailSubject);
+			emailMessage.setContent(emailBody, "text/html");//for a html email
+			
+			BodyPart messageBodyPart = new MimeBodyPart();
+			
+			messageBodyPart.setContent(emailBody, "text/html; charset=utf-8");
+			
+			Multipart multipart = new MimeMultipart();
+			
+			multipart.addBodyPart(messageBodyPart);
+			
+			
+			for(int i=0; i< anexos.length; i++)
+			{
+				messageBodyPart = new MimeBodyPart();
+				DataSource source = new FileDataSource(anexos[i]);
+				messageBodyPart.setDataHandler(new DataHandler(source));
+				messageBodyPart.setFileName(anexos[i]);
+				multipart.addBodyPart(messageBodyPart);
+			}
+			
+			emailMessage.setContent(multipart);
+			this.sendEmail();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	public void createEmailMessage(boolean responder, Address[] toEmails, Address[] cc, Address[] cco, String emailSubject, String emailBody) throws AddressException, MessagingException 
+	{
+		try
+		{
+			if(!this.isAuthenticated)
+			this.authenticate(0);
+			
+			emailMessage = new MimeMessage(emailSession);
+			emailMessage.setFrom(this.getUsuario());
+			
+			if(responder)
+				emailMessage = (MimeMessage) this.emailMessage.reply(false);
+			
+			if(toEmails.length>0)
+			for (int i = 0; i < toEmails.length; i++) 
+				emailMessage.addRecipient(Message.RecipientType.TO, toEmails[i]);
+			
+			if(cc.length>0)
+			for(int i=0; i<cc.length; i++)
+				emailMessage.addRecipient(Message.RecipientType.CC, cc[i]);
+			
+			if(cco.length>0)
+			for(int i=0; i<cco.length; i++)
+				emailMessage.addRecipient(Message.RecipientType.BCC, cco[i]);
+			
+			emailMessage.setSubject(emailSubject);
+			emailMessage.setContent(emailBody, "text/html");//for a html email
+			
+			BodyPart messageBodyPart = new MimeBodyPart();
+			
+			messageBodyPart.setContent(emailBody, "text/html; charset=utf-8");
+			
+			Multipart multipart = new MimeMultipart();
+			
+			multipart.addBodyPart(messageBodyPart);
+			
+			emailMessage.setContent(multipart);
+			this.sendEmail();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
 	public void sendEmail() throws Exception
 	{
 		try 
@@ -203,45 +350,6 @@ public class EmailManipulator extends Email
 		{
 			throw new Exception("A mensagem não foi criada.");	
 		}
-	}
-	
-	public void replyEmail(String[] toEmails, String emailSubject, String emailBody, 
-			               String[] anexos) throws Exception 
-	{
-		MimeMessage emailResposta = new MimeMessage(this.emailSession);  
-
-        emailResposta = (MimeMessage) this.emailMessage.reply(false);
-        emailResposta.setFrom(this.getUsuario());
-        
-        InternetAddress[] destinatarios = new InternetAddress[toEmails.length];
-        
-        for (int i = 0; i < toEmails.length; i++) 
-        	destinatarios[i] = new InternetAddress(toEmails[i]);
-        
-        emailResposta.setReplyTo(destinatarios);
-	
-        emailResposta.setSubject(emailSubject);
-        emailResposta.setContent(emailBody, "text/html");//for a html email
-	
-        BodyPart messageBodyPart = new MimeBodyPart();
-    
-        messageBodyPart.setContent(emailBody, "text/html; charset=utf-8");
-    
-        Multipart multipart = new MimeMultipart();
-    
-        multipart.addBodyPart(messageBodyPart);
-       
-		for(int i=0; i< anexos.length; i++)
-		{
-			messageBodyPart = new MimeBodyPart();
-			DataSource source = new FileDataSource(anexos[i]);
-			messageBodyPart.setDataHandler(new DataHandler(source));
-			messageBodyPart.setFileName(anexos[i]);
-			multipart.addBodyPart(messageBodyPart);
-		}
-
-		emailResposta.setContent(multipart);
-		this.sendEmail();
 	}
 	
 	private void setStore() throws Exception

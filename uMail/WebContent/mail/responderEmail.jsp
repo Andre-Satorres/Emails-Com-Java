@@ -9,11 +9,22 @@
 </head>
 <body>
 <%
-	int qual = Integer.parseInt(request.getParameter("i"));
-	EmailManipulator email = (EmailManipulator)session.getAttribute("Email1");
-	
-	email.replyEmail(toEmails, emailSubject, emailBody, anexos);
-
+	try
+	{
+		int qual = Integer.parseInt(request.getParameter("i"));
+		Message msg = (Message)session.getAttribute("Mensagem");
+		EmailManipulator email = (EmailManipulator)session.getAttribute("Email1");
+		email.createEmailMessage(true, msg.getRecipients(Message.RecipientType.TO), 
+				msg.getRecipients(Message.RecipientType.CC), 
+				msg.getRecipients(Message.RecipientType.BCC), "EAE", "Respostinha padrao");
+		
+		request.getRequestDispatcher("inbox.jsp").forward(request, response);
+	}
+	catch(Exception e)
+	{
+		e.printStackTrace();
+		request.getRequestDispatcher("inbox.jsp").forward(request, response);
+	}
 %>
 </body>
 </html>

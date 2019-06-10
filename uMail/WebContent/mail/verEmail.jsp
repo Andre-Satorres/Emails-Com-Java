@@ -47,7 +47,10 @@ Email em = (Email)session.getAttribute("Email1");
 EmailManipulator email = new EmailManipulator(em);
 Message[] emails = email.mensagens("inbox");
 int i = Integer.parseInt(request.getParameter("i"));
-Message msg = emails[i]; %>
+Message msg = emails[i]; 
+session.setAttribute("Mensagem", msg);
+
+%>
   
 
 <title><%=msg.getSubject() %></title>
@@ -171,7 +174,7 @@ Message msg = emails[i]; %>
                 		 class="circle" width="45"></div>
                 <div class="">
                     <h5 class="m-b-0 font-16 font-medium">
-                    <%=((InternetAddress)msg.getFrom()[0]).getPersonal() %> 
+                    <%=((InternetAddress)msg.getFrom()[0]).getPersonal() == null?((InternetAddress)msg.getFrom()[0]).getAddress():((InternetAddress)msg.getFrom()[0]).getPersonal()%> 
                     <small> ( <%=((InternetAddress)msg.getFrom()[0]).getAddress() %> )</small>
                     </h5><span>para <%=((InternetAddress)msg.getAllRecipients()[0]).getAddress() %>
                     </span>
@@ -286,12 +289,11 @@ if(msg.getContentType().contains("multipart"))
 					if (javax.mail.Part.ATTACHMENT.equalsIgnoreCase(part.getDisposition())) 		
 					{
 						String fileName = part.getFileName();
+						fileName = fileName.substring(fileName.lastIndexOf('\\')+1, fileName.length());
 						
 						%>
-			            <div class="col s12 l3">
-			                <img src="<%=fileName %>" class="responsive-img">
-			                <a href="" class="m-r-10">Visualizar</a><a href="">Baixar</a>
-			            </div>
+						<p><%=fileName%></p>
+						<button onclick="<%part.saveFile("c:\\temp" + File.separator +fileName);%>" value="Baixar">Baixar</button>
 			            <%
             		}
 						
@@ -301,6 +303,7 @@ if(msg.getContentType().contains("multipart"))
         </div>
     </div>
 </li>
+
 <%
 	if(msg.getReplyTo().length>0) 
 	for(int j=0; j<msg.getReplyTo().length; j++)
@@ -313,7 +316,7 @@ if(msg.getContentType().contains("multipart"))
             			<div class="">
                 			<h5 class="m-b-0 font-16 font-medium"><%=((InternetAddress)msg.getReplyTo()[j]).getPersonal()%>
                 				<small> ( <%=((InternetAddress)msg.getReplyTo()[j]).getAddress() %> )</small></h5>
-                					<span>to <%=((InternetAddress)msg.getFrom()[0]).getPersonal() %></span>
+                					<span>to <%=((InternetAddress)msg.getFrom()[0]).getPersonal() == null?((InternetAddress)msg.getFrom()[0]).getAddress():((InternetAddress)msg.getFrom()[0]).getPersonal() %></span>
             			</div>
         			</div>
     			</div>
