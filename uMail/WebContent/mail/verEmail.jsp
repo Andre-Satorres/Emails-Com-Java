@@ -192,7 +192,7 @@ session.setAttribute("Mensagem", msg);
             <li tabindex="0" class="active"><a href="excluirEmail.jsp?i=<%=i %>" 
             	class="active"><i class="material-icons">view_module</i>Excluir</a></li>
             <li tabindex="0" class="active"><a href="excluirTodos.jsp" 
-            	class="active"><i class="material-icons">cloud</i>Clear All</a></li>
+            	class="active"><i class="material-icons">cloud</i>Excluir Todos</a></li>
         </ul>
 
 		<%= getTextFromMessage(msg) %>

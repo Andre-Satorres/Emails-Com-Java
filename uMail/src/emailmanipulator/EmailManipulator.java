@@ -140,7 +140,7 @@ public class EmailManipulator extends Email
 		}
 	}
 	
-	public void createEmailMessage(Boolean responder, String[] toEmails, String[] cc, String[] cco, String emailSubject, String emailBody, String[] anexos) throws AddressException, MessagingException 
+	public void createEmailMessage(boolean responder, String[] toEmails, String[] cc, String[] cco, String emailSubject, String emailBody, String[] anexos) throws AddressException, MessagingException 
 	{
 		try
 		{
@@ -195,7 +195,7 @@ public class EmailManipulator extends Email
 		}
 	}
 	
-	public void createEmailMessage(Boolean responder, String[] toEmails, String[] cc, String[] cco, String emailSubject, String emailBody) throws AddressException, MessagingException 
+	public void createEmailMessage(boolean responder, String[] toEmails, String[] cc, String[] cco, String emailSubject, String emailBody) throws AddressException, MessagingException 
 	{
 		try
 		{
@@ -240,7 +240,7 @@ public class EmailManipulator extends Email
 		}
 	}
 	
-	public void createEmailMessage(Boolean responder, Address[] toEmails, Address[] cc, Address[] cco, String emailSubject, String emailBody, String[] anexos) throws AddressException, MessagingException 
+	public void createEmailMessage(boolean responder, Address[] toEmails, Address[] cc, Address[] cco, String emailSubject, String emailBody, String[] anexos) throws AddressException, MessagingException 
 	{
 		try
 		{
@@ -295,7 +295,7 @@ public class EmailManipulator extends Email
 		}
 	}
 	
-	public void createEmailMessage(boolean responder, Address[] toEmails, Address[] cc, Address[] cco, String emailSubject, String emailBody) throws AddressException, MessagingException 
+	public void createEmailMessage_n(boolean responder, Address[] toEmails, Address[] cc, Address[] cco, String emailSubject, String emailBody) throws AddressException, MessagingException 
 	{
 		try
 		{

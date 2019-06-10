@@ -14,7 +14,7 @@
 		int qual = Integer.parseInt(request.getParameter("i"));
 		Message msg = (Message)session.getAttribute("Mensagem");
 		EmailManipulator email = (EmailManipulator)session.getAttribute("Email1");
-		email.createEmailMessage(true, msg.getRecipients(Message.RecipientType.TO), 
+		email.createEmailMessage_n(true, msg.getRecipients(Message.RecipientType.TO), 
 				msg.getRecipients(Message.RecipientType.CC), 
 				msg.getRecipients(Message.RecipientType.BCC), "EAE", "Respostinha padrao");
 		
