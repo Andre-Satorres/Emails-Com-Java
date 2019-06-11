@@ -127,7 +127,9 @@ public class EmailManipulator extends Email
 			emailSession = Session.getDefaultInstance(emailProperties,
 					new javax.mail.Authenticator() {
 						protected PasswordAuthentication getPasswordAuthentication() {
+							String a="";
 							return new PasswordAuthentication(user, senha);
+							
 						}
 					});
 			

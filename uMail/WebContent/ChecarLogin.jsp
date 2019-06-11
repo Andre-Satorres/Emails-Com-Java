@@ -36,7 +36,7 @@
    				while(contasVinculadas.next())
    				{
    					em = new Email(contasVinculadas.getString("usuario"), contasVinculadas.getString("SENHA"), 
-   							             contasVinculadas.getInt   ("Porta"), Segurancas.getSeguranca(contasVinculadas.getInt("Seguranca")), 
+   							             contasVinculadas.getInt   ("Porta"), contasVinculadas.getInt   ("PortaSMTP"), Segurancas.getSeguranca(contasVinculadas.getInt("Seguranca")), 
    		            		             Hosts.getHost(contasVinculadas.getInt ("HOST")), contasVinculadas.getString("nome"), 
    		            		             contasVinculadas.getString("sobrenome"), contasVinculadas.getString("servidor"), 
    		            		             contasVinculadas.getString("conta"));
@@ -48,6 +48,7 @@
    				
    				//sessionei tds as contas de email vinculadas a esta conta de usuario
    				session.setAttribute("QtdEmailsUsuario", i);
+   				session.setAttribute("atual", i);
    				response.sendRedirect("mail/inbox.jsp");
    			}
    		}

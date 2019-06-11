@@ -48,7 +48,7 @@
 	{
 		request.setAttribute("errorMessageCadastro", "Um ou mais campos inválidos!");
 		
-		request.getRequestDispatcher("inbox.jsp").forward(request, response);
+		response.sendRedirect("CadastrarEmail.jsp");
 	}
 	%>
 </body>

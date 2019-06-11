@@ -11,14 +11,12 @@
 	try
 	{
 		String usuario   = request.getParameter("usuario");
-		session.setAttribute("usuario", usuario);
 		String senha     = request.getParameter("senha");
 		String confSenha = request.getParameter("confsenha");
 		
 		if(!(senha.equals(confSenha)))
 		{
 			request.setAttribute("errorMessageCad", "Senhas não coincidem!");
-			request.getRequestDispatcher("/index.jsp").forward(request, response);
 			response.sendRedirect("index.jsp");
 		}
 		
@@ -26,23 +24,20 @@
 		{
 			LoginMail new_user = new LoginMail(usuario, senha);
 			LoginMails.incluir(new_user);
-			response.sendRedirect("mail/inbox.jsp");
+			session.setAttribute("usuario", usuario);
+			response.sendRedirect("mail/CadastrarEmail.jsp");
 		}
 		else 
 		{
 			request.setAttribute("errorMessageCad", "Este usuário já existe!");
 			
-			request.getRequestDispatcher("/index.jsp").forward(request, response);
 			response.sendRedirect("index.jsp");	
 		}
 	}
 	catch(Exception e)
 	{
 		request.setAttribute("errorMessageCad", e.getMessage());
-		
-		request.getRequestDispatcher("/index.jsp").forward(request, response);
 		response.sendRedirect("index.jsp");
-		
 	}
 %>
 </body>

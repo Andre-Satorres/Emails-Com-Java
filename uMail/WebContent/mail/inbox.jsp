@@ -23,9 +23,14 @@
 	//String password = "Sem1seiji";
 	
 	if(session.getAttribute("Email1") == null)
-		request.getRequestDispatcher("../index.jsp").forward(request, response);
+		request.getRequestDispatcher("CadastrarEmail.jsp").forward(request, response);
 	
-	Email em = (Email)session.getAttribute("Email1");
+	Email em;
+	
+	if(session.getAttribute("atual") == null)
+		em = (Email)session.getAttribute("Email"+session.getAttribute("QtdEmailsUsuario"));
+	else
+		em = (Email)session.getAttribute("Email"+ session.getAttribute("atual"));
 	
 	EmailManipulator email = new EmailManipulator(em);
 	
@@ -102,26 +107,33 @@
                             </li>
                             
                             <%
-                            MeuResultSet result = Emails.contaTemEmails((String)session.getAttribute("usuario"));
-                            result.beforeFirst();
-                            int a =0;
-                            while(result.next()) 
-                            {%>
-                            <li class="list-group-item">
-                            	<%if(a==0)
-                            	{%>
-                                <a href="mudar.jsp?i=<%=a%>" class="active"> <i class="material-icons">email</i>
-                                							<%=result.getString("usuario") %></a>
-                                <%}
+                            int qtdEmailsUsuario = (int)(session.getAttribute("QtdEmailsUsuario"));
+                            
+                            for(int a=qtdEmailsUsuario; a>0; a--)
+                            {
+                            	Email umEmail = (Email)session.getAttribute("Email"+a);
+                            	String nomeUsuario = umEmail.getUsuario();
+                            	int atual = (int)(session.getAttribute("atual"));
+                            	
+                            	%>
+                            	<li class="list-group-item">
+                            	<%if(a==atual)
+                            	{	
+                            		%>
+                                	<a href="mudar.jsp?i=<%=a%>" class="active"> <i class="material-icons">email</i>
+                                							<%=nomeUsuario%></a>
+                                	<%
+                                }
                             	else
                             	{
-                            		%><a href="mudar.jsp?i=<%=a%>" class="active"> <i class="material-icons">email</i>
-                                							<%=result.getString("usuario") %></a>
+                            		%><a href="mudar.jsp?i=<%=a%>"> <i class="material-icons">email</i>
+                                							<%=nomeUsuario%></a>
                                 	<%
                             	}
                             	%>				
-                            </li>
-                            <%a++;
+                            	
+                            	</li>
+                            	<%
                             } %>
                             
                             <li>
