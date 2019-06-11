@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" import="javax.mail.internet.*, javax.mail.*, 
-                         java.io.*, java.util.Properties, javax.mail.search.*, md5util.*, bd.daos.*, bd.dbos.*, emailmanipulator.*"
+                         bd.core.*, java.io.*, java.util.Properties, javax.mail.search.*, md5util.*, bd.daos.*, bd.dbos.*, emailmanipulator.*"
     pageEncoding="ISO-8859-1"%>
     
 <!DOCTYPE html>
@@ -15,27 +15,24 @@
     <link rel="stylesheet" type="text/css" id="u0" href="./Materialart Admin Template_files/skin.min.css"></head>   
     
     <%
-	//if(session.getAttribute("usuario") == null)
-	//	response.sendRedirect("../index.jsp");
+	if(session.getAttribute("usuario") == null)
+		response.sendRedirect("../index.jsp");
 
-	String host = "pop.gmail.com";
-	String user = "mommavalos@gmail.com";
-	String password = "Sem1seiji";
+	//String host = "pop.gmail.com";
+	//String user = "mommavalos@gmail.com";
+	//String password = "Sem1seiji";
 	
-	//session.setAttribute("usuario", user);
-	// connect to my pop3 inbox in read-only mode
+	if(session.getAttribute("Email1") == null)
+		request.getRequestDispatcher("../index.jsp").forward(request, response);
 	
-	//if(session.getAttribute("Email1") == null)
-	//	request.getRequestDispatcher("../index.jsp").forward(request, response);
+	Email em = (Email)session.getAttribute("Email1");
 	
-	//Email em = (Email)session.getAttribute("Email1");
+	EmailManipulator email = new EmailManipulator(em);
 	
-	//EmailManipulator email = new EmailManipulator(em);
+	//EmailManipulator email = new EmailManipulator("Felipe", "Seiji", user, password, 465, new Seguranca(1, "ssl"), 
+		//						new Host(1, "pop3"), "gmail.com", "d");
 	
-	EmailManipulator email = new EmailManipulator("Felipe", "Seiji", user, password, 465, new Seguranca(1, "ssl"), 
-								new Host(1, "pop3"), "gmail.com", "d");
-	
-	session.setAttribute("Email1", email);
+	//session.setAttribute("Email1", email);
 %>
 <title><%=session.getAttribute("usuario")%> - uMail</title>
 <body>
@@ -44,7 +41,8 @@
                 <div class="loader__figure"></div>
                 <p class="loader__label"><%=email.getNome() %></p>
             </div>
-        </div>
+        </div> 
+		
         <div class="page-wrapper">
             <div class="app-container">
                 <div class="email-app">
@@ -85,9 +83,7 @@
                                 <a href="javascript:void(0)"> <i class="material-icons">star</i> Arquivado </a>
                             </li>
                             <li class="list-group-item">
-                                <a href="javascript:void(0)"> <i class="material-icons">send</i> Rascunho <span class="label label-danger right">3</span></a></li>
-                            <li class="list-group-item">
-                                <a href="javascript:void(0)"> <i class="material-icons">email</i> Enviar Email </a>
+                                <a href="javascript:void(0)"> <i class="material-icons">send</i> Rascunho <span class="label label-danger right">3</span></a>
                             </li>
                             <li>
                                 <div class="divider m-t-10  m-b-10"></div>
@@ -101,21 +97,45 @@
                             <li>
                                 <div class="divider m-t-10  m-b-10"></div>
                             </li>
+                            <li class="list-group-item">
+                                <a href="CadastrarEmail.jsp"> <i class="material-icons">add</i> Adicionar Email </a>
+                            </li>
+                            
+                            <%
+                            MeuResultSet result = Emails.contaTemEmails((String)session.getAttribute("d"));
+                            result.beforeFirst();
+                            int a =0;
+                            while(result.next()) 
+                            {%>
+                            <li class="list-group-item">
+                                <a href="mudar.jsp?i=<%=a%>"> <i class="material-icons">email</i>
+                                							<%=result.getString("usuario") %></a>
+                            </li>
+                            <%a++;} %>
+                            
+                            <li>
+                                <div class="divider m-t-10  m-b-10"></div>
+                            </li>
                         </ul>
-                    <div class="ps__scrollbar-x-rail" style="left: 0px; bottom: 0px;"><div class="ps__scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__scrollbar-y-rail" style="top: 0px; height: 676px; right: 0px;"><div class="ps__scrollbar-y" tabindex="0" style="top: 0px; height: 0px;"></div></div></div>
+                    <div class="ps__scrollbar-x-rail" style="left: 0px; bottom: 0px;">
+                    	<div class="ps__scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+                    </div>
+                    <div class="ps__scrollbar-y-rail" style="top: 0px; height: 676px; right: 0px;">
+                    	<div class="ps__scrollbar-y" tabindex="0" style="top: 0px; height: 0px;"></div>
+                    </div>
+                   </div>
                     <div class="right-part mail-list">
                     
+					  <label class="logoutLblPos">
+					  <span class="glyphicon glyphicon-search"></span>
+					  <a href="deslogar.jsp" id="sair">Deslogar</a>
+					  </label>
                     
                         <div class="p-15 b-b">
                             <div class="d-flex align-items-center">
                                 <div>
                                     <h4>uMail Mailbox <i class="ti-menu ti-close right show-left-panel hide-on-med-and-up"></i></h4>
                                     <span>Lista de todos os emails</span>
-                                </div>
-                                <div class="ml-auto">
-                                    <div class="input-field m-b-0">
-                                        <input placeholder="Search Mail" id="" type="text" class="">
-                                    </div>
                                 </div>
                             </div>
                         </div>

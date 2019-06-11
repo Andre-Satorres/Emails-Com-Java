@@ -1,3 +1,29 @@
+#sair{
+    background-color: red;
+  box-shadow: 0 5px 0 darkred;
+  color: white;
+  padding: 1em 1.5em;
+  position: relative;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+#sair:hover {
+  background-color: #ce0606;
+  cursor: pointer;
+}
+
+#sair:active {
+  box-shadow: none;
+}
+
+.logoutLblPos{
+
+   position:fixed;
+   right:15px;
+   top: 30px;
+}
+
 body {
   margin: 0;
   font-family: "Muli";
