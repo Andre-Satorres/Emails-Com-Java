@@ -102,16 +102,27 @@
                             </li>
                             
                             <%
-                            MeuResultSet result = Emails.contaTemEmails((String)session.getAttribute("d"));
+                            MeuResultSet result = Emails.contaTemEmails((String)session.getAttribute("usuario"));
                             result.beforeFirst();
                             int a =0;
                             while(result.next()) 
                             {%>
                             <li class="list-group-item">
-                                <a href="mudar.jsp?i=<%=a%>"> <i class="material-icons">email</i>
+                            	<%if(a==0)
+                            	{%>
+                                <a href="mudar.jsp?i=<%=a%>" class="active"> <i class="material-icons">email</i>
                                 							<%=result.getString("usuario") %></a>
+                                <%}
+                            	else
+                            	{
+                            		%><a href="mudar.jsp?i=<%=a%>" class="active"> <i class="material-icons">email</i>
+                                							<%=result.getString("usuario") %></a>
+                                	<%
+                            	}
+                            	%>				
                             </li>
-                            <%a++;} %>
+                            <%a++;
+                            } %>
                             
                             <li>
                                 <div class="divider m-t-10  m-b-10"></div>

@@ -16,7 +16,8 @@
 		String senha     = request.getParameter("senha");
 		String confSenha = request.getParameter("confSenha");
 		String host      = request.getParameter("host");
-		int porta        = Integer.parseInt(request.getParameter("porta"));
+		int portaR        = Integer.parseInt(request.getParameter("portaR"));
+		int portaE        = Integer.parseInt(request.getParameter("portaE"));
 		String seg       = request.getParameter("seguranca");
 		String conta     = (String)session.getAttribute("usuario");
 		
@@ -40,9 +41,9 @@
 		else
 			host_certo = Hosts.getHost(2);
 		
-		String servidor = usuario.substring(usuario.indexOf("@")+1, usuario.length()-1);
+		String servidor = usuario.substring(usuario.indexOf("@")+1, usuario.length());
 		
-		Email email = new Email(usuario, senha, porta, seguranca, host_certo, nome, sobrenome, servidor, conta);
+		Email email = new Email(usuario, senha, portaR, portaE, seguranca, host_certo, nome, sobrenome, servidor, conta);
 		
 		Emails.incluir(email);
 		

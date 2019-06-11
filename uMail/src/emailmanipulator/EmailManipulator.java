@@ -368,7 +368,7 @@ public class EmailManipulator extends Email
 			throw new Exception();
 		
 		if(!this.isAuthenticated)
-			this.authenticate(0);
+			this.authenticate(1);
 		
 		try
 		{
@@ -404,13 +404,13 @@ public class EmailManipulator extends Email
 	
 	public Message[] mensagens(String nomePasta) throws Exception
 	{
-		Folder fd = this.abrirPasta(nomePasta, 0);
+		Folder fd = this.abrirPasta(nomePasta, 1);
 		return fd.getMessages();
 	}
 	
 	public Message getMensagem(String nomePasta, int index) throws Exception
 	{
-		Folder fd = this.abrirPasta(nomePasta, 0);
+		Folder fd = this.abrirPasta(nomePasta, 1);
 		return fd.getMessages()[index];
 	}
 	
@@ -423,7 +423,7 @@ public class EmailManipulator extends Email
 	{
 		try
 		{
-			Folder fd = this.abrirPasta(nomePasta, 0);
+			Folder fd = this.abrirPasta(nomePasta, 1);
 			Flags visualizada = new Flags(Flags.Flag.SEEN);
 			FlagTerm naoVisualizada = new FlagTerm(visualizada, false);
 			return fd.search(naoVisualizada); //messages.length sera a qtd de mensagens nao lidas...
@@ -448,7 +448,7 @@ public class EmailManipulator extends Email
 	public Folder[] obterTodasAsPastas()
 	{
 		if(!this.isAuthenticated)
-			this.authenticate(0);
+			this.authenticate(1);
 		
 		//props.setProperty("mail.store.protocol", "imaps");
 		try

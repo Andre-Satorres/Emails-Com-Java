@@ -32,8 +32,12 @@
             <input type="password" class="form-control" placeholder="Confirmar senha" id="confSenha" name="confSenha">
           </div>
           <div class="form-group">
-            <input type="number" class="form-control" placeholder="Porta" min="1" max="65535" id="porta" name="porta"
-            value = "<%= (request.getParameter("porta")!= null?request.getParameter("porta"):"")%>">
+            <input type="number" class="form-control" placeholder="Porta de Recepção" min="1" max="65535" id="portaR" name="portaR"
+            value = "<%= (request.getParameter("portaR")!= null?request.getParameter("portaR"):"")%>">
+          </div>
+          <div class="form-group">
+            <input type="number" class="form-control" placeholder="Porta de Envio" min="1" max="65535" id="portaE" name="portaE"
+            value = "<%= (request.getParameter("portaE")!= null?request.getParameter("portaE"):"")%>">
           </div>
           <div class="form-group">
             <select class="form-control" name="seguranca" id="seguranca"> 

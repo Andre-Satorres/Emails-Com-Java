@@ -15,7 +15,7 @@
 	
 		try
 		{
-			if(Emails.cadastrado(usuario))
+			if(Emails.cadastrado(usuario, senha))
 			{
 				session.setAttribute("usuario", usuario);
 				response.sendRedirect("mail/index.jsp");

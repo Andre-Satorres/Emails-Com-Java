@@ -6,7 +6,8 @@ public class Email implements Cloneable
 	private String    senha;
 	private String    nome;
 	private String    sobrenome;
-    private int       porta;
+    private int       portaR;
+    private int       portaE;
     private Seguranca seguranca; //tls, ssl
     private Host      host;      // pop3, imap, smtp
     private String    servidor; // gmail.com --> dominio
@@ -66,15 +67,28 @@ public class Email implements Cloneable
 		this.seguranca = seguranca;
 	}
 
-	public int getPorta() 
+	public int getPortaRecepcao() 
 	{
-		return porta;
+		return portaR;
+	}
+	
+	public int getPortaEnvio() 
+	{
+		return portaE;
 	}
 
-	public void setPorta(int porta) throws Exception 
+	public void setPortaRecepcao(int portaRecepcao) throws Exception 
 	{
-		if(porta > 0 && porta <= 65536)
-			this.porta = porta;
+		if(portaRecepcao > 0 && portaRecepcao <= 65536)
+			this.portaR = portaRecepcao;
+		else
+			throw new Exception("Porta inválida!");
+	}
+	
+	public void setPortaEnvio(int portaEnvio) throws Exception 
+	{
+		if(portaEnvio > 0 && portaEnvio <= 65536)
+			this.portaE = portaEnvio;
 		else
 			throw new Exception("Porta inválida!");
 	}
@@ -132,13 +146,14 @@ public class Email implements Cloneable
 			throw new Exception ("Sobrenome inválido!");
 	}
 
-	public Email (String usuario, String senha, int porta, Seguranca seguranca, Host host, String nome, String sobrenome, String servidor, String conta) throws Exception
+	public Email (String usuario, String senha, int portaR, int portaE, Seguranca seguranca, Host host, String nome, String sobrenome, String servidor, String conta) throws Exception
     {
 		this.setNome(nome);
 		this.setSobrenome(sobrenome);
     	this.setUsuario(usuario);
     	this.setSenha(senha);
-    	this.setPorta(porta);
+    	this.setPortaRecepcao(portaR);
+    	this.setPortaEnvio(portaE);
     	this.setHost(host);
     	this.setSeguranca(seguranca);
     	this.setServidor(servidor);
@@ -154,7 +169,8 @@ public class Email implements Cloneable
         ret+="Usuario..: "+this.usuario    +"\n";
         ret+="Senha....: "+this.senha      +"\n";
         ret+="Conta....: "+this.conta      +"\n";
-        ret+="Porta....: "+this.porta      +"\n";
+        ret+="PortaR...: "+this.portaR     +"\n";
+        ret+="PortaE...: "+this.portaE     +"\n";
         ret+="Seguranca: "+this.seguranca  +"\n";
         ret+="Servidor.: "+this.servidor   +"\n";
         ret+="Host.....: "+this.host;
@@ -175,7 +191,10 @@ public class Email implements Cloneable
 
         Email em = (Email)obj;
 
-        if (this.porta!=em.porta)
+        if (this.portaR!=em.portaR)
+            return false;
+        
+        if (this.portaE!=em.portaE)
             return false;
         
         if (!(this.nome.equals(em.nome)))
@@ -210,7 +229,8 @@ public class Email implements Cloneable
     {
         int ret=666;
 
-        ret = 7*ret + new Integer(this.porta).hashCode();
+        ret = 7*ret + new Integer(this.portaR).hashCode();
+        ret = 7*ret + new Integer(this.portaE).hashCode();
         ret = 7*ret + this.seguranca.hashCode();
         ret = 7*ret + this.host.hashCode();
         ret = 7*ret + this.usuario.hashCode();
@@ -232,7 +252,8 @@ public class Email implements Cloneable
         this.usuario   = modelo.usuario;
         this.seguranca = modelo.seguranca; 
         this.senha     = modelo.senha;
-        this.porta     = modelo.porta;
+        this.portaE    = modelo.portaE;
+        this.portaR    = modelo.portaR;
         this.host      = modelo.host;
         this.nome      = modelo.nome;
         this.sobrenome = modelo.sobrenome;
