@@ -27,10 +27,10 @@ public class EmailManipulator extends Email
 	private Store emailStore;
 	
 	
-	public EmailManipulator(String nome, String sobrenome, String usuario, String senha, int porta, 
+	public EmailManipulator(String nome, String sobrenome, String usuario, String senha, int portaR, int portaE, 
 			                Seguranca seguranca, Host host, String servidor, String conta) throws Exception 
 	{
-		super(usuario, senha, porta, seguranca, host, nome, sobrenome, servidor, conta);
+		super(usuario, senha, portaR, portaE, seguranca, host, nome, sobrenome, servidor, conta);
 		
 		this.issetServerMailProperties = false;
 		this.isAuthenticated = false;
@@ -58,7 +58,7 @@ public class EmailManipulator extends Email
 				{
 					this.mailServer = "pop" + "." + this.getServidor();
 					
-					emailProperties.put("mail.pop3.port", this.getPorta());
+					emailProperties.put("mail.pop3.port", this.getPortaRecepcao());
 					emailProperties.put("mail.pop3.host", this.mailServer);
 					emailProperties.put("mail.pop3.socketFactory.fallback", "false");
 					
@@ -66,7 +66,7 @@ public class EmailManipulator extends Email
 						emailProperties.put("mail.pop3.starttls.enable", "true");
 					else
 					{
-						emailProperties.put("mail.pop3.socketFactory.port", this.getPorta());
+						emailProperties.put("mail.pop3.socketFactory.port", this.getPortaRecepcao());
 						emailProperties.put("mail.pop3.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 						emailProperties.put("mail.pop3.ssl.enable", "true");
 					}
@@ -75,7 +75,7 @@ public class EmailManipulator extends Email
 				{
 					this.mailServer = "imap" + "." + this.getServidor();
 					
-					emailProperties.put("mail.imap.port", this.getPorta());
+					emailProperties.put("mail.imap.port", this.getPortaRecepcao());
 					emailProperties.put("mail.imap.host", this.mailServer);
 				    emailProperties.put("mail.imap.auth", "true");
 				    
@@ -83,7 +83,7 @@ public class EmailManipulator extends Email
 						emailProperties.put("mail.imap.starttls.enable", "true");
 					else
 					{
-						emailProperties.put("mail.imap.socketFactory.port", this.getPorta());
+						emailProperties.put("mail.imap.socketFactory.port", this.getPortaRecepcao());
 						emailProperties.put("mail.imap.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 						emailProperties.put("mail.imap.ssl.enable", "true");
 					}
@@ -92,7 +92,7 @@ public class EmailManipulator extends Email
 			else
 			{
 				this.mailServer = "smtp" + "." + this.getServidor();
-				emailProperties.put("mail.smtp.port", this.getPorta());
+				emailProperties.put("mail.smtp.port", this.getPortaEnvio());
 				emailProperties.put("mail.smtp.host", this.mailServer);
 			    emailProperties.put("mail.smtp.auth", "true");
 			    
@@ -100,7 +100,7 @@ public class EmailManipulator extends Email
 					emailProperties.put("mail.smtp.starttls.enable", "true");
 				else
 				{
-					emailProperties.put("mail.smtp.socketFactory.port", this.getPorta());
+					emailProperties.put("mail.smtp.socketFactory.port", this.getPortaEnvio());
 					emailProperties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 					emailProperties.put("mail.smtp.ssl.enable", "true");
 				}
