@@ -14,18 +14,11 @@
 		String sobrenome = request.getParameter("sobrenome");
 		String usuario   = request.getParameter("usuario");
 		String senha     = request.getParameter("senha");
-		String confSenha = request.getParameter("confSenha");
 		String host      = request.getParameter("host");
 		int portaR        = Integer.parseInt(request.getParameter("portaR"));
 		int portaE        = Integer.parseInt(request.getParameter("portaE"));
 		String seg       = request.getParameter("seguranca");
 		String conta     = (String)session.getAttribute("usuario");
-		
-		if(!(senha.equals(confSenha)))
-		{
-			request.setAttribute("errorMessageCadastro", "Senhas não coincidem!");
-			request.getRequestDispatcher("/index.jsp").forward(request, response);
-		}
 		
 		Seguranca seguranca;
 		Host host_certo;

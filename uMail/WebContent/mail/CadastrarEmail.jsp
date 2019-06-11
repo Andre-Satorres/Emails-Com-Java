@@ -29,9 +29,6 @@
             <input type="password" class="form-control" placeholder="Senha" id="senha" name = "senha">
           </div>
           <div class="form-group">
-            <input type="password" class="form-control" placeholder="Confirmar senha" id="confSenha" name="confSenha">
-          </div>
-          <div class="form-group">
             <input type="number" class="form-control" placeholder="Porta de Recepção" min="1" max="65535" id="portaR" name="portaR"
             value = "<%= (request.getParameter("portaR")!= null?request.getParameter("portaR"):"")%>">
           </div>

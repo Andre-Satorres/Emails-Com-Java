@@ -15,6 +15,20 @@ public class Email implements Cloneable
     
     static final String pattern = "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$";
   
+    public Email (String usuario, String senha, int portaR, int portaE, Seguranca seguranca, Host host, String nome, String sobrenome, String servidor, String conta) throws Exception
+    {
+		this.setNome(nome);
+		this.setSobrenome(sobrenome);
+    	this.setUsuario(usuario);
+    	this.setSenha(senha);
+    	this.setPortaRecepcao(portaR);
+    	this.setPortaEnvio(portaE);
+    	this.setHost(host);
+    	this.setSeguranca(seguranca);
+    	this.setServidor(servidor);
+    	this.setConta(conta);
+    }
+    
 	public Host getHost() 
     {
 		return host;
@@ -145,20 +159,6 @@ public class Email implements Cloneable
 		else
 			throw new Exception ("Sobrenome inválido!");
 	}
-
-	public Email (String usuario, String senha, int portaR, int portaE, Seguranca seguranca, Host host, String nome, String sobrenome, String servidor, String conta) throws Exception
-    {
-		this.setNome(nome);
-		this.setSobrenome(sobrenome);
-    	this.setUsuario(usuario);
-    	this.setSenha(senha);
-    	this.setPortaRecepcao(portaR);
-    	this.setPortaEnvio(portaE);
-    	this.setHost(host);
-    	this.setSeguranca(seguranca);
-    	this.setServidor(servidor);
-    	this.setConta(conta);
-    }
 
     public String toString ()
     {
