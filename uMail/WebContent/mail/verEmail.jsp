@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" import="javax.mail.internet.*, javax.mail.*, 
                          java.io.*, java.util.Properties, javax.mail.search.*, md5util.*, bd.dbos.*, emailmanipulator.*,
-                         javax.*"
-    pageEncoding="ISO-8859-1"%>
+                         javax.*, org.jsoup.*" pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -233,15 +232,17 @@ private String getTextFromMimeMultipart(MimeMultipart mimeMultipart) throws Mess
 public String pegaTextoDeCadaParte(BodyPart bodyPart) throws MessagingException, IOException
 {
 	String result = "";
-	if (bodyPart.isMimeType("text/plain"))
+	if (bodyPart.getContentType().contains("text/plain"))
 	{
 		return result + "\n" + bodyPart.getContent();
 	}
-	else if (bodyPart.isMimeType("text/html"))
+	else if(bodyPart.getContentType().contains("TEXT/HTML"))
 	{
-		String html = (String) bodyPart.getContent();
-		return result + "\n" + org.jsoup.Jsoup.parse(html).text();
-	}
+	    Object content = bodyPart.getContent();
+	    
+	    if(content != null)
+	        result += Jsoup.parse((String)content).text();
+	}  
 	else if (bodyPart.getContent() instanceof MimeMultipart)
 	{
 		return result + getTextFromMimeMultipart((MimeMultipart)bodyPart.getContent());
