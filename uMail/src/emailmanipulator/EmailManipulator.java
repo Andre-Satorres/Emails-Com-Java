@@ -356,7 +356,7 @@ public class EmailManipulator extends Email
 	private void setStore() throws Exception
 	{
 		this.emailStore = this.emailSession.getStore(this.getHost().getNome().toLowerCase()+"s"); //imaps ou pop3s
-		this.emailStore.connect(this.mailServer, this.getUsuario(), this.getSenha());	
+		this.emailStore.connect(this.mailServer, this.getUsuario(), this.getSenha());
 		
 	}
 	

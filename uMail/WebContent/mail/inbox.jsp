@@ -57,7 +57,7 @@
                             </li>
                             <%
                             	Folder[] pastas = email.obterTodasAsPastas();
-                            	session.setAttribute("pastaAtual", "inbox");
+                            	session.setAttribute("pastaAtual", pastas[0].getName());
                             	for(Folder fd:pastas)
                             	{
                             		%>
@@ -142,13 +142,13 @@
                     	<div class="ps__scrollbar-y" tabindex="0" style="top: 0px; height: 0px;"></div>
                     </div>
                    </div>
-                    <div class="right-part mail-list">
-                    
-					  <label class="logoutLblPos">
+                   
+                   <label class="logoutLblPos">
 					  <span class="glyphicon glyphicon-search"></span>
 					  <a href="deslogar.jsp" id="sair">Deslogar</a>
 					  </label>
-                    
+                   
+                    <div class="right-part mail-list">
                         <div class="p-15 b-b">
                             <div class="d-flex align-items-center">
                                 <div>
@@ -178,7 +178,7 @@
 	{
 		Message[] emails = email.mensagens("inbox");
 		
-		session.setAttribute("emails", emails);
+		//session.setAttribute("emails", emails);
 		
 		int qtd = 0;
 		

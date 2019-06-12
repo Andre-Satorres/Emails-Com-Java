@@ -43,7 +43,7 @@
     </script>
 
 <%
-	Email em = (Email)session.getAttribute("Email1");
+	Email em = (Email)session.getAttribute("Email"+(int)session.getAttribute("atual"));
 	
 	EmailManipulator email = new EmailManipulator(em);
 	Message[] emails = email.mensagens((String)session.getAttribute("pastaAtual"));
@@ -125,15 +125,7 @@
                     <div class="ps__scrollbar-y-rail" style="top: 0px; height: 676px; right: 0px;">
                     <div class="ps__scrollbar-y" tabindex="0" style="top: 0px; height: 0px;"></div></div></div>
                     
-                    
-                    
-                    
 <div class="right-part mail-details active" style="display: block;">
-
-<label class="logoutLblPos">
-<span class="glyphicon glyphicon-search"></span>
-<a href="deslogar.jsp" id="sair">Deslogar</a>
-</label>
 					  
 <div class="grey lighten-5 p-15 d-flex no-block">
     <a id="back_to_inbox" class="m-l-5 tooltipped" href="inbox.jsp" data-tooltip="back to inbox" data-position="top">
@@ -210,7 +202,7 @@
 		String result = "";
 		if (message.isMimeType("text/plain")) //se o conteúdo for meramente textual
 		{
-		result = message.getContent().toString(); //siplesmente printa o texto
+			result = message.getContent().toString(); //siplesmente printa o texto
 		}
 		else if (message.isMimeType("multipart/*")) //se tiver múltiplas partes
 		{
@@ -300,7 +292,8 @@ if(msg.getContentType().contains("multipart"))
 						
 						%>
 						<h6><%=nomeArq %></h6>
-						<button onclick="<%part.saveFile("c:\\temp" + File.separator +nomeArq);%>" value="Baixar">Baixar</button>
+						<button oncl
+						ick="<%part.saveFile("c:\\temp" + File.separator +nomeArq);%>" value="Baixar">Baixar</button>
 			            <%
             		}
 						
