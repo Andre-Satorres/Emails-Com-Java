@@ -25,6 +25,8 @@
 			LoginMail new_user = new LoginMail(usuario, senha);
 			LoginMails.incluir(new_user);
 			session.setAttribute("usuario", usuario);
+			session.setAttribute("QtdEmailsUsuario", 0);
+			session.setAttribute("atual", 0);
 			response.sendRedirect("mail/CadastrarEmail.jsp");
 		}
 		else 

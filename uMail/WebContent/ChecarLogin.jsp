@@ -39,7 +39,7 @@
    							             contasVinculadas.getInt   ("Porta"), contasVinculadas.getInt   ("PortaSMTP"), Segurancas.getSeguranca(contasVinculadas.getInt("Seguranca")), 
    		            		             Hosts.getHost(contasVinculadas.getInt ("HOST")), contasVinculadas.getString("nome"), 
    		            		             contasVinculadas.getString("sobrenome"), contasVinculadas.getString("servidor"), 
-   		            		             contasVinculadas.getString("conta"));
+   		            		             LoginMails.getUsuario(contasVinculadas.getString("conta")));
    					
    					i++;
    					session.setAttribute("Email"+i, em); 	

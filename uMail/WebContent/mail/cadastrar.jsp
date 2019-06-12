@@ -36,9 +36,13 @@
 		
 		String servidor = usuario.substring(usuario.indexOf("@")+1, usuario.length());
 		
-		Email email = new Email(usuario, senha, portaR, portaE, seguranca, host_certo, nome, sobrenome, servidor, conta);
+		Email email = new Email(usuario, senha, portaR, portaE, seguranca, host_certo, nome, sobrenome, servidor, LoginMails.getUsuario(conta));
 		
 		Emails.incluir(email);
+		
+		session.setAttribute("QtdEmailsUsuario", (int)session.getAttribute("QtdEmailsUsuario")+1);
+		
+		session.setAttribute("atual", (int)session.getAttribute("QtdEmailsUsuario"));
 		
 		session.setAttribute("Email"+session.getAttribute("QtdEmailsUsuario"), email);
 	

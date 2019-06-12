@@ -48,7 +48,7 @@ try
    String conta = (String)session.getAttribute("usuario");
    
    EmailManipulator em = new EmailManipulator("andre", "satorres", "mommavalos@gmail.com", "Sem1seiji", 995, 465, 
-		   									Segurancas.getSeguranca(2), Hosts.getHost(3), "gmail.com", conta);
+		   									Segurancas.getSeguranca(2), Hosts.getHost(3), "gmail.com", LoginMails.getUsuario(conta));
    
    em.createEmailMessage(false, to, cc, cco, assunto, message, an);
 }

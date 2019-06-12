@@ -28,7 +28,7 @@ public class EmailManipulator extends Email
 	
 	
 	public EmailManipulator(String nome, String sobrenome, String usuario, String senha, int portaR, int portaE, 
-			                Seguranca seguranca, Host host, String servidor, String conta) throws Exception 
+			                Seguranca seguranca, Host host, String servidor, LoginMail conta) throws Exception 
 	{
 		super(usuario, senha, portaR, portaE, seguranca, host, nome, sobrenome, servidor, conta);
 		
@@ -127,7 +127,6 @@ public class EmailManipulator extends Email
 			emailSession = Session.getDefaultInstance(emailProperties,
 					new javax.mail.Authenticator() {
 						protected PasswordAuthentication getPasswordAuthentication() {
-							String a="";
 							return new PasswordAuthentication(user, senha);
 							
 						}
@@ -418,6 +417,9 @@ public class EmailManipulator extends Email
 	
 	public int quantidadeNaoLidas(String nomePasta)
 	{
+		if(this.mensagensNaoLidas(nomePasta) == null)
+			return 0;
+		
 		return this.mensagensNaoLidas(nomePasta).length;
 	}
 	

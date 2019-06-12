@@ -11,11 +11,11 @@ public class Email implements Cloneable
     private Seguranca seguranca; //tls, ssl
     private Host      host;      // pop3, imap, smtp
     private String    servidor; // gmail.com --> dominio
-    private String    conta;    // usuario(d)
+    private LoginMail conta;    // usuario(d)
     
     static final String pattern = "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$";
   
-    public Email (String usuario, String senha, int portaR, int portaE, Seguranca seguranca, Host host, String nome, String sobrenome, String servidor, String conta) throws Exception
+    public Email (String usuario, String senha, int portaR, int portaE, Seguranca seguranca, Host host, String nome, String sobrenome, String servidor, LoginMail conta) throws Exception
     {
 		this.setNome(nome);
 		this.setSobrenome(sobrenome);
@@ -42,12 +42,12 @@ public class Email implements Cloneable
 		this.host = host;
 	}
 	
-	public String getConta() 
+	public LoginMail getConta() 
     {
 		return conta;
 	}
 	
-	public void setConta(String conta) throws Exception 
+	public void setConta(LoginMail conta) throws Exception 
 	{
 		if(conta == null)
 			throw new Exception("Conta invalida!");

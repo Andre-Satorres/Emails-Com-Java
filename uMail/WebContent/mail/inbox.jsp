@@ -33,11 +33,6 @@
 		em = (Email)session.getAttribute("Email"+ session.getAttribute("atual"));
 	
 	EmailManipulator email = new EmailManipulator(em);
-	
-	//EmailManipulator email = new EmailManipulator("Felipe", "Seiji", user, password, 465, new Seguranca(1, "ssl"), 
-		//						new Host(1, "pop3"), "gmail.com", "d");
-	
-	//session.setAttribute("Email1", email);
 %>
 <title><%=session.getAttribute("usuario")%> - uMail</title>
 <body>
@@ -72,12 +67,12 @@
                             			  	%>
                                 			<a href="javascript:void(0)" class="active">
                                 			<i class="material-icons">inbox</i><%=fd.getName().substring(0, 1).toUpperCase() + fd.getName().substring(1).toLowerCase() %>
-                                			<span class="label label-success right"><%=email.quantidadeNaoLidas(fd.getName()) %></span></a>
+                                			<span class="label label-success right"><%=(email.quantidadeNaoLidas(fd.getName())==0?"":email.quantidadeNaoLidas(fd.getName()))%></span></a>
                                 			<%
                                 		  }else {%>
                                 			<a href="javascript:void(0)">
                                 			<i class="material-icons"><%=fd.getName() %></i><%=fd.getName().substring(0, 1).toUpperCase() + fd.getName().substring(1).toLowerCase() %>
-                                			<span class="label label-success right"><%=email.quantidadeNaoLidas(fd.getName()) %></span></a>
+                                			<span class="label label-success right"><%=(email.quantidadeNaoLidas(fd.getName())==0?"":email.quantidadeNaoLidas(fd.getName()))%></span></a>
                                 			<%} %>
                             			</li>
                             		<%
