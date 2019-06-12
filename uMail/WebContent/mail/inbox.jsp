@@ -842,8 +842,9 @@
     <script src="./Materialart Admin Template_files/app.init.js.download"></script>
     <script src="./Materialart Admin Template_files/app-style-switcher.js.download"></script>
     <script src="./Materialart Admin Template_files/custom.min.js.download"></script>
-    <script src="./Materialart Admin Template_files/email.js.download"></script>
     <script src="./Materialart Admin Template_files/tinymce.min.js.download"></script>
+    <script src="./Materialart Admin Template_files/email.js.download"></script>
+    
     <script>
     $(function() {
         if ($("#emailarea").length > 0) {
@@ -859,6 +860,7 @@
                 toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
             });
         }
+
     });
     </script>
 
