@@ -57,7 +57,9 @@
                             </li>
                             <%
                             	Folder[] pastas = email.obterTodasAsPastas();
-                            	session.setAttribute("pastaAtual", pastas[0].getName());
+                            	if(pastas != null)
+                            		session.setAttribute("pastaAtual", pastas[0].getName());
+                            	
                             	for(Folder fd:pastas)
                             	{
                             		%>

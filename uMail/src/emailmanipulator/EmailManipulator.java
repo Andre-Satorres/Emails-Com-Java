@@ -177,7 +177,7 @@ public class EmailManipulator extends Email
 	        
 	        multipart.addBodyPart(messageBodyPart);
 	        
-	        
+	        if(!anexos[0].equals(""))
 	        for(int i=0; i< anexos.length; i++)
 	        {
 	        	messageBodyPart = new MimeBodyPart();
