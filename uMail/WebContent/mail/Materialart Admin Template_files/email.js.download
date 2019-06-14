@@ -49,6 +49,8 @@ $(function() {
         $(mail).click(function() {
             $('.right-part.mail-list').fadeOut("fast");
             $('.right-part.mail-details').fadeIn("fast");
+            var newURLString = window.location.href + "?i=" + $('#mail').attr('class');
+			window.location.href = newURLString;
         });
 
         $("#back_to_inbox").click(function() {

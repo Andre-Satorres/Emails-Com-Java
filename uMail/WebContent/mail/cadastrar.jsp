@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" import="bd.daos.*, bd.dbos.*"
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" import="bd.daos.*, bd.dbos.*, emailmanipulator.*"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
@@ -38,21 +38,38 @@
 		
 		Email email = new Email(usuario, senha, portaR, portaE, seguranca, host_certo, nome, sobrenome, servidor, LoginMails.getUsuario(conta));
 		
-		Emails.incluir(email);
+		Email admin_mail = Emails.getEmail("aa.satorres@gmail.com", "admin");
 		
-		session.setAttribute("QtdEmailsUsuario", (int)session.getAttribute("QtdEmailsUsuario")+1);
+		EmailManipulator em = new EmailManipulator(admin_mail);
+
+		//String uniqueID = UUID.randomUUID().toString();
+		//mandar activation key, criar campo pra isso no bd (ver jeito bom de fzr isso....)
+		//fazer operacoes c pastas
+		//tratar excessoes de cadastro
+		//testar deslogar de email
+		//fazer o email aparecer em html
+		em.sendConfirmationEmail(usuario);
 		
-		session.setAttribute("atual", (int)session.getAttribute("QtdEmailsUsuario"));
-		
-		session.setAttribute("Email"+session.getAttribute("QtdEmailsUsuario"), email);
-	
+		if(em.authenticate(1))
+		{
+			Emails.incluir(email);
+			
+			session.setAttribute("QtdEmailsUsuario", (int)session.getAttribute("QtdEmailsUsuario")+1);
+			
+			session.setAttribute("atual", (int)session.getAttribute("QtdEmailsUsuario"));
+			
+			session.setAttribute("Email"+session.getAttribute("QtdEmailsUsuario"), email);
+		}
+		else
+			session.setAttribute("errorMessageCadastro", "Falha ao autenticar este email. Não existe um email com tais dados inseridos.");	
+
 		response.sendRedirect("inbox.jsp");
 	}
 	catch(Exception e)
 	{
-		request.setAttribute("errorMessageCadastro", "Um ou mais campos inválidos!");
+		session.setAttribute("errorMessageCadastro", "Um ou mais campos inválidos!");
 		
-		response.sendRedirect("CadastrarEmail.jsp");
+		response.sendRedirect("inbox.jsp");
 	}
 	%>
 </body>

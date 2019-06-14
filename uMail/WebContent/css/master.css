@@ -1,9 +1,74 @@
+#linkEmail
+{
+    padding: 12px 15px;
+    border: 0px;
+    margin: 0px;
+    display: block;
+    cursor: pointer;
+}
+
+#linkEmail i 
+{
+    font-size: 18px;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+li.list-group-item:hover #linkEmail
+{
+    opacity:0.1;
+}
+
+li.list-group-item:hover #delEmail 
+{
+    display: inline-block;
+}
+
+li.list-group-item:hover #inEmail 
+{
+    display: inline-block;
+}
+
+div.conteiner #delEmail 
+{
+    position:absolute;
+    display:none;
+}
+
+div.conteiner #inEmail 
+{
+    position:absolute;
+    display:none;
+}
+
+div.conteiner #delEmail 
+{
+    top:0px;
+    left:157px;
+    height absolute;
+    color: darkred;
+}
+
+div.conteiner #inEmail 
+{
+    top:0px;
+    left:0px;
+    height absolute;
+    color: #35cc02;
+}
+
+.conteiner{
+	position: relative;
+}
+
 #sair{
-    background-color: red;
+  background-color: red;
   box-shadow: 0 5px 0 darkred;
   color: white;
   padding: 1em 1.5em;
   position: fixed;
+  top: 15px;
+  right: 15px;
   text-decoration: none;
   text-transform: uppercase;
 }

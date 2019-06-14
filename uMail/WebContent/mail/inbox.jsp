@@ -117,30 +117,39 @@
                             
                             for(int a=qtdEmailsUsuario; a>0; a--)
                             {
+                            	if(session.getAttribute("Email"+a) == null)
+                            		continue;
+                            	
                             	Email umEmail = (Email)session.getAttribute("Email"+a);
                             	String nomeUsuario = umEmail.getUsuario();
                             	int atual = (int)(session.getAttribute("atual"));
                             	
                             	%>
+                            	<div class="conteiner">
                             	<li class="list-group-item">
                             	<%if(a==atual)
                             	{	
                             		%>
-                                	<a href="mudar.jsp?i=<%=a%>" class="active"> <i class="material-icons">email</i>
-                                							<%=nomeUsuario%></a>
+                                	<span class="active" id="linkEmail"> <i class="material-icons">email</i>
+                                							<%=nomeUsuario%></span>
                                 	<%
                                 }
                             	else
                             	{
-                            		%><a href="mudar.jsp?i=<%=a%>"> <i class="material-icons">email</i>
-                                							<%=nomeUsuario%></a>
+                            		%><span id="linkEmail"> <i class="material-icons">email</i>
+                                							<%=nomeUsuario%></span>
                                 	<%
                             	}
-                            	%>				
+                            	%>
                             	
+ 								<a id="inEmail" href="mudar.jsp?i=<%=a %>"> <i class="material-icons">contact_mail</i>Entrar</a>		
+                            	<a id="delEmail" href="deslogarEmail.jsp?i=<%=a %>"> <i class="material-icons">unsubscribe</i>Deletar</a>		
+ 
                             	</li>
+                            	</div>
                             	<%
                             } %>
+                            
                             
                             <li>
                                 <div class="divider m-t-10  m-b-10"></div>
@@ -149,7 +158,7 @@
                     <div class="ps__scrollbar-x-rail" style="left: 0px; bottom: 0px;">
                     	<div class="ps__scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div>
                     </div>
-                    <div class="ps__scrollbar-y-rail" style="top: 0px; height: 676px; right: 0px;">
+                    <div class="ps__scrollbar-y-rail" style="top: 0px; height: 0px; right: 0px;">
                     	<div class="ps__scrollbar-y" tabindex="0" style="top: 0px; height: 0px;"></div>
                     </div>
                    </div>
@@ -219,22 +228,16 @@
                 <td class="user-name" id="<%=i%>">
                     <h6 class="m-b-0"><%=((InternetAddress)emails[i].getFrom()[0]).getPersonal() == null?((InternetAddress)emails[i].getFrom()[0]).getAddress():((InternetAddress)emails[i].getFrom()[0]).getPersonal() %></h6>
                 </td>
-                <td class="max-texts"><a id="mail" href="verEmail.jsp?i=<%=i%>"><%=emails[i].getSubject() %></a></td>
+                <td class="max-texts"><a id="mail" class="<%=i%>" href="verEmail.jsp?i=<%=i%>"><%=emails[i].getSubject() %></a></td>
                 <td class="clip"><i class="fa fa-paperclip"></i></td>
                 <td class="time"><%=emails[i].getSentDate() %></td>
             </tr>
             
             <%
 		}
-%>                            
+%>
 </tbody>
 </table>
-
-<%! public void chamar(int i)
-	{
-		System.out.print(i);
-	}
-%>
 
 </div>
 
@@ -584,7 +587,14 @@
                                                 <span class="time">9:02 AM</span>
                                             </span>
                                         </a>
-                                    <div class="ps__scrollbar-x-rail" style="left: 0px; bottom: 0px;"><div class="ps__scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__scrollbar-y-rail" style="top: 0px; right: 0px;"><div class="ps__scrollbar-y" tabindex="0" style="top: 0px; height: 0px;"></div></div></div>
+                                        
+                                    <div class="ps__scrollbar-x-rail" style="left: 0px; bottom: 0px;">
+                                    	<div class="ps__scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+                                    </div>
+                                    <div class="ps__scrollbar-y-rail" style="top: 0px; right: 0px;">
+                                    	<div class="ps__scrollbar-y" tabindex="0" style="top: 0px; height: 0px;"></div>
+                                    </div>
+                                    </div>
                                 </li>
                             </ul>
                         </div>
@@ -656,7 +666,11 @@
 
 		</ul>
 		</aside>
-            <div class="ps__scrollbar-x-rail" style="left: 0px; bottom: 0px;"><div class="ps__scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__scrollbar-y-rail" style="top: 0px; height: 800px; right: 0px;"><div class="ps__scrollbar-y" tabindex="0" style="top: 0px; height: 280px;"></div></div>
+            <div class="ps__scrollbar-x-rail" style="left: 0px; bottom: 0px;">
+            	<div class="ps__scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+            </div>
+            <div class="ps__scrollbar-y-rail" style="top: 0px; height: 0px; right: 0px;">
+            	<div class="ps__scrollbar-y" tabindex="0" style="top: 0px; height: 0px;"></div></div>
         <div class="chat-windows"></div>
     <script src="./Materialart Admin Template_files/jquery.min.js.download"></script>
     <script src="./Materialart Admin Template_files/materialize.min.js.download"></script>

@@ -138,14 +138,46 @@ public class EmailManipulator extends Email
 						}
 					});
 			
-			this.isAuthenticated = true;
-			return true;
+			if(emailSession == null)
+				this.isAuthenticated = false;
+			else
+				this.isAuthenticated = true;
+			
+			return this.isAuthenticated;
 		}
 		catch(Exception e)
 		{
 			return false;
 		}
 	}
+	
+	public void sendConfirmationEmail(String user)
+	{
+		try
+		{
+			if(!this.isAuthenticated)
+				this.authenticate(0);
+			
+			emailMessage = new MimeMessage(emailSession);
+			emailMessage.setFrom(this.getUsuario());
+			
+			if(user==null)
+				throw new Exception("A mensagem não possui destinatário!");
+
+			emailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(user));
+
+			
+			emailMessage.setSubject("Bem vindo ao uMail!");
+			emailMessage.setContent("Agradecemos a preferência!", "text/html; charset=utf-8");//for a html email
+
+	        this.sendEmail();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
 	
 	public void createEmailMessage(boolean responder, String[] toEmails, String[] cc, String[] cco, String emailSubject, String emailBody, String[] anexos) throws AddressException, MessagingException 
 	{
@@ -175,7 +207,6 @@ public class EmailManipulator extends Email
 				emailMessage.addRecipient(Message.RecipientType.BCC, new InternetAddress(cco[i]));
 			
 			emailMessage.setSubject(emailSubject);
-			emailMessage.setContent(emailBody, "text/html");//for a html email
 			
 	        BodyPart messageBodyPart = new MimeBodyPart();
 	        
