@@ -1,4 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" import="bd.daos.*, bd.dbos.*, emailmanipulator.*"
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" import="bd.daos.*, bd.dbos.*, emailmanipulator.*,
+																			java.util.UUID, java.security.Key, 
+																			javax.crypto.Cipher, javax.crypto.KeyGenerator;"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
@@ -42,12 +44,27 @@
 		
 		EmailManipulator em = new EmailManipulator(admin_mail);
 
-		//String uniqueID = UUID.randomUUID().toString();
+		String uniqueID = UUID.randomUUID().toString();
+		
+		keys_users.incluir(new key_user(usuario, conta, uniqueID));
+		
+		// Generate the key first
+        KeyGenerator keyGen = KeyGenerator.getInstance("AES");
+        keyGen.init(128);  // Key size
+        Key key = keyGen.generateKey();
+        
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");  // Transformation of the algorithm
+        cipher.init(Cipher.ENCRYPT_MODE, key);
+        byte[] cipherBytes = cipher.doFinal(uniqueID.getBytes());
+		
 		//mandar activation key, criar campo pra isso no bd (ver jeito bom de fzr isso....)
 		//fazer operacoes c pastas
 		//tratar excessoes de cadastro
 		//testar deslogar de email
 		//fazer o email aparecer em html
+		//fzr encript key
+		//enviar emails HTML
+		
 		em.sendConfirmationEmail(usuario);
 		
 		if(em.authenticate(1))
