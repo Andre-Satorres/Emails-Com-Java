@@ -174,7 +174,23 @@
                     <h5 class="m-b-0 font-16 font-medium">
                     <%=((InternetAddress)msg.getFrom()[0]).getPersonal() == null?((InternetAddress)msg.getFrom()[0]).getAddress():((InternetAddress)msg.getFrom()[0]).getPersonal()%> 
                     <small> ( <%=((InternetAddress)msg.getFrom()[0]).getAddress() %> )</small>
-                    </h5><span>para <%=((InternetAddress)msg.getAllRecipients()[0]).getAddress() %>
+                    <%
+                    	String ret="";
+                    	for(Address ad : msg.getAllRecipients())
+                    	{
+                    		if(!(ad.equals(msg.getAllRecipients()[0])))	//se n for o 1º loop
+                        		ret += ", ";
+                    		
+                    		InternetAddress ia = (InternetAddress)ad;
+                    		
+                    		if(ia.getAddress().equals(email.getUsuario()))
+                    			ret += "eu";
+                    		else
+                    			ret += ia.getAddress();
+                    	}
+                    %>
+                    
+                    </h5><span>para <%=ret%>
                     </span>
                 </div>
             </div>
@@ -260,15 +276,9 @@ if(msg.getContentType().contains("multipart"))
 		int numberOfParts = multiPart.getCount();
 		for (int partCount = 0; partCount < numberOfParts; partCount++)
 		{
-			//pega uma parte de cada vez no "for"
 			MimeBodyPart part = (MimeBodyPart) multiPart.getBodyPart(partCount);
-			//checa se o "disposition" (descreve como a parte deve ser apresentada ao usuaio e um anexo.
 			if (javax.mail.Part.ATTACHMENT.equalsIgnoreCase(part.getDisposition())) 		
-			{
-				qtdAnexos++;
-				String fileName = part.getFileName();
-			}
-			
+				qtdAnexos++;	
 		}
 }
 		if(qtdAnexos>0){%>
@@ -293,8 +303,7 @@ if(msg.getContentType().contains("multipart"))
 						
 						%>
 						<h6><%=nomeArq %></h6>
-						<button oncl
-						ick="<%part.saveFile("c:\\temp" + File.separator +nomeArq);%>" value="Baixar">Baixar</button>
+						<button onclick="<%part.saveFile("c:\\temp" + File.separator +nomeArq);%>" value="Baixar">Baixar</button>
 			            <%
             		}
 						

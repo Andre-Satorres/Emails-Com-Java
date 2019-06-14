@@ -39,6 +39,12 @@ $(function() {
             $('.right-part.mail-details').fadeIn("fast");
             $('.right-part.mail-list').fadeIn("fast");
         });
+        
+        $("#descartar").click(function() {
+            $('.right-part.mail-compose').fadeOut("fast");
+            $('.right-part.mail-details').fadeIn("fast");
+            $('.right-part.mail-list').fadeIn("fast");
+        });
 
         $(mail).click(function() {
             $('.right-part.mail-list').fadeOut("fast");

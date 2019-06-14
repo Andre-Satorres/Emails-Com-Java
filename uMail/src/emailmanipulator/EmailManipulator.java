@@ -2,6 +2,7 @@ package emailmanipulator;
 
 import bd.dbos.*;
 
+import java.io.File;
 import java.util.Properties;
 
 import javax.activation.DataHandler;
@@ -69,6 +70,7 @@ public class EmailManipulator extends Email
 						emailProperties.put("mail.pop3.socketFactory.port", this.getPortaRecepcao());
 						emailProperties.put("mail.pop3.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 						emailProperties.put("mail.pop3.ssl.enable", "true");
+						emailProperties.put("mail.pop3.ssl.trust", this.mailServer);
 					}
 				}
 				else
@@ -91,7 +93,11 @@ public class EmailManipulator extends Email
 			} //enviar 
 			else
 			{
-				this.mailServer = "smtp" + "." + this.getServidor();
+				if(this.getServidor().contains("bol"))
+					this.mailServer = "smtps" + "." + this.getServidor(); //bol tem esse s gay
+				else
+					this.mailServer = "smtp" + "." + this.getServidor();
+				
 				emailProperties.put("mail.smtp.port", this.getPortaEnvio());
 				emailProperties.put("mail.smtp.host", this.mailServer);
 			    emailProperties.put("mail.smtp.auth", "true");
@@ -154,15 +160,17 @@ public class EmailManipulator extends Email
 			if(responder)
 				emailMessage = (MimeMessage) this.emailMessage.reply(false);
 			
-			if(toEmails.length>0)
+			if(toEmails==null)
+				throw new Exception("A mensagem não possui destinatários!");
+			
 			for (int i = 0; i < toEmails.length; i++) 
 				emailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(toEmails[i]));
 			
-			if(cc.length>0)
+			if(cc!=null)
 			for(int i=0; i<cc.length; i++)
 				emailMessage.addRecipient(Message.RecipientType.CC, new InternetAddress(cc[i]));
 			
-			if(cco.length>0)
+			if(cco!=null)
 			for(int i=0; i<cco.length; i++)
 				emailMessage.addRecipient(Message.RecipientType.BCC, new InternetAddress(cco[i]));
 			
@@ -177,7 +185,7 @@ public class EmailManipulator extends Email
 	        
 	        multipart.addBodyPart(messageBodyPart);
 	        
-	        if(!anexos[0].equals(""))
+	        if(anexos!=null)
 	        for(int i=0; i< anexos.length; i++)
 	        {
 	        	messageBodyPart = new MimeBodyPart();
@@ -196,7 +204,8 @@ public class EmailManipulator extends Email
 		}
 	}
 	
-	public void createEmailMessage(boolean responder, String[] toEmails, String[] cc, String[] cco, String emailSubject, String emailBody) throws AddressException, MessagingException 
+	public void createEmailMessage(boolean responder, String[] toEmails, String[] cc, String[] cco,
+			   String emailSubject, String emailBody, File[] anexos) throws AddressException, MessagingException 
 	{
 		try
 		{
@@ -209,15 +218,17 @@ public class EmailManipulator extends Email
 			if(responder)
 				emailMessage = (MimeMessage) this.emailMessage.reply(false);
 			
-			if(toEmails.length>0)
+			if(toEmails==null)
+				throw new Exception("A mensagem não possui destinatários!");
+			
 			for (int i = 0; i < toEmails.length; i++) 
 				emailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(toEmails[i]));
 			
-			if(cc.length>0)
+			if(cc!=null)
 			for(int i=0; i<cc.length; i++)
 				emailMessage.addRecipient(Message.RecipientType.CC, new InternetAddress(cc[i]));
 			
-			if(cco.length>0)
+			if(cco!=null)
 			for(int i=0; i<cco.length; i++)
 				emailMessage.addRecipient(Message.RecipientType.BCC, new InternetAddress(cco[i]));
 			
@@ -231,7 +242,17 @@ public class EmailManipulator extends Email
 	        Multipart multipart = new MimeMultipart();
 	        
 	        multipart.addBodyPart(messageBodyPart);
-	       
+	        
+	        if(anexos!=null)
+	        for(int i=0; i< anexos.length; i++)
+	        {
+	        	messageBodyPart = new MimeBodyPart();
+	        	DataSource source = new FileDataSource(anexos[i]);
+	        	messageBodyPart.setDataHandler(new DataHandler(source));
+	        	messageBodyPart.setFileName(anexos[i].getName());
+	        	multipart.addBodyPart(messageBodyPart);
+	        }
+	
 	        emailMessage.setContent(multipart);
 	        this.sendEmail();
 		}
@@ -254,15 +275,17 @@ public class EmailManipulator extends Email
 			if(responder)
 				emailMessage = (MimeMessage) this.emailMessage.reply(false);
 			
-			if(toEmails.length>0)
+			if(toEmails==null)
+				throw new Exception("A mensagem não possui destinatários!");
+			
 			for (int i = 0; i < toEmails.length; i++) 
 				emailMessage.addRecipient(Message.RecipientType.TO, toEmails[i]);
 			
-			if(cc.length>0)
+			if(cc!=null)
 			for(int i=0; i<cc.length; i++)
 				emailMessage.addRecipient(Message.RecipientType.CC, cc[i]);
 			
-			if(cco.length>0)
+			if(cco!=null)
 			for(int i=0; i<cco.length; i++)
 				emailMessage.addRecipient(Message.RecipientType.BCC, cco[i]);
 			
@@ -276,8 +299,8 @@ public class EmailManipulator extends Email
 			Multipart multipart = new MimeMultipart();
 			
 			multipart.addBodyPart(messageBodyPart);
-			
-			
+				
+			if(anexos!=null)
 			for(int i=0; i< anexos.length; i++)
 			{
 				messageBodyPart = new MimeBodyPart();
@@ -286,51 +309,6 @@ public class EmailManipulator extends Email
 				messageBodyPart.setFileName(anexos[i]);
 				multipart.addBodyPart(messageBodyPart);
 			}
-			
-			emailMessage.setContent(multipart);
-			this.sendEmail();
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
-	
-	public void createEmailMessage_n(boolean responder, Address[] toEmails, Address[] cc, Address[] cco, String emailSubject, String emailBody) throws AddressException, MessagingException 
-	{
-		try
-		{
-			if(!this.isAuthenticated)
-			this.authenticate(0);
-			
-			emailMessage = new MimeMessage(emailSession);
-			emailMessage.setFrom(this.getUsuario());
-			
-			if(responder)
-				emailMessage = (MimeMessage) this.emailMessage.reply(false);
-			
-			if(toEmails.length>0)
-			for (int i = 0; i < toEmails.length; i++) 
-				emailMessage.addRecipient(Message.RecipientType.TO, toEmails[i]);
-			
-			if(cc.length>0)
-			for(int i=0; i<cc.length; i++)
-				emailMessage.addRecipient(Message.RecipientType.CC, cc[i]);
-			
-			if(cco.length>0)
-			for(int i=0; i<cco.length; i++)
-				emailMessage.addRecipient(Message.RecipientType.BCC, cco[i]);
-			
-			emailMessage.setSubject(emailSubject);
-			emailMessage.setContent(emailBody, "text/html");//for a html email
-			
-			BodyPart messageBodyPart = new MimeBodyPart();
-			
-			messageBodyPart.setContent(emailBody, "text/html; charset=utf-8");
-			
-			Multipart multipart = new MimeMultipart();
-			
-			multipart.addBodyPart(messageBodyPart);
 			
 			emailMessage.setContent(multipart);
 			this.sendEmail();
@@ -454,7 +432,6 @@ public class EmailManipulator extends Email
 		if(!this.isAuthenticated)
 			this.authenticate(1);
 		
-		//props.setProperty("mail.store.protocol", "imaps");
 		try
 		{
 			if(!this.isStoreSet)

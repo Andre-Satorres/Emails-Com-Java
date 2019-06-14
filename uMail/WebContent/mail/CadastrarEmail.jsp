@@ -47,6 +47,12 @@
               <option>POP3</option>
               <option>IMAP</option>
             </select>
+          </div>  
+          <div class="form-group">
+            <input type="button" class="btn-submit" value="Voltar">
+          </div>
+          <div class="form-group">
+            <input type="reset" class="btn-submit" value="Limpar Dados">
           </div>
           <div class="form-group">
             <input type="submit" class="btn-submit" value="Cadastrar">

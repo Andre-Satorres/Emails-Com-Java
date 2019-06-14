@@ -3,16 +3,19 @@
 
 <%@ page import = "java.io.*,java.util.*,javax.mail.*"%>
 <%@ page import = "javax.mail.internet.*,javax.activation.*"%>
-<%@ page import = "javax.servlet.http.*,javax.servlet.*" %>
+<%@ page import = "javax.servlet.http.*,javax.servlet.*, java.nio.file.Paths"%>
 
 <%
 try
 {
    	String result;
-   
-   	String[] to, cc, cco, an;
+   	
+   	String[] to, cc, cco = null;
+   	File an[] = null;
    	String assunto="";
-   
+
+   	an = (File[])request.getAttribute("anexos");
+    
    	if(request.getParameter("para").trim().length()>0)
    		to = request.getParameter("para").trim().split(";");
    	else
@@ -27,11 +30,6 @@ try
    		cco= request.getParameter("cco").trim().split(";");
    	else
    		cco = new String[0];
-   	
-   	if( request.getParameter("cc").trim().length()>0)
-   		 an = request.getParameter("anexos").trim().split(",");
-   	else
-   		an = new String[0];
    	
    assunto = request.getParameter("assunto").trim();
    StringBuffer text = new StringBuffer(request.getParameter("emailarea"));
@@ -51,11 +49,14 @@ try
 		   									Segurancas.getSeguranca(2), Hosts.getHost(3), "gmail.com", LoginMails.getUsuario(conta));
    
    em.createEmailMessage(false, to, cc, cco, assunto, message, an);
+   
+   response.sendRedirect("inbox.jsp");
 }
 catch(Exception e)
 {
 	e.printStackTrace();
 	request.setAttribute("errorMessageEnv", e.getMessage());
 }
-	request.getRequestDispatcher("inbox.jsp").forward(request, response);
+
+	response.sendRedirect("inbox.jsp");
 %>
