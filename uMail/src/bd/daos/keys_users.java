@@ -36,6 +36,30 @@ public class keys_users
 
         return retorno;
     }
+	
+	public static MeuResultSet pegarChave(String chave) throws Exception
+	{
+		MeuResultSet retorno = null;
+		
+		try
+		{
+			String sql;
+			
+			sql = "SELECT * FROM key_user where chave = ?";
+			
+			BDSQLServer.COMANDO.prepareStatement (sql);
+
+            BDSQLServer.COMANDO.setString(1, chave);
+
+            retorno = (MeuResultSet)BDSQLServer.COMANDO.executeQuery ();
+		}
+		catch(SQLException erro)
+		{
+			throw new Exception("Erro ao procurar chave!");
+		}
+		
+		return retorno;
+	}
 
     public static void incluir (key_user key_user) throws Exception
     {

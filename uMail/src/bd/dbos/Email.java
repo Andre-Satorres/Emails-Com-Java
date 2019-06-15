@@ -12,10 +12,12 @@ public class Email implements Cloneable
     private Host      host;      // pop3, imap, smtp
     private String    servidor; // gmail.com --> dominio
     private LoginMail conta;    // usuario(d)
+    private int       autenticado;
     
     static final String pattern = "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$";
   
-    public Email (String usuario, String senha, int portaR, int portaE, Seguranca seguranca, Host host, String nome, String sobrenome, String servidor, LoginMail conta) throws Exception
+    public Email (String usuario, String senha, int portaR, int portaE, Seguranca seguranca, Host host, String nome, 
+    											String sobrenome, String servidor, LoginMail conta) throws Exception
     {
 		this.setNome(nome);
 		this.setSobrenome(sobrenome);
@@ -27,8 +29,80 @@ public class Email implements Cloneable
     	this.setSeguranca(seguranca);
     	this.setServidor(servidor);
     	this.setConta(conta);
+    	this.autenticado = 1;
     }
     
+    public Email (String usuario, String senha, int portaR, int portaE, Seguranca seguranca, Host host, String nome, 
+											String sobrenome, String servidor, LoginMail conta, int autenticado) throws Exception
+	{
+		this.setNome(nome);
+		this.setSobrenome(sobrenome);
+		this.setUsuario(usuario);
+		this.setSenha(senha);
+		this.setPortaRecepcao(portaR);
+		this.setPortaEnvio(portaE);
+		this.setHost(host);
+		this.setSeguranca(seguranca);
+		this.setServidor(servidor);
+		this.setConta(conta);
+		this.setAutenticado(autenticado);
+	}
+    
+	/**
+	 * @return the portaR
+	 */
+	public int getPortaR() {
+		return portaR;
+	}
+
+	/**
+	 * @param portaR the portaR to set
+	 */
+	public void setPortaR(int portaR) throws Exception
+	{
+		if(portaR >0 && portaR<65500)
+			this.portaR = portaR;
+		else
+			throw new Exception("Porta invalida!");
+	}
+
+	/**
+	 * @return the portaE
+	 */
+	public int getPortaE() {
+		return portaE;
+	}
+
+	/**
+	 * @param portaE the portaE to set
+	 */
+	public void setPortaE(int portaE) throws Exception
+	{
+		if(portaE >0 && portaE<65500)
+			this.portaE = portaE;
+		else
+			throw new Exception("Porta invalida!");
+	}
+
+	/**
+	 * @return the autenticado
+	 */
+	public int getAutenticado() {
+		return autenticado;
+	}
+
+	/**
+	 * @param autenticado the autenticado to set
+	 */
+	public void setAutenticado(int autenticado) throws Exception
+	{
+		if(autenticado == 0 || autenticado == 1)
+			this.autenticado = autenticado;
+		else
+			throw new Exception("Autenticacao invalida!");
+		
+	}
+
 	public Host getHost() 
     {
 		return host;
@@ -173,6 +247,7 @@ public class Email implements Cloneable
         ret+="PortaE...: "+this.portaE     +"\n";
         ret+="Seguranca: "+this.seguranca  +"\n";
         ret+="Servidor.: "+this.servidor   +"\n";
+        ret+="Autentic.: "+this.autenticado+"\n";
         ret+="Host.....: "+this.host;
 
         return ret;
@@ -191,6 +266,9 @@ public class Email implements Cloneable
 
         Email em = (Email)obj;
 
+        if (this.autenticado!=em.autenticado)
+            return false;
+        
         if (this.portaR!=em.portaR)
             return false;
         
@@ -239,6 +317,7 @@ public class Email implements Cloneable
         ret = 7*ret + this.sobrenome.hashCode();
         ret = 7*ret + this.servidor.hashCode();
         ret = 7*ret + this.conta.hashCode();
+        ret = 7*ret + new Integer(this.autenticado).hashCode();
 
         return ret;
     }
@@ -259,6 +338,7 @@ public class Email implements Cloneable
         this.sobrenome = modelo.sobrenome;
         this.servidor  = modelo.servidor;
         this.conta     = modelo.conta;
+        this.autenticado= modelo.autenticado;
     }
 
     public Object clone ()

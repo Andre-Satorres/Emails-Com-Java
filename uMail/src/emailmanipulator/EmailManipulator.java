@@ -151,7 +151,7 @@ public class EmailManipulator extends Email
 		}
 	}
 	
-	public void sendConfirmationEmail(String user)
+	public void sendConfirmationEmail(String user, byte[] chave_criptografada)
 	{
 		try
 		{
@@ -168,8 +168,10 @@ public class EmailManipulator extends Email
 
 			
 			emailMessage.setSubject("Bem vindo ao uMail!");
-			emailMessage.setContent("Agradecemos a preferência!", "text/html; charset=utf-8");//for a html email
-
+			String mensagem = "<h3>Agradecemos a preferência!</h3>";
+			mensagem += "\n <a href=\"localhost:8080/uMail/mail/confirmarCadastroEmail.jsp?c="+ new String(chave_criptografada)+"\">Clique aqui</a> para confirmar seu cadastro.";
+			emailMessage.setText(mensagem, "UTF-8", "html");
+			
 	        this.sendEmail();
 		}
 		catch(Exception e)

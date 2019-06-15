@@ -47,9 +47,9 @@ public class Emails
             String sql;
 
             sql = "INSERT INTO Email " +
-            	  "(Usuario, senha, porta, seguranca, host, nome, sobrenome, servidor, conta, portaSMTP)" +
+            	  "(Usuario, senha, porta, seguranca, host, nome, sobrenome, servidor, conta, portaSMTP, autenticado)" +
                   "VALUES " +
-                  "(?,?,?,?,?,?,?,?,?,?)";
+                  "(?,?,?,?,?,?,?,?,?,?,?)";
 
             BDSQLServer.COMANDO.prepareStatement (sql);
             
@@ -63,6 +63,7 @@ public class Emails
             BDSQLServer.COMANDO.setString (8, email.getServidor());
             BDSQLServer.COMANDO.setString (9, email.getConta().getUsuario());
             BDSQLServer.COMANDO.setInt    (10,email.getPortaEnvio());
+            BDSQLServer.COMANDO.setInt    (11,email.getAutenticado());
             
             BDSQLServer.COMANDO.executeUpdate ();
             BDSQLServer.COMANDO.commit        ();
@@ -347,6 +348,37 @@ public class Emails
             throw new Exception ("Erro ao atualizar sobrenome!");
         }
     }
+    
+    public static void autenticar (Email email) throws Exception 
+    {
+        if (email==null)
+            throw new Exception ("Email nao fornecido");
+
+        if (!cadastrado (email.getUsuario(), email.getConta().getUsuario()))
+            throw new Exception ("Nao cadastrado");
+
+        try
+        {
+            String sql;
+
+            sql = "UPDATE Email " +
+                  "SET autenticado=? " +
+                  "WHERE usuario = ? and conta=?";
+
+            BDSQLServer.COMANDO.prepareStatement (sql);
+
+            BDSQLServer.COMANDO.setInt    (1, email.getAutenticado());
+            BDSQLServer.COMANDO.setString (2, email.getUsuario());
+            BDSQLServer.COMANDO.setString (3, email.getConta().getUsuario());
+
+            BDSQLServer.COMANDO.executeUpdate ();
+            BDSQLServer.COMANDO.commit        ();
+        }
+        catch (SQLException erro)
+        {
+            throw new Exception ("Erro ao atualizar sobrenome!");
+        }
+    }
 
     public static Email getEmail (String usuario, String conta) throws Exception
     {
@@ -371,7 +403,8 @@ public class Emails
                 throw new Exception ("Nao cadastrado");
             
             email = new Email (resultado.getString("usuario"), resultado.getString("SENHA"), resultado.getInt   ("Porta"), resultado.getInt   ("PortaSMTP"), Segurancas.getSeguranca(resultado.getInt("Seguranca")), 
-            		Hosts.getHost(resultado.getInt ("HOST")), resultado.getString("nome"), resultado.getString("sobrenome"), resultado.getString("servidor"), LoginMails.getUsuario(resultado.getString("conta")));
+            		Hosts.getHost(resultado.getInt ("HOST")), resultado.getString("nome"), resultado.getString("sobrenome"), resultado.getString("servidor"), LoginMails.getUsuario(resultado.getString("conta")),
+            		resultado.getInt("autenticado"));
         }
         catch (SQLException erro)
         {
