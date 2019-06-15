@@ -86,8 +86,9 @@ public class FileUpload extends HttpServlet
 			request.setAttribute("error", e.getMessage());
 			e.printStackTrace();
 		}
-	    
-		response.sendRedirect("/mail/enviarEmail.jsp");
+		
+		request.getRequestDispatcher("/mail/enviarEmail.jsp").forward(request, response);
+		
 	}
 
 }

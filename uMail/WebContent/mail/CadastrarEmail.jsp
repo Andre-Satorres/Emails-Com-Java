@@ -39,7 +39,7 @@
           <div class="form-group">
             <select class="form-control" name="seguranca" id="seguranca" required> 
               <option>SSL</option>
-              <option>TSL</option>
+              <option>TLS</option>
             </select>
           </div>
           <div class="form-group">
@@ -60,6 +60,6 @@
          
        </form>
       </div>
-
+	 <%session.removeAttribute("errorMessageAlteracao"); %>
 </body>
 </html>

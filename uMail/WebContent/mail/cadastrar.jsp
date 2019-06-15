@@ -68,7 +68,7 @@
 	{
 		session.setAttribute("errorMessageCadastro", "Um ou mais campos inválidos!");
 		
-		response.sendRedirect("inbox.jsp");
+		response.sendRedirect("CadastrarEmail.jsp");
 	}
 	%>
 </body>

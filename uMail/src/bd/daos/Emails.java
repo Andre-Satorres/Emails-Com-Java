@@ -131,6 +131,43 @@ public class Emails
         }
     }
     
+    public static void alterar (Email email) throws Exception
+    {
+        if (email==null)
+            throw new Exception ("Email nao fornecido");
+
+        if (!cadastrado (email.getUsuario(), email.getConta().getUsuario()))
+            throw new Exception ("Nao cadastrado");
+
+        try
+        {
+            String sql;
+
+            sql = "UPDATE Email " +
+                  "SET senha=?, porta=?, seguranca=?, host=?, nome=?, sobrenome=?, portaSMTP=? " +
+                  "WHERE usuario = ? and conta=?";
+
+            BDSQLServer.COMANDO.prepareStatement (sql);
+
+            BDSQLServer.COMANDO.setString (1, email.getSenha());
+            BDSQLServer.COMANDO.setInt    (2, email.getPortaR());
+            BDSQLServer.COMANDO.setInt    (3, email.getSeguranca().getId());
+            BDSQLServer.COMANDO.setInt    (4, email.getHost().getId());
+            BDSQLServer.COMANDO.setString (5, email.getNome());
+            BDSQLServer.COMANDO.setString (6, email.getSobrenome());
+            BDSQLServer.COMANDO.setInt    (7, email.getPortaE());
+            BDSQLServer.COMANDO.setString (8, email.getUsuario());
+            BDSQLServer.COMANDO.setString (9, email.getConta().getUsuario());
+
+            BDSQLServer.COMANDO.executeUpdate ();
+            BDSQLServer.COMANDO.commit        ();
+        }
+        catch (SQLException erro)
+        {
+            throw new Exception ("Erro ao atualizar informações!");
+        }
+    }
+    
     public static void alterarPortaRecepcao (Email email) throws Exception
     {
         if (email==null)

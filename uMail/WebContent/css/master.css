@@ -29,6 +29,11 @@ li.list-group-item:hover #inEmail
     display: inline-block;
 }
 
+li.list-group-item:hover #altEmail 
+{
+    display: inline-block;
+}
+
 div.conteiner #delEmail 
 {
     position:absolute;
@@ -36,6 +41,12 @@ div.conteiner #delEmail
 }
 
 div.conteiner #inEmail 
+{
+    position:absolute;
+    display:none;
+}
+
+div.conteiner #altEmail 
 {
     position:absolute;
     display:none;
@@ -55,6 +66,14 @@ div.conteiner #inEmail
     left:0px;
     height absolute;
     color: #35cc02;
+}
+
+div.conteiner #altEmail 
+{
+    top:0px;
+    left:78px;
+    height absolute;
+    color: darkblue;
 }
 
 .conteiner{

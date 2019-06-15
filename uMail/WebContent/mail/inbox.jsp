@@ -142,7 +142,8 @@
                             	}
                             	%>
                             	
- 								<a id="inEmail" href="mudar.jsp?i=<%=a %>"> <i class="material-icons">contact_mail</i>Entrar</a>		
+ 								<a id="inEmail" href="mudar.jsp?i=<%=a %>"> <i class="material-icons">contact_mail</i>Entrar</a>
+ 								<a id="altEmail" href="alterarEmail.jsp?i=<%=a %>"> <i class="material-icons">edit</i>Editar</a>		
                             	<a id="delEmail" href="deslogarEmail.jsp?i=<%=a %>"> <i class="material-icons">unsubscribe</i>Deletar</a>		
  
                             	</li>
@@ -354,6 +355,7 @@
                 </div>
                 <button type="submit" class="btn green m-t-20">Enviar</button>
                 <button id="descartar" onClick="javascript:void(0)" class="btn grey darken-4 m-t-20">Descartar</button>
+                <label id="erro"><%=session.getAttribute("erroEnvio")==null?"":session.getAttribute("erroEnvio") %></label>
             </form>
         </div>
     </div>

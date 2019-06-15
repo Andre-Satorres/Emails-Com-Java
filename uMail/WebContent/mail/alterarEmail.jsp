@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" import="bd.dbos.*"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
@@ -8,38 +8,43 @@
 <title>Alterar conta email - <%=session.getAttribute("usuario")%></title>
 </head>
 <body>
+<%
+Email email = (Email)session.getAttribute("Email"+request.getParameter("i"));
+session.setAttribute("i", request.getParameter("i"));
+%>
 <div class="flex-form">
         <form class="main-form" action="alterar.jsp" method="post">
           <h3>Cadastro</h3>
           <div class="flex-content">
             <div class="form-group name-box">
               <input type="text" class="form-control" placeholder="Nome" id="nome" name="nome"
-              value = "<%= (request.getParameter("nome")!= null?request.getParameter("nome"):"")%>" required>
+              value = "<%=(email.getNome()!= null?email.getNome():"")%>" required>
             </div>
             <div class="form-group">
               <input type="text" class="form-control" placeholder="Sobrenome" id="sobrenome" name="sobrenome"
-              value = "<%= (request.getParameter("sobrenome")!= null?request.getParameter("sobrenome"):"")%>" required>
+              value = "<%= (email.getSobrenome()!= null?email.getSobrenome():"")%>" required>
             </div>
           </div>
           <div class="form-group">
             <input type="text" class="form-control" placeholder="Email" id="usuario" name = "usuario"
-            value = "<%= (request.getParameter("usuario")!= null?request.getParameter("usuario"):"")%>" required>
+            value = "<%=email.getUsuario()%>" readonly>
           </div>
           <div class="form-group">
-            <input type="password" class="form-control" placeholder="Senha" id="senha" name = "senha" required>
+            <input type="password" class="form-control" placeholder="Senha" id="senha" name = "senha" 
+            value = "<%= (email.getSenha()!= null?email.getSenha():"")%>" required>
           </div>
           <div class="form-group">
             <input type="number" class="form-control" placeholder="Porta de Recepção" min="1" max="65535" id="portaR" name="portaR"
-            value = "<%= (request.getParameter("portaR")!= null?request.getParameter("portaR"):"")%>" required>
+            value = "<%= (email.getPortaR()!= 0?email.getPortaR():"")%>" required>
           </div>
           <div class="form-group">
             <input type="number" class="form-control" placeholder="Porta de Envio" min="1" max="65535" id="portaE" name="portaE"
-            value = "<%= (request.getParameter("portaE")!= null?request.getParameter("portaE"):"")%>" required>
+            value = "<%= (email.getPortaE()!= 0?email.getPortaE():"")%>" required>
           </div>
           <div class="form-group">
             <select class="form-control" name="seguranca" id="seguranca" required> 
               <option>SSL</option>
-              <option>TSL</option>
+              <option>TLS</option>
             </select>
           </div>
           <div class="form-group">
@@ -49,17 +54,29 @@
             </select>
           </div>  
           <div class="form-group">
-            <input type="button" class="btn-submit" value="Voltar">
+            <input type="button" class="btn-submit" value="Voltar" onClick="inbox.jsp">
             <input type="reset" class="btn-submit" value="Limpar Dados">
-            <input type="submit" class="btn-submit" value="Cadastrar">
+            <input type="submit" class="btn-submit" value="Alterar">
           </div>
           
           <div class="form-group">
-              <label><%=session.getAttribute("errorMessageCadastro")==null?"":session.getAttribute("errorMessageCadastro")%></label>
+              <label><%=session.getAttribute("errorMessageAlteracao")==null?"":session.getAttribute("errorMessageCadastro")%></label>
          </div>
          
        </form>
       </div>
+      
+      <script>
+      		var val = '<%=email.getSeguranca().getNome().toUpperCase()%>';
+		    document.getElementById('seguranca').value= val;
+	 </script>
+	 
+	 <script>
+		    var val = '<%=email.getHost().getNome()%>';
+		    document.getElementById('host').value=val;
+	 </script>
+	 
+	 <%session.removeAttribute("errorMessageAlteracao"); %>
 
 </body>
 </html>

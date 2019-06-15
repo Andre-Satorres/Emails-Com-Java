@@ -50,13 +50,12 @@ try
    
    em.createEmailMessage(false, to, cc, cco, assunto, message, an);
    
-   response.sendRedirect("inbox.jsp");
+   response.sendRedirect("mail/inbox.jsp");
 }
 catch(Exception e)
 {
 	e.printStackTrace();
-	request.setAttribute("errorMessageEnv", e.getMessage());
+	request.setAttribute("erroEnvio", e.getMessage());
 }
 
-	response.sendRedirect("inbox.jsp");
 %>
