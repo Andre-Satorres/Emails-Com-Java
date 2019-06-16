@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" import="bd.daos.*, bd.dbos.*, emailmanipulator.*,
 																			java.util.UUID, java.security.Key, 
-																			javax.crypto.Cipher, javax.crypto.KeyGenerator"
+																			javax.crypto.Cipher, javax.crypto.KeyGenerator, saltedmd5.*"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
@@ -40,7 +40,13 @@
 		
 		String servidor = usuario.substring(usuario.indexOf("@")+1, usuario.length());
 		
-		Email email = new Email(usuario, senha, portaR, portaE, seguranca, host_certo, nome, sobrenome, servidor, 
+		String[] cripto = SaltedMD5.criptografar(senha);
+		//cripto[0] eh a senha criptrografada em hexadecimal
+		//cripto[1] eh o salt q tenho q salvar no bd
+		
+		//Hashs.incluir(usuario, cripto[1], conta);
+		
+		Email email = new Email(usuario, cripto[0], portaR, portaE, seguranca, host_certo, nome, sobrenome, servidor, 
 								LoginMails.getUsuario(conta), 0);
 		
 		Email admin_mail = Emails.getEmail("noreply.uMail@yahoo.com", "admin");

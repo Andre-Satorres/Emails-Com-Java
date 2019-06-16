@@ -7,7 +7,7 @@ import java.security.SecureRandom;
 
 public class SaltedMD5 
 {
-    public static String[] preparar(String senha) throws NoSuchAlgorithmException, NoSuchProviderException
+    public static String[] criptografar(String senha) throws NoSuchAlgorithmException, NoSuchProviderException
     {
         byte[] salt = getSalt();
          
