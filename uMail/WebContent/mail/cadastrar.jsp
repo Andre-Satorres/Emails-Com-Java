@@ -10,6 +10,8 @@
 </head>
 <body>
 <%
+	final String ALPHA_NUMERIC_STRING = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
 	try
 	{	
 		String nome      = request.getParameter("nome");
@@ -44,21 +46,19 @@
 		Email admin_mail = Emails.getEmail("aa.satorres@gmail.com", "admin");
 		
 		EmailManipulator em = new EmailManipulator(admin_mail);
+		
 
-		String uniqueID = UUID.randomUUID().toString();
+		StringBuilder builder = new StringBuilder();
 		
-		keys_users.incluir(new key_user(usuario, conta, uniqueID)); //incluo no BD a chave nao criptografada
-		
-		// Generate the key first
-        KeyGenerator keyGen = KeyGenerator.getInstance("AES");
-        keyGen.init(128);  // Key size
-        Key key = keyGen.generateKey();
-        
-        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding"); 
-        cipher.init(Cipher.ENCRYPT_MODE, key);
-        byte[] cipherBytes = cipher.doFinal(uniqueID.getBytes());
-        
-        em.sendConfirmationEmail(usuario, cipherBytes); //envia email com chave cripto
+		for(int f=0; f<7; f++) 
+		{
+			int character = (int)(Math.random()*ALPHA_NUMERIC_STRING.length());
+			builder.append(ALPHA_NUMERIC_STRING.charAt(character));
+		}
+
+		keys_users.incluir(new key_user(usuario, conta, builder.toString())); //incluo no BD a chave guard
+
+		em.sendConfirmationEmail(usuario, builder.toString()); //envia email com chave
 
 		Emails.incluir(email);
 			
@@ -66,7 +66,7 @@
 	}
 	catch(Exception e)
 	{
-		session.setAttribute("errorMessageCadastro", "Um ou mais campos inválidos!");
+		session.setAttribute("erroCadastro", "Um ou mais campos inválidos!");
 		
 		response.sendRedirect("CadastrarEmail.jsp");
 	}

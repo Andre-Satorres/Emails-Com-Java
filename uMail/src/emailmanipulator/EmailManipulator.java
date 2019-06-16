@@ -9,7 +9,6 @@ import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
 import javax.mail.*;
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
@@ -151,7 +150,7 @@ public class EmailManipulator extends Email
 		}
 	}
 	
-	public void sendConfirmationEmail(String user, byte[] chave_criptografada)
+	public void sendConfirmationEmail(String user, String chave) throws Exception
 	{
 		try
 		{
@@ -169,19 +168,20 @@ public class EmailManipulator extends Email
 			
 			emailMessage.setSubject("Bem vindo ao uMail!");
 			String mensagem = "<h3>Agradecemos a preferência!</h3>";
-			mensagem += "\n <a href=\"localhost:8080/uMail/mail/confirmarCadastroEmail.jsp?c="+ new String(chave_criptografada)+"\">Clique aqui</a> para confirmar seu cadastro.";
+			mensagem += "\n<h4>Seu código de verificação de conta é " + chave + "</h4>";
+			mensagem += "\n <p>uMail. Todos os direitos reservados.</p>";
 			emailMessage.setText(mensagem, "UTF-8", "html");
 			
 	        this.sendEmail();
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			throw new Exception("Erro ao criar mensagem! " + e.getMessage());
 		}
 	}
 	
 	
-	public void createEmailMessage(boolean responder, String[] toEmails, String[] cc, String[] cco, String emailSubject, String emailBody, String[] anexos) throws AddressException, MessagingException 
+	public void createEmailMessage(boolean responder, String[] toEmails, String[] cc, String[] cco, String emailSubject, String emailBody, String[] anexos) throws Exception
 	{
 		try
 		{
@@ -233,12 +233,12 @@ public class EmailManipulator extends Email
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			throw new Exception("Erro ao criar mensagem. " + e.getMessage());
 		}
 	}
 	
 	public void createEmailMessage(boolean responder, String[] toEmails, String[] cc, String[] cco,
-			   String emailSubject, String emailBody, File[] anexos) throws AddressException, MessagingException 
+			   String emailSubject, String emailBody, File[] anexos) throws Exception 
 	{
 		try
 		{
@@ -291,11 +291,11 @@ public class EmailManipulator extends Email
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			throw new Exception("Erro ao criar mensagem. " + e.getMessage());
 		}
 	}
 	
-	public void createEmailMessage(boolean responder, Address[] toEmails, Address[] cc, Address[] cco, String emailSubject, String emailBody, String[] anexos) throws AddressException, MessagingException 
+	public void createEmailMessage(boolean responder, Address[] toEmails, Address[] cc, Address[] cco, String emailSubject, String emailBody, String[] anexos) throws Exception 
 	{
 		try
 		{
@@ -348,7 +348,7 @@ public class EmailManipulator extends Email
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			throw new Exception("Erro ao criar mensagem!" + e.getMessage());
 		}
 	}
 	
@@ -398,10 +398,8 @@ public class EmailManipulator extends Email
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			throw new Exception("Erro ao abrir pasta. " + e.getMessage());
 		}
-		
-		return null;
 	}
 	
 	public void fecharPasta(Folder fd) throws MessagingException
@@ -428,13 +426,20 @@ public class EmailManipulator extends Email
 	
 	public int quantidadeNaoLidas(String nomePasta)
 	{
-		if(this.mensagensNaoLidas(nomePasta) == null)
-			return 0;
+		try
+		{
+			if(this.mensagensNaoLidas(nomePasta) == null)
+				return 0;
 		
-		return this.mensagensNaoLidas(nomePasta).length;
+			return this.mensagensNaoLidas(nomePasta).length;
+		}
+		catch(Exception e)
+		{
+			return 0;
+		}
 	}
 	
-	public Message[] mensagensNaoLidas(String nomePasta)
+	public Message[] mensagensNaoLidas(String nomePasta) throws Exception
 	{
 		try
 		{
@@ -445,22 +450,25 @@ public class EmailManipulator extends Email
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			throw new Exception("Erro ao abrir pasta." + e.getMessage());
 		}
-		
-		return null;
 	}
 	
 	public boolean isMessageRead(String nomePasta, Message msg)
 	{
-		for(Message m:this.mensagensNaoLidas(nomePasta))
-			if(m.equals(msg))
-				return true;
+		try
+		{
+			for(Message m:this.mensagensNaoLidas(nomePasta))
+				if(m.equals(msg))
+					return true;
+		}
+		catch(Exception e)
+		{}
 		
 		return false;
 	}
 	
-	public Folder[] obterTodasAsPastas()
+	public Folder[] obterTodasAsPastas() throws Exception
 	{
 		if(!this.isAuthenticated)
 			this.authenticate(1);
@@ -474,10 +482,8 @@ public class EmailManipulator extends Email
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			return null;
 		}
-		
-		return null;
 	}
 	
 	public void criarPasta(String novaPasta) throws Exception
@@ -492,25 +498,35 @@ public class EmailManipulator extends Email
 	
 	public void deletarPasta(String nome, boolean deletarFilhas) throws Exception
 	{
-		Folder pasta = this.abrirPasta(nome, 1);
-		
-		if (!pasta.exists())
-			throw new FolderNotFoundException();
-		
-		if (pasta.isOpen())		
-			pasta.close();
-		
-		pasta.delete(deletarFilhas); //o parâmetro boolean especifica se as pastas filhas devem ser deletadas
+		try
+		{
+			Folder pasta = this.abrirPasta(nome, 1);
+			
+			if (!pasta.exists())
+				throw new FolderNotFoundException();
+			
+			if (pasta.isOpen())		
+				pasta.close();
+			
+			pasta.delete(deletarFilhas); //o parâmetro boolean especifica se as pastas filhas devem ser deletadas
+		}
+		catch(Exception e)
+		{}
 	}
 	
 	public void renomearPasta(String nomeOriginal, String nomeFinal) throws Exception
 	{
-		Folder pasta = this.abrirPasta(nomeOriginal, 1);
-		
-		if (!pasta.exists())
-			throw new FolderNotFoundException();
-		else
-			pasta.renameTo(this.abrirPasta(nomeFinal, 1));
+		try
+		{
+			Folder pasta = this.abrirPasta(nomeOriginal, 1);
+			
+			if (!pasta.exists())
+				throw new FolderNotFoundException();
+			else
+				pasta.renameTo(this.abrirPasta(nomeFinal, 1));
+		}
+		catch(Exception e)
+		{}
 	}
 }
 	

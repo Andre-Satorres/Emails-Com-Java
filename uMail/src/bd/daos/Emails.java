@@ -99,7 +99,7 @@ public class Emails
             throw new Exception ("Erro ao excluir email.");
         }
     }
-
+    
     public static void alterarSenha (Email email) throws Exception
     {
         if (email==null)
@@ -416,7 +416,37 @@ public class Emails
             throw new Exception ("Erro ao atualizar sobrenome!");
         }
     }
+    
+    public static void autenticar (String email, String conta) throws Exception 
+    {
+        if (email==null)
+            throw new Exception ("Email nao fornecido");
 
+        if (!cadastrado (email, conta))
+            throw new Exception ("Nao cadastrado");
+
+        try
+        {
+            String sql;
+
+            sql = "UPDATE Email " +
+                  "SET autenticado=1 " +
+                  "WHERE usuario = ? and conta=?";
+
+            BDSQLServer.COMANDO.prepareStatement (sql);
+
+            BDSQLServer.COMANDO.setString (1, email);
+            BDSQLServer.COMANDO.setString (2, conta);
+
+            BDSQLServer.COMANDO.executeUpdate ();
+            BDSQLServer.COMANDO.commit        ();
+        }
+        catch (SQLException erro)
+        {
+            throw new Exception ("Erro ao atualizar sobrenome!");
+        }
+    }
+   
     public static Email getEmail (String usuario, String conta) throws Exception
     {
         Email email = null;
@@ -459,7 +489,31 @@ public class Emails
 		{
 			String sql;
 			
-			sql = "SELECT * " + "FROM EMAIL " + "WHERE CONTA = ?";	
+			sql = "SELECT * " + "FROM EMAIL " + "WHERE CONTA = ? and autenticado = 1";	
+			
+			BDSQLServer.COMANDO.prepareStatement(sql);
+			
+			BDSQLServer.COMANDO.setString (1, conta);
+			
+			resultado = (MeuResultSet)BDSQLServer.COMANDO.executeQuery();
+		}
+		catch(SQLException erro)
+		{
+			throw new Exception("Erro ao procurar emails não autenticados da conta.");
+		}
+		
+		return resultado;
+	}
+    
+    public static MeuResultSet naoAutenticadosDaConta(String conta) throws Exception
+	{
+		MeuResultSet resultado = null;
+		
+		try
+		{
+			String sql;
+			
+			sql = "SELECT * " + "FROM EMAIL " + "WHERE CONTA = ? and autenticado=0";	
 			
 			BDSQLServer.COMANDO.prepareStatement(sql);
 			

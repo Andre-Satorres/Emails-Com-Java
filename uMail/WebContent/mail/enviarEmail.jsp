@@ -54,8 +54,7 @@ try
 }
 catch(Exception e)
 {
-	e.printStackTrace();
-	request.setAttribute("erroEnvio", e.getMessage());
+	session.setAttribute("erroEnvio", e.getMessage());
 }
 
 %>

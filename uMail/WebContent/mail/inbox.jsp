@@ -108,8 +108,13 @@
                             <li>
                                 <div class="divider m-t-10  m-b-10"></div>
                             </li>
+                            
                             <li class="list-group-item">
                                 <a href="CadastrarEmail.jsp"> <i class="material-icons">add</i> Adicionar Email </a>
+                            </li>
+                            
+                            <li class="list-group-item">
+                                <a href="ativarEmail.jsp"> <i class="material-icons">verified_user</i> Ativar Email </a>
                             </li>
                             
                             <%

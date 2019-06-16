@@ -55,11 +55,11 @@
           </div>
           
           <div class="form-group">
-              <label><%=session.getAttribute("errorMessageCadastro")==null?"":session.getAttribute("errorMessageCadastro")%></label>
+              <label><%=session.getAttribute("erroCadastro")==null?"":session.getAttribute("erroCadastro")%></label>
          </div>
          
        </form>
       </div>
-	 <%session.removeAttribute("errorMessageAlteracao"); %>
+	 <%session.removeAttribute("erroCadastro"); %>
 </body>
 </html>
