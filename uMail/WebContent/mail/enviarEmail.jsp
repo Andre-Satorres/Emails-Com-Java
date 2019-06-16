@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" import="emailmanipulator.*, bd.daos.*"
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" import="emailmanipulator.*, bd.daos.*, bd.dbos.*"
     pageEncoding="ISO-8859-1"%>
 
 <%@ page import = "java.io.*,java.util.*,javax.mail.*"%>
@@ -42,11 +42,10 @@ try
   }
    
   String message = text.toString();
+  
+  Email email = (Email)session.getAttribute("Email"+session.getAttribute("atual"));
    
-   String conta = (String)session.getAttribute("usuario");
-   
-   EmailManipulator em = new EmailManipulator("andre", "satorres", "mommavalos@gmail.com", "Sem1seiji", 995, 465, 
-		   									Segurancas.getSeguranca(2), Hosts.getHost(3), "gmail.com", LoginMails.getUsuario(conta));
+  EmailManipulator em = new EmailManipulator(email);
    
    em.createEmailMessage(false, to, cc, cco, assunto, message, an);
    

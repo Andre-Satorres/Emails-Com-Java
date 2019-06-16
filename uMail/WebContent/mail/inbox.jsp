@@ -32,9 +32,11 @@
 	//String password = "Sem1seiji";
 	
 	if(session.getAttribute("Email1") == null)
-		request.getRequestDispatcher("CadastrarEmail.jsp").forward(request, response);
+		response.sendRedirect("CadastrarEmail.jsp");
 	
 	Email em;
+	
+	int atu = (int)session.getAttribute("atual");
 	
 	if(session.getAttribute("atual") == null)
 		em = (Email)session.getAttribute("Email"+session.getAttribute("QtdEmailsUsuario"));
@@ -69,6 +71,7 @@
                             	if(pastas != null)
                             		session.setAttribute("pastaAtual", pastas[0].getName());
                             	
+                            	if(pastas!=null)
                             	for(Folder fd:pastas)
                             	{
                             		%>

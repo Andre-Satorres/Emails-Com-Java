@@ -25,8 +25,8 @@
    			
    			if(!contasVinculadas.first())
    			{
-   				response.sendRedirect("mail/CadastrarEmail.jsp");
    				session.setAttribute("QtdEmailsUsuario", 0);
+   				response.sendRedirect("mail/CadastrarEmail.jsp");
    			}
    			else
    			{

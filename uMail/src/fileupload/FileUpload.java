@@ -1,7 +1,6 @@
 package fileupload;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,42 +48,39 @@ public class FileUpload extends HttpServlet
 		   	
 		   	javax.servlet.http.Part[] fileParts = col.toArray(new javax.servlet.http.Part[col.size()]);
 		   	
-		   	int i=0;
-		   	File[] an = new File[fileParts.length];
-		   	
-		   	if(fileParts != null)
-		    for (javax.servlet.http.Part filePart : fileParts) 
-		    {
-		        String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-		        
-		        InputStream fileContent = filePart.getInputStream();
-		        
-		        File f = new File(fileName);
-		        
-	    		try(OutputStream outputStream = new FileOutputStream(f))
-	    		{
-	    		    IOUtils.copy(fileContent, outputStream);
-	    		} 
-	    		catch (FileNotFoundException e) 
-	    		{
-	    		    
-	    		} 
-	    		catch (IOException e) 
-	    		{
-	    		    
-	    		}
-		        
-		        an[i] = f;
-		        
-		        i++;
+		   	if(fileParts.length == 0)
+		   		request.getRequestDispatcher("/mail/enviarEmail.jsp").forward(request, response);	   	
+		   	else
+		   	{
+			   	int i=0;
+			   	File[] an = new File[fileParts.length];
+			   	
+			   	if(fileParts != null)
+			    for (javax.servlet.http.Part filePart : fileParts) 
+			    {
+			        String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+			        
+			        InputStream fileContent = filePart.getInputStream();
+			        
+			        File f = new File(fileName);
+			        
+		    		try(OutputStream outputStream = new FileOutputStream(f))
+		    		{
+		    		    IOUtils.copy(fileContent, outputStream);
+		    		}
+
+			        an[i] = f;
+			        
+			        i++;
+			    }
+			   	
+			   	request.setAttribute("anexos", an);
 		    }
-		    
-		    request.setAttribute("anexos", an);
 		}
 		catch(Exception e)
 		{
 			request.setAttribute("error", e.getMessage());
-			e.printStackTrace();
+			//nao ha arquivos
 		}
 		
 		request.getRequestDispatcher("/mail/enviarEmail.jsp").forward(request, response);

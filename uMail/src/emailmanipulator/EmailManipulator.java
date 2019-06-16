@@ -128,7 +128,7 @@ public class EmailManipulator extends Email
 				this.setMailServerProperties(modo);
 			
 			final String user = this.getUsuario();
-			final String senha = this.getSenha();
+ 			final String senha = this.getSenha();
 			emailSession = Session.getDefaultInstance(emailProperties,
 					new javax.mail.Authenticator() {
 						protected PasswordAuthentication getPasswordAuthentication() {
@@ -158,7 +158,7 @@ public class EmailManipulator extends Email
 				this.authenticate(0);
 			
 			emailMessage = new MimeMessage(emailSession);
-			emailMessage.setFrom(this.getUsuario());
+			emailMessage.setFrom(new InternetAddress(this.getUsuario()));
 			
 			if(user==null)
 				throw new Exception("A mensagem não possui destinatário!");
@@ -356,7 +356,9 @@ public class EmailManipulator extends Email
 	{
 		try 
 		{
-			Transport.send(emailMessage);
+			Transport tp = emailSession.getTransport();
+			tp.connect(getUsuario(), getSenha());
+			tp.sendMessage(this.emailMessage, this.emailMessage.getAllRecipients());
 		}
 		catch(Exception e)
 		{
@@ -364,11 +366,17 @@ public class EmailManipulator extends Email
 		}
 	}
 	
-	private void setStore() throws Exception
+	public void setStore() throws Exception
 	{
-		this.emailStore = this.emailSession.getStore(this.getHost().getNome().toLowerCase()+"s"); //imaps ou pop3s
-		this.emailStore.connect(this.mailServer, this.getUsuario(), this.getSenha());
-		
+		try
+		{
+			this.emailStore = this.emailSession.getStore(this.getHost().getNome().toLowerCase()+"s"); //imaps ou pop3s
+			this.emailStore.connect(this.mailServer, this.getUsuario(), this.getSenha());
+		}
+		catch(Exception e)
+		{
+			throw new Exception("Falha de autenticaço. Senha e/ou porta(s) inválida(s) para esta conta!"); //authentication failed
+		}
 	}
 	
 	public Folder abrirPasta(String nomePasta, int modo) throws Exception
@@ -472,18 +480,11 @@ public class EmailManipulator extends Email
 	{
 		if(!this.isAuthenticated)
 			this.authenticate(1);
-		
-		try
-		{
-			if(!this.isStoreSet)
-				this.setStore();
-	
-			return emailStore.getDefaultFolder().list();
-		}
-		catch(Exception e)
-		{
-			return null;
-		}
+
+		if(!this.isStoreSet)
+			this.setStore();
+
+		return emailStore.getDefaultFolder().list();
 	}
 	
 	public void criarPasta(String novaPasta) throws Exception
