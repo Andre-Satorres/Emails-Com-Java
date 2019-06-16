@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" import="bd.dbos.*"
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" import="bd.dbos.*, bd.daos.*"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
@@ -9,8 +9,15 @@
 </head>
 <body>
 <%
-Email email = (Email)session.getAttribute("Email"+request.getParameter("i"));
-session.setAttribute("i", request.getParameter("i"));
+	Email email = (Email)session.getAttribute("Email"+request.getParameter("i"));
+	session.setAttribute("i", request.getParameter("i"));
+	
+	if(email == null) //veio da tela de ativar email
+	{
+		String e = request.getParameter("u");
+		email = Emails.getEmail(e, (String)session.getAttribute("usuario"));
+		session.setAttribute("i", null);
+	}
 %>
 <div class="flex-form">
         <form class="main-form" action="alterar.jsp" method="post">
@@ -54,7 +61,7 @@ session.setAttribute("i", request.getParameter("i"));
             </select>
           </div>  
           <div class="form-group">
-            <input type="button" class="btn-submit" value="Voltar" onClick="inbox.jsp">
+            <input type="button" class="btn-submit" value="Voltar" onClick="window.history.back()">
             <input type="reset" class="btn-submit" value="Limpar Dados">
             <input type="submit" class="btn-submit" value="Alterar">
           </div>

@@ -127,7 +127,7 @@
 <div class="right-part mail-details active" style="display: block;">
 					  
 <div class="grey lighten-5 p-15 d-flex no-block">
-    <a id="back_to_inbox" class="m-l-5 tooltipped" href="inbox.jsp" data-tooltip="back to inbox" data-position="top">
+    <a id="back_to_inbox" class="m-l-5 tooltipped" href="window.history.back()" data-tooltip="voltar para inbox" data-position="top">
     	<i class="material-icons font-20">arrow_back</i></a>
     <a class="m-l-5 tooltipped" href="responderEmail.jsp?i=<%=i %>" data-tooltip="Reply" data-position="top">
     <i class="material-icons font-20">reply</i></a>

@@ -14,7 +14,7 @@
 		
 		if(!(chave.equals(chave_usuario.getChave()))) //chave nao bate com o BD
 		{
-			session.setAttribute("erroAtivacao", "Chave invalida para este email. Verifique se a senha e chave estão corretas!");
+			session.setAttribute("erroAtivacao", "Chave invalida para este email. Verifique se a chave está correta!");
 			response.sendRedirect("ativarEmail.jsp");
 		}
 		else //chave digitada confere com a do BD
@@ -22,8 +22,34 @@
 			Email email = Emails.getEmail(usuario, conta);
 			EmailManipulator em = new EmailManipulator(email);
 
-			em.setStore();
+			em.authenticate(1);
 			
+			try
+			{
+				em.setStore();
+				em.abrirPasta("INBOX", 0);
+				
+			}
+			catch(Exception e)
+			{
+				session.setAttribute("erroAtivacao", "Falha de autenticação. Senha e/ou porta de recepção erradas.");
+				response.sendRedirect("ativarEmail.jsp");
+				return;
+			}
+			
+			em.authenticate(0);
+			try
+			{
+				em.setStore();
+				em.testarConexao();
+			}
+			catch(Exception e)
+			{
+				session.setAttribute("erroAtivacao", "Falha de autenticação. Senha e/ou porta de envio (SMTP) erradas.");
+				response.sendRedirect("ativarEmail.jsp");
+				return;
+			}
+		
 			Emails.autenticar(usuario, conta);
 			keys_users.excluir(usuario, conta);
 			

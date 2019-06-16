@@ -11,7 +11,7 @@
 <%
 	int qual = Integer.parseInt(request.getParameter("i"));
 
-	EmailManipulator email = (EmailManipulator)session.getAttribute("Email1");
+	EmailManipulator email = (EmailManipulator)session.getAttribute("Email"+session.getAttribute("atual"));
 	Message msg = email.getMensagem((String)session.getAttribute("pastaAtual"), qual);
 	
 	msg.setFlag(Flags.Flag.DELETED, true);

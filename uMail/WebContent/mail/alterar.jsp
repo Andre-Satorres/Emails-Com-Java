@@ -41,9 +41,13 @@
 		
 		Emails.alterar(email);
 		
-		session.setAttribute("Email" + session.getAttribute("i"), Emails.getEmail(usuario, conta));
-		
-		response.sendRedirect("inbox.jsp");
+		if(session.getAttribute("i") != null)
+		{
+			session.setAttribute("Email" + session.getAttribute("i"), Emails.getEmail(usuario, conta));
+			response.sendRedirect("inbox.jsp");
+		}
+		else
+			response.sendRedirect("ativarEmail.jsp");
 	}
 	catch(Exception e)
 	{

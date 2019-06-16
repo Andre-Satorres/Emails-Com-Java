@@ -43,7 +43,7 @@
 		Email email = new Email(usuario, senha, portaR, portaE, seguranca, host_certo, nome, sobrenome, servidor, 
 								LoginMails.getUsuario(conta), 0);
 		
-		Email admin_mail = Emails.getEmail("aa.satorres@gmail.com", "admin");
+		Email admin_mail = Emails.getEmail("noreply.uMail@yahoo.com", "admin");
 		
 		EmailManipulator em = new EmailManipulator(admin_mail);
 		

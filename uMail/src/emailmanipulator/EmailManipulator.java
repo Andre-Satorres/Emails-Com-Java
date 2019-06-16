@@ -20,7 +20,6 @@ public class EmailManipulator extends Email
 	private Properties emailProperties;
 	private Session emailSession;
 	private MimeMessage emailMessage;
-	private boolean issetServerMailProperties;
 	private boolean isAuthenticated;
 	private boolean isStoreSet;
 	private String mailServer;
@@ -32,7 +31,6 @@ public class EmailManipulator extends Email
 	{
 		super(usuario, senha, portaR, portaE, seguranca, host, nome, sobrenome, servidor, conta);
 		
-		this.issetServerMailProperties = false;
 		this.isAuthenticated = false;
 		this.isStoreSet = false;
 	}
@@ -41,7 +39,6 @@ public class EmailManipulator extends Email
 	{
 		super(em);
 		
-		this.issetServerMailProperties = false;
 		this.isAuthenticated = false;
 		this.isStoreSet = false;
 	}
@@ -93,7 +90,7 @@ public class EmailManipulator extends Email
 			else
 			{
 				if(this.getServidor().contains("bol"))
-					this.mailServer = "smtps" + "." + this.getServidor(); //bol tem esse s gay
+					this.mailServer = "smtps" + "." + this.getServidor(); //bol tem esse s
 				else
 					this.mailServer = "smtp" + "." + this.getServidor();
 				
@@ -111,7 +108,6 @@ public class EmailManipulator extends Email
 				}
 			}
 			
-			this.issetServerMailProperties = true;
 			return 0;
 		}
 		catch(Exception e)
@@ -124,8 +120,7 @@ public class EmailManipulator extends Email
 	{
 		try 
 		{
-			if(!this.issetServerMailProperties)
-				this.setMailServerProperties(modo);
+			this.setMailServerProperties(modo);
 			
 			final String user = this.getUsuario();
  			final String senha = this.getSenha();
@@ -352,6 +347,12 @@ public class EmailManipulator extends Email
 		}
 	}
 	
+	public void testarConexao() throws Exception
+	{
+		Transport tp = emailSession.getTransport();
+		tp.connect(getUsuario(), getSenha());
+	}
+	
 	public void sendEmail() throws Exception
 	{
 		try 
@@ -368,15 +369,8 @@ public class EmailManipulator extends Email
 	
 	public void setStore() throws Exception
 	{
-		try
-		{
-			this.emailStore = this.emailSession.getStore(this.getHost().getNome().toLowerCase()+"s"); //imaps ou pop3s
-			this.emailStore.connect(this.mailServer, this.getUsuario(), this.getSenha());
-		}
-		catch(Exception e)
-		{
-			throw new Exception("Falha de autenticaço. Senha e/ou porta(s) inválida(s) para esta conta!"); //authentication failed
-		}
+		this.emailStore = this.emailSession.getStore(this.getHost().getNome().toLowerCase()+"s"); //imaps ou pop3s
+		this.emailStore.connect(this.mailServer, this.getUsuario(), this.getSenha());
 	}
 	
 	public Folder abrirPasta(String nomePasta, int modo) throws Exception

@@ -8,6 +8,7 @@
 <title>Ativar Conta - <%=conta%></title>
 </head>
 <link rel="stylesheet" type="text/css" href="../css/master.css">
+<script src="./Materialart Admin Template_files/jquery.min.js.download"></script>
 <body>
 <div class="flex-form">
         <form class="main-form" action="ativar.jsp" method="post">
@@ -16,12 +17,13 @@
           	MeuResultSet emailsNAuth = Emails.naoAutenticadosDaConta(conta);
           
       		if(!emailsNAuth.first())
-      		{%><h2>Sua conta não possui autenticações pendentes.</h2><%}
+      		{%><h2>Sua conta não possui autenticações pendentes.</h2>
+      			<input type="button" class="btn-submit" value="Voltar" id="voltar"><%}
       		else{%>
 	          <div class="form-group">
 	            <select class="form-control" name="usuario" id="usuario" required>
 	            <%     		
-	            	emailsNAuth.beforeFirst();	
+	            	emailsNAuth.beforeFirst();
 	            	while(emailsNAuth.next())
 	            		{%><option><%=emailsNAuth.getString("usuario")%></option><%}%>
 	            </select>
@@ -34,8 +36,8 @@
 	          <div class="form-group">
 	            <input type="button" class="btn-submit" value="Voltar" onClick="window.history.back()">
 	            <input type="reset" class="btn-submit" value="Limpar Dados">
-	            <input type="reset" class="btn-submit" value="Excluir Email">
-	            <input type="reset" class="btn-submit" value="Alterar Email" onClick="window.location='/alterarEmail?i='<%=0/*por enqt zero*/%>">
+	            <input type="reset" class="btn-submit" value="Excluir Email" id="excluir">
+	            <input type="reset" class="btn-submit" value="Alterar Email" id="alterar">
 	            <input type="submit" class="btn-submit" value="Ativar">
 	          </div>
 	          
@@ -47,5 +49,23 @@
        </form>
       </div>
 	 <%session.removeAttribute("erroAtivacao"); %>
+	 
+	 <script>
+	 	$('#alterar').click(function() 
+	 	{
+	 		 window.location.href =  "alterarEmail.jsp?u="+$('select').val();
+		});
+	 	
+	 	$('#excluir').click(function() 
+	 	{
+	 		 window.location.href = "excluirEmailNaoAutenticado.jsp?u="+$('select').val();
+		});
+	 	
+	 	$('#voltar').click(function() 
+	 	{
+	 		 window.location.href = "inbox.jsp";
+		});
+	 		 	
+	 </script>
 </body>
 </html>
