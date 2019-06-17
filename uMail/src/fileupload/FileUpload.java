@@ -80,11 +80,9 @@ public class FileUpload extends HttpServlet
 		catch(Exception e)
 		{
 			request.setAttribute("error", e.getMessage());
-			//nao ha arquivos
 		}
 		
 		request.getRequestDispatcher("/mail/enviarEmail.jsp").forward(request, response);
-		
 	}
 
 }

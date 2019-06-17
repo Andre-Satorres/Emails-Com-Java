@@ -13,6 +13,7 @@
     <link href="./Materialart Admin Template_files/email.css" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" type="text/css" id="u0" href="./Materialart Admin Template_files/skin.min.css"></head>   
+    <script src="https://cdn.ckeditor.com/ckeditor5/12.2.0/classic/ckeditor.js"></script>
     
      <style>
             .thumb 
@@ -339,14 +340,22 @@
                    <input placeholder="Assunto:" name="assunto" id="assunto" required>
                </div>
                
-               	<!--  TEXT AREA -->
-               	<div ng-app="myApp">
-					<div ng-controller="AppCtrl" align="center">
-                  		<textarea id="emailarea" name="emailarea"
-                  			ng-model="loremIpsum" ng-keyup="autoExpand($event)" style="height:300px;"
-                  			placeholder="Insira seu texto aqui"></textarea>
-                  	</div>
-                </div>
+                <div class="Input-field">
+                   <input type="hidden" name="testing" id="emailarea" required>
+               </div>
+               
+               <!-- ----------------------------------------------------------------------------- -->
+               
+				    <textarea name="content" id="htmleditor">
+				        &lt;p&gt;This is some sample content.&lt;/p&gt;
+				    </textarea>
+				    <script>
+				    ClassicEditor
+		            .create( document.querySelector( '#htmleditor' ) )
+		            .catch( error => {
+		                console.error( error );
+		            } );
+				    </script>
                   	
                 <h5 class="card-title"><i class="ti-link"></i>Anexo</h5>
                 <div class="file-field input-field">
@@ -689,29 +698,15 @@
     <script src="./Materialart Admin Template_files/app.init.js.download"></script>
     <script src="./Materialart Admin Template_files/app-style-switcher.js.download"></script>
     <script src="./Materialart Admin Template_files/custom.min.js.download"></script>
-    <script src="./Materialart Admin Template_files/tinymce.min.js.download"></script>
     <script src="./Materialart Admin Template_files/email.js.download"></script>
     <script src="../js/angular.js"></script>
     <script src="../js/js.js"></script>
     
     <script>
-    $(function() {
-        if ($("#emailarea").length > 0) {
-            tinymce.init({
-                selector: "textarea#mymce",
-                theme: "modern",
-                height: 250,
-                plugins: [
-                    "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
-                    "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
-                    "save table contextmenu directionality emoticons template paste textcolor"
-                ],
-                toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
-            });
-        }
-        
-
-    });
+	    $(".ck.ck-content.ck-editor__editable.ck-rounded-corners.ck-editor__editable_inline.ck-blurred").keyup(function() 
+	    {
+	    	$("#emailarea").val($(".ck.ck-content.ck-editor__editable.ck-rounded-corners.ck-editor__editable_inline.ck-blurred").html());
+	    });
     </script>
     
     <script>
@@ -752,5 +747,12 @@
 
    	document.getElementById('arqs').addEventListener('change', handleFileSelect, false);
    </script>
-<div class="sidenav-overlay"></div><div class="drag-target"></div><div class="sidenav-overlay"></div><div class="drag-target right-aligned"></div><div class="material-tooltip"><div class="tooltip-content"></div></div><div class="material-tooltip"><div class="tooltip-content"></div></div><div class="material-tooltip"><div class="tooltip-content"></div></div>
+<div class="sidenav-overlay"></div><div class="drag-target"></div>
+<div class="sidenav-overlay"></div><div class="drag-target right-aligned"></div>
+
+
+<div class="material-tooltip"><div class="tooltip-content"></div></div>
+<div class="material-tooltip"><div class="tooltip-content"></div></div>
+<div class="material-tooltip"><div class="tooltip-content"></div></div>
+
 </body></html>

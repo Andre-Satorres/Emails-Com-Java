@@ -32,15 +32,8 @@ try
    		cco = new String[0];
    	
    assunto = request.getParameter("assunto").trim();
-   StringBuffer text = new StringBuffer(request.getParameter("emailarea"));
+  String text = new String(request.getParameter("emailarea"));
   
-   int loc = (new String(text)).indexOf('\n');
-   while(loc > 0)
-   {
-       text.replace(loc, loc+1, "<BR>");
-       loc = (new String(text)).indexOf('\n');
-  }
-   
   String message = text.toString();
   
   Email email = (Email)session.getAttribute("Email"+session.getAttribute("atual"));
