@@ -98,7 +98,10 @@ public class EmailManipulator extends Email
 				if(this.getServidor().contains("bol"))
 					this.mailServer = "smtps" + "." + this.getServidor(); //bol tem esse s
 				else
-					this.mailServer = "smtp" + "." + this.getServidor();
+					if(this.getServidor().contains("yahoo"))
+						this.mailServer = "smtp" + ".mail." + this.getServidor();
+					else
+						this.mailServer = "smtp" + "." + this.getServidor();
 				
 				emailProperties.put("mail.smtp.port", this.getPortaEnvio());
 				emailProperties.put("mail.smtp.host", this.mailServer);

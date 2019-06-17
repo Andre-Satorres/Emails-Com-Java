@@ -341,7 +341,7 @@
                </div>
                
                 <div class="Input-field">
-                   <input type="hidden" name="testing" id="emailarea" required>
+                   <input type="hidden" name="testing" id="emailarea">
                </div>
                
                <!-- ----------------------------------------------------------------------------- -->
@@ -705,7 +705,9 @@
     <script>
 	    $(".ck.ck-content.ck-editor__editable.ck-rounded-corners.ck-editor__editable_inline.ck-blurred").keyup(function() 
 	    {
-	    	$("#emailarea").val($(".ck.ck-content.ck-editor__editable.ck-rounded-corners.ck-editor__editable_inline.ck-blurred").html());
+	    	var s = $(".ck.ck-content.ck-editor__editable.ck-rounded-corners.ck-editor__editable_inline.ck-blurred").html();
+	    	$("#emailarea").val(s);
+	    	alert($("#emailarea").html());
 	    });
     </script>
     

@@ -51,10 +51,7 @@ public class FileUpload extends HttpServlet
 		   	
 		   	if(fileParts.length == 0)
 		   	{
-		   		String nextJSP = "/mail/enviarEmail.jsp";
-		   		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
-		   		dispatcher.forward(request,response);
-		   		return;
+
 		   	}
 		   	else
 		   	{
@@ -76,12 +73,7 @@ public class FileUpload extends HttpServlet
 		    		    IOUtils.copy(fileContent, outputStream);
 		    		}
 		    		catch(Exception e)
-		    		{
-		    			String nextJSP = "/mail/enviarEmail.jsp";
-				   		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
-				   		dispatcher.forward(request,response);
-		    			return;
-		    		}
+		    		{}
 
 			        an[i] = f;
 			        
@@ -95,10 +87,6 @@ public class FileUpload extends HttpServlet
 		{
 			e.printStackTrace();
 			request.setAttribute("error", e.getMessage());
-			String nextJSP = "/mail/enviarEmail.jsp";
-	   		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
-	   		dispatcher.forward(request,response);
-			return;
 		}
 		
 		String nextJSP = "/mail/enviarEmail.jsp";
