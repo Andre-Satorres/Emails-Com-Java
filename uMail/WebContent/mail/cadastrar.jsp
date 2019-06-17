@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" import="bd.daos.*, bd.dbos.*, emailmanipulator.*,
 																			java.util.UUID, java.security.Key, 
-																			javax.crypto.Cipher, javax.crypto.KeyGenerator, saltedmd5.*"
+																			javax.crypto.Cipher, javax.crypto.KeyGenerator, criptoslyde.*"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
@@ -40,19 +40,14 @@
 		
 		String servidor = usuario.substring(usuario.indexOf("@")+1, usuario.length());
 		
-		String[] cripto = SaltedMD5.criptografar(senha);
-		//cripto[0] eh a senha criptrografada em hexadecimal
-		//cripto[1] eh o salt q tenho q salvar no bd
-		
-		//Hashs.incluir(usuario, cripto[1], conta);
-		
-		Email email = new Email(usuario, cripto[0], portaR, portaE, seguranca, host_certo, nome, sobrenome, servidor, 
+		Email email = new Email(usuario, CriptoSlyDe.gerarSenhaCriptografada(senha), portaR, portaE, seguranca, host_certo, nome, sobrenome, servidor, 
 								LoginMails.getUsuario(conta), 0);
 		
+		Emails.incluir(email);
+		
 		Email admin_mail = Emails.getEmail("noreply.uMail@yahoo.com", "admin");
-		
+		admin_mail.setSenha(CriptoSlyDe.descriptografar(admin_mail.getSenha()));
 		EmailManipulator em = new EmailManipulator(admin_mail);
-		
 
 		StringBuilder builder = new StringBuilder();
 		
@@ -66,7 +61,6 @@
 
 		em.sendConfirmationEmail(usuario, builder.toString()); //envia email com chave
 
-		Emails.incluir(email);
 			
 		response.sendRedirect("inbox.jsp");
 	}

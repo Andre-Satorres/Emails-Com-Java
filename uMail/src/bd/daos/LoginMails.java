@@ -118,6 +118,38 @@ public class LoginMails
         }
     }
     
+    public static String getSenha (String usuario) throws Exception
+    {
+        if (usuario==null)
+            throw new Exception ("Usuario nao fornecido");
+
+        if (!cadastrado (usuario))
+            throw new Exception ("Nao cadastrado");
+
+        try
+        {
+            String sql;
+
+            sql = "select senha from loginMail " +
+                  "WHERE usuario = ?";
+
+            BDSQLServer.COMANDO.prepareStatement (sql);
+
+            BDSQLServer.COMANDO.setString (1, usuario);
+
+            MeuResultSet resultado = (MeuResultSet)BDSQLServer.COMANDO.executeQuery ();
+
+            if (!resultado.first())
+                throw new Exception ("Nao cadastrado");
+            
+            return resultado.getString("senha");
+        }
+        catch (SQLException erro)
+        {
+            throw new Exception ("Erro ao procurar senha!");
+        }
+    }
+    
     public static LoginMail getUsuario (String usuario) throws Exception
     {
         LoginMail uMail = null;

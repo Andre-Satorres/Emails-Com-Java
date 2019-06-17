@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" import = "bd.dbos.*, bd.daos.*"
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" import = "bd.dbos.*, bd.daos.*, criptoslyde.*"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
@@ -36,7 +36,7 @@
 		
 		String servidor = usuario.substring(usuario.indexOf("@")+1, usuario.length());
 		
-		Email email = new Email(usuario, senha, portaR, portaE, seguranca, host_certo, nome, sobrenome, servidor, 
+		Email email = new Email(usuario, CriptoSlyDe.gerarSenhaCriptografada(senha), portaR, portaE, seguranca, host_certo, nome, sobrenome, servidor, 
 								LoginMails.getUsuario(conta), 0);
 		
 		Emails.alterar(email);

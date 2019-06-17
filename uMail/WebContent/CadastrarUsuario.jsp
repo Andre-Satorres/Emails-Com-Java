@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" import = "bd.dbos.*, bd.daos.*"
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" import = "bd.dbos.*, bd.daos.*, senhaaltamentesegura.*"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
@@ -22,7 +22,7 @@
 		
 		if(!(LoginMails.cadastrado(usuario)))	
 		{
-			LoginMail new_user = new LoginMail(usuario, senha);
+			LoginMail new_user = new LoginMail(usuario, SenhaAltamenteSegura.gerarSenhaForte(senha));
 			LoginMails.incluir(new_user);
 			session.setAttribute("usuario", usuario);
 			session.setAttribute("QtdEmailsUsuario", 0);

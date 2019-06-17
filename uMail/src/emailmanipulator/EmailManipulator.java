@@ -53,7 +53,10 @@ public class EmailManipulator extends Email
 			{
 				if(this.getHost().getId()==1)
 				{
-					this.mailServer = "pop" + "." + this.getServidor();
+					if(this.getServidor().contains("yahoo"))
+						this.mailServer = "pop" + "." + "mail." + this.getServidor();
+					else
+						this.mailServer = "pop" + "." + this.getServidor();
 					
 					emailProperties.put("mail.pop3.port", this.getPortaRecepcao());
 					emailProperties.put("mail.pop3.host", this.mailServer);
@@ -71,7 +74,10 @@ public class EmailManipulator extends Email
 				}
 				else
 				{
-					this.mailServer = "imap" + "." + this.getServidor();
+					if(this.getServidor().contains("yahoo"))
+						this.mailServer = "imap" + "." + "mail." + this.getServidor();
+					else
+						this.mailServer = "imap" + "." + this.getServidor();
 					
 					emailProperties.put("mail.imap.port", this.getPortaRecepcao());
 					emailProperties.put("mail.imap.host", this.mailServer);
@@ -350,7 +356,7 @@ public class EmailManipulator extends Email
 	public void testarConexao() throws Exception
 	{
 		Transport tp = emailSession.getTransport();
-		tp.connect(getUsuario(), getSenha());
+		tp.connect(getUsuario(), this.getSenha());
 	}
 	
 	public void sendEmail() throws Exception

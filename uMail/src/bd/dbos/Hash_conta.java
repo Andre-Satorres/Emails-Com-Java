@@ -1,17 +1,10 @@
 package bd.dbos;
 
-public class Hash 
+public class Hash_conta 
 {
-	private String usuario;
 	private String conta;
 	private String hash;
 	
-	public String getUsuario() {
-		return usuario;
-	}
-	public void setUsuario(String usuario) {
-		this.usuario = usuario;
-	}
 	public String getConta() {
 		return conta;
 	}
@@ -25,20 +18,19 @@ public class Hash
 		this.hash = hash;
 	}
 	
-	public Hash()
+	public Hash_conta()
 	{}
 	
-	public Hash(String usuario, String hash, String conta) 
+	public Hash_conta(String hash, String conta) 
 	{
 		super();
-		this.usuario = usuario;
 		this.conta = conta;
 		this.hash = hash;
 	}
 	
 	@Override
 	public String toString() {
-		return "key_user [usuario=" + usuario + ", conta=" + conta + ", hash=" + hash + "]";
+		return "key_user [conta=" + conta + ", hash=" + hash + "]";
 	}
 	@Override
 	public int hashCode() 
@@ -47,7 +39,6 @@ public class Hash
 		int result = 1;
 		result = prime * result + ((hash == null) ? 0 : hash.hashCode());
 		result = prime * result + ((conta == null) ? 0 : conta.hashCode());
-		result = prime * result + ((usuario == null) ? 0 : usuario.hashCode());
 		return result;
 	}
 	
@@ -60,32 +51,33 @@ public class Hash
 			return false;
 		if (!(obj instanceof Hash))
 			return false;
-		Hash other = (Hash) obj;
-		if (hash == null) {
+		Hash_conta other = (Hash_conta) obj;
+		if (hash == null) 
+		{
 			if (other.hash != null)
 				return false;
-		} else if (!hash.equals(other.hash))
+		} 
+		else if (!hash.equals(other.hash))
 			return false;
-		if (conta == null) {
+		
+		if (conta == null) 
+		{
 			if (other.conta != null)
 				return false;
-		} else if (!conta.equals(other.conta))
+		} 
+		else if (!conta.equals(other.conta))
 			return false;
-		if (usuario == null) {
-			if (other.usuario != null)
-				return false;
-		} else if (!usuario.equals(other.usuario))
-			return false;
+
 		return true;
 	}
 	
 	public Object clone()
 	{
-		Hash hash = null;
+		Hash_conta hash = null;
 		
 		try
 		{
-			hash = new Hash(this);
+			hash = new Hash_conta(this);
 		}
 		catch(Exception e)
 		{}
@@ -93,10 +85,9 @@ public class Hash
 		return hash;
 	}
 	
-	public Hash(Hash hash) throws Exception
+	public Hash_conta(Hash_conta hash) throws Exception
 	{
 		this.conta = hash.conta;
 		this.hash = hash.hash;
-		this.usuario = hash.usuario;
 	}
 }

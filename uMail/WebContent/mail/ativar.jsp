@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" import="java.security.Key, javax.crypto.Cipher, 
 																	javax.crypto.KeyGenerator, bd.dbos.*, bd.daos.*,
-																	bd.core.*, emailmanipulator.*"
+																	bd.core.*, emailmanipulator.*, criptoslyde.*"
     pageEncoding="ISO-8859-1"%>
 
 <%
@@ -19,9 +19,10 @@
 		}
 		else //chave digitada confere com a do BD
 		{
-			Email email = Emails.getEmail(usuario, conta);
+			Email email = Emails.getEmail(usuario, conta);		
+			email.setSenha(CriptoSlyDe.descriptografar(email.getSenha()));	
 			EmailManipulator em = new EmailManipulator(email);
-
+	
 			em.authenticate(1);
 			
 			try
@@ -55,7 +56,7 @@
 			
 			session.setAttribute("QtdEmailsUsuario", (int)(session.getAttribute("QtdEmailsUsuario"))+1);
 			session.setAttribute("atual", session.getAttribute("QtdEmailsUsuario"));
-			session.setAttribute("Email"+session.getAttribute("QtdEmailsUsuario"), Emails.getEmail(usuario, conta));
+			session.setAttribute("Email"+session.getAttribute("QtdEmailsUsuario"), email);
 			response.sendRedirect("inbox.jsp");
 		}
 	}

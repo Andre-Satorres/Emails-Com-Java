@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" import="bd.dbos.*, bd.daos.*"
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" import="bd.dbos.*, bd.daos.*, criptoslyde.*"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
@@ -16,6 +16,7 @@
 	{
 		String e = request.getParameter("u");
 		email = Emails.getEmail(e, (String)session.getAttribute("usuario"));
+		email.setSenha(CriptoSlyDe.descriptografar(email.getSenha()));
 		session.setAttribute("i", null);
 	}
 %>

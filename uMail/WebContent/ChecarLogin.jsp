@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" import="bd.daos.*, bd.dbos.*, bd.core.*"
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" import="bd.daos.*, bd.dbos.*, bd.core.*, senhaaltamentesegura.*, criptoslyde.*"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
@@ -12,49 +12,62 @@
    try
    {
 	    String usuario = request.getParameter("usuarioL");
-   		if(!LoginMails.cadastrado(usuario) || !(LoginMails.getUsuario(usuario).getSenha().equals(request.getParameter("senhaL"))))
+	    String senha = request.getParameter("senhaL");
+	    
+   		if(!LoginMails.cadastrado(usuario))
    		{
    			request.setAttribute("errorMessage", "Usuário ou senha inválidos!");
    			request.getRequestDispatcher("/index.jsp").forward(request, response);
    		}
    		else
    		{
-   			session.setAttribute("usuario", usuario);
+   			boolean checarSenha = SenhaAltamenteSegura.validarSenha(senha, LoginMails.getSenha(usuario));
    			
-   			MeuResultSet contasVinculadas = Emails.contaTemEmails(usuario);
-   			
-   			if(!contasVinculadas.first())
+   			if(!checarSenha)
    			{
-   				session.setAttribute("QtdEmailsUsuario", 0);
-   				response.sendRedirect("mail/CadastrarEmail.jsp");
+   				request.setAttribute("errorMessage", "Usuário ou senha inválidos!");
+   	   			request.getRequestDispatcher("/index.jsp").forward(request, response);
    			}
    			else
    			{
-   				contasVinculadas.beforeFirst();
-   				int i=0;
-   				Email em = null; 
-   				while(contasVinculadas.next())
-   				{
-   					em = new Email(contasVinculadas.getString("usuario"), contasVinculadas.getString("SENHA"), 
-   							             contasVinculadas.getInt   ("Porta"), contasVinculadas.getInt   ("PortaSMTP"), Segurancas.getSeguranca(contasVinculadas.getInt("Seguranca")), 
-   		            		             Hosts.getHost(contasVinculadas.getInt ("HOST")), contasVinculadas.getString("nome"), 
-   		            		             contasVinculadas.getString("sobrenome"), contasVinculadas.getString("servidor"), 
-   		            		             LoginMails.getUsuario(contasVinculadas.getString("conta")), contasVinculadas.getInt("autenticado"));
-   					
-   					i++;
-   					
-   					if(em.getAutenticado() == 1)
-   						session.setAttribute("Email"+i, em); 
-   					else
-   						i--;
-   					
-   					//usuario nesse caso eh o de email, tipo mommavalos@gmail.com
-   				}
-   				
-   				//sessionei tds as contas de email vinculadas a esta conta de usuario
-   				session.setAttribute("QtdEmailsUsuario", i);
-   				session.setAttribute("atual", i);
-   				response.sendRedirect("mail/inbox.jsp");
+   			
+	   			session.setAttribute("usuario", usuario);
+	   			
+	   			MeuResultSet contasVinculadas = Emails.contaTemEmails(usuario);
+	   			
+	   			if(!contasVinculadas.first())
+	   			{
+	   				session.setAttribute("QtdEmailsUsuario", 0);
+	   				response.sendRedirect("mail/CadastrarEmail.jsp");
+	   			}
+	   			else
+	   			{
+	   				contasVinculadas.beforeFirst();
+	   				int i=0;
+	   				Email em = null; 
+	   				while(contasVinculadas.next())
+	   				{
+	   					em = new Email(contasVinculadas.getString("usuario"), CriptoSlyDe.descriptografar(contasVinculadas.getString("SENHA")), 
+	   							             contasVinculadas.getInt   ("Porta"), contasVinculadas.getInt("PortaSMTP"), Segurancas.getSeguranca(contasVinculadas.getInt("Seguranca")), 
+	   		            		             Hosts.getHost(contasVinculadas.getInt ("HOST")), contasVinculadas.getString("nome"), 
+	   		            		             contasVinculadas.getString("sobrenome"), contasVinculadas.getString("servidor"), 
+	   		            		             LoginMails.getUsuario(contasVinculadas.getString("conta")), contasVinculadas.getInt("autenticado"));
+	   					
+	   					i++;
+	   					
+	   					if(em.getAutenticado() == 1)
+	   						session.setAttribute("Email"+i, em); 
+	   					else
+	   						i--;
+	   					
+	   					//usuario nesse caso eh o de email, tipo mommavalos@gmail.com
+	   				}
+	   				
+	   				//sessionei tds as contas de email vinculadas a esta conta de usuario
+	   				session.setAttribute("QtdEmailsUsuario", i);
+	   				session.setAttribute("atual", i);
+	   				response.sendRedirect("mail/inbox.jsp");
+	   			}
    			}
    		}
    }

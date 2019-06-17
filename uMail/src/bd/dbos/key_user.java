@@ -78,4 +78,25 @@ public class key_user
 			return false;
 		return true;
 	}
+	
+	public Object clone()
+	{
+		key_user key = null;
+		
+		try
+		{
+			key = new key_user(this);
+		}
+		catch(Exception e)
+		{}
+		
+		return key;
+	}
+	
+	public key_user(key_user key) throws Exception
+	{
+		this.chave = key.chave;
+		this.conta = key.conta;
+		this.usuario = key.usuario;
+	}
 }

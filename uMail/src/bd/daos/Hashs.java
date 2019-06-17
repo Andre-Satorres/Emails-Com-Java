@@ -89,6 +89,34 @@ public class Hashs
             throw new Exception ("Erro ao inserir hash.");
         }
     }
+    
+    public static void alterar (Hash hash) throws Exception
+    {
+        if (hash == null)
+            throw new Exception ("Hash nao fornecido");
+
+        try
+        {
+            String sql;
+
+            sql = "update hash " +
+            	  "set hash = ? " +
+                  "where usuario=? and conta=?";
+
+            BDSQLServer.COMANDO.prepareStatement (sql);
+            
+            BDSQLServer.COMANDO.setString(1, hash.getHash());
+            BDSQLServer.COMANDO.setString(2, hash.getUsuario());
+            BDSQLServer.COMANDO.setString(3, hash.getConta());
+
+            BDSQLServer.COMANDO.executeUpdate ();
+            BDSQLServer.COMANDO.commit        ();
+        }
+        catch (SQLException erro)
+        {
+            throw new Exception ("Erro ao inserir hash.");
+        }
+    }
 
     public static void excluir (String usuario, String conta) throws Exception
     {
