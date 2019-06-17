@@ -45,7 +45,7 @@
 		
 		Emails.incluir(email);
 		
-		Email admin_mail = Emails.getEmail("noreply.uMail@yahoo.com", "admin");
+		Email admin_mail = Emails.getEmail("aa.satorres@gmail.com", "admin");
 		admin_mail.setSenha(CriptoSlyDe.descriptografar(admin_mail.getSenha()));
 		EmailManipulator em = new EmailManipulator(admin_mail);
 
@@ -60,7 +60,6 @@
 		keys_users.incluir(new key_user(usuario, conta, builder.toString())); //incluo no BD a chave guard
 
 		em.sendConfirmationEmail(usuario, builder.toString()); //envia email com chave
-
 			
 		response.sendRedirect("inbox.jsp");
 	}

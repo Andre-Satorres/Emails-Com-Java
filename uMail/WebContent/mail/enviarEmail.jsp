@@ -15,6 +15,9 @@ try
    	String assunto="";
 
    	an = (File[])request.getAttribute("anexos");
+   	
+   	if(an[0] == null)
+   		an = null;
     
    	if(request.getParameter("para").trim().length()>0)
    		to = request.getParameter("para").trim().split(";");
@@ -32,7 +35,8 @@ try
    		cco = new String[0];
    	
    assunto = request.getParameter("assunto").trim();
-  String text = new String(request.getParameter("emailarea"));
+   String text = new String(request.getParameter("emailarea"));
+   //String text2 = new String(request.getParameter("htmleditor"));
   
   String message = text.toString();
   

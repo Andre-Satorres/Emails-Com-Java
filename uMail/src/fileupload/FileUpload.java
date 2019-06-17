@@ -71,12 +71,11 @@ public class FileUpload extends HttpServlet
 		    		{
 		    			OutputStream outputStream = new FileOutputStream(f);
 		    		    IOUtils.copy(fileContent, outputStream);
+		    		    an[i] = f;
 		    		}
 		    		catch(Exception e)
 		    		{}
-
-			        an[i] = f;
-			        
+		    		
 			        i++;
 			    }
 			   	

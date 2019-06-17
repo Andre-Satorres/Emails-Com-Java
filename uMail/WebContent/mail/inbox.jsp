@@ -341,12 +341,12 @@
                </div>
                
                 <div class="Input-field">
-                   <input type="hidden" name="testing" id="emailarea">
+                   <input type="hidden" name="emailarea" id="emailarea">
                </div>
                
                <!-- ----------------------------------------------------------------------------- -->
                
-				    <textarea name="content" id="htmleditor">
+				    <textarea name="content" id="htmleditor" name="htmleditor">
 				        &lt;p&gt;This is some sample content.&lt;/p&gt;
 				    </textarea>
 				    <script>
@@ -703,15 +703,23 @@
     <script src="../js/js.js"></script>
     
     <script>
-	    $(".ck.ck-content.ck-editor__editable.ck-rounded-corners.ck-editor__editable_inline.ck-blurred").keyup(function() 
-	    {
-	    	var s = $(".ck.ck-content.ck-editor__editable.ck-rounded-corners.ck-editor__editable_inline.ck-blurred").html();
-	    	$("#emailarea").val(s);
-	    	alert($("#emailarea").html());
-	    });
+    $(".ck.ck-content.ck-editor__editable.ck-rounded-corners.ck-editor__editable_inline.ck-blurred").keyup(function() 
+    	    {
+    			$("#htmleditor").html(document.activeElement.innerHTML);
+    	   		minhaFuncao();
+    	    
+    	    });
     </script>
     
     <script>
+    	function minhaFuncao()
+    	{
+    		var s = document.activeElement.innerHTML;
+    		$("#htmleditor").val(s);
+    		$("#emailarea").val(s);
+    		console.log(s);
+    	}
+    	
        function handleFileSelect(evt) 
        {
            var files = evt.target.files; // FileList object
