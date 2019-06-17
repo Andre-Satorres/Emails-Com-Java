@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -49,7 +50,12 @@ public class FileUpload extends HttpServlet
 		   	javax.servlet.http.Part[] fileParts = col.toArray(new javax.servlet.http.Part[col.size()]);
 		   	
 		   	if(fileParts.length == 0)
-		   		request.getRequestDispatcher("/mail/enviarEmail.jsp").forward(request, response);	   	
+		   	{
+		   		String nextJSP = "/mail/enviarEmail.jsp";
+		   		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
+		   		dispatcher.forward(request,response);
+		   		return;
+		   	}
 		   	else
 		   	{
 			   	int i=0;
@@ -64,9 +70,17 @@ public class FileUpload extends HttpServlet
 			        
 			        File f = new File(fileName);
 			        
-		    		try(OutputStream outputStream = new FileOutputStream(f))
+		    		try
 		    		{
+		    			OutputStream outputStream = new FileOutputStream(f);
 		    		    IOUtils.copy(fileContent, outputStream);
+		    		}
+		    		catch(Exception e)
+		    		{
+		    			String nextJSP = "/mail/enviarEmail.jsp";
+				   		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
+				   		dispatcher.forward(request,response);
+		    			return;
 		    		}
 
 			        an[i] = f;
@@ -79,10 +93,17 @@ public class FileUpload extends HttpServlet
 		}
 		catch(Exception e)
 		{
+			e.printStackTrace();
 			request.setAttribute("error", e.getMessage());
+			String nextJSP = "/mail/enviarEmail.jsp";
+	   		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
+	   		dispatcher.forward(request,response);
+			return;
 		}
 		
-		request.getRequestDispatcher("/mail/enviarEmail.jsp").forward(request, response);
+		String nextJSP = "/mail/enviarEmail.jsp";
+   		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
+   		dispatcher.forward(request,response);
 	}
 
 }
