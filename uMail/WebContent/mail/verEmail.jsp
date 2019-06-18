@@ -76,7 +76,10 @@
                             </li>
                             <%
                             	Folder[] pastas = email.obterTodasAsPastas();
+                            	if(pastas != null)
+                            		session.setAttribute("pastaAtual", pastas[0].getName());
                             	
+                            	if(pastas!=null)
                             	for(Folder fd:pastas)
                             	{
                             		%>
@@ -86,12 +89,12 @@
                             			  	%>
                                 			<a href="javascript:void(0)" class="active">
                                 			<i class="material-icons">inbox</i><%=fd.getName().substring(0, 1).toUpperCase() + fd.getName().substring(1).toLowerCase() %>
-                                			<span class="label label-success right"><%=email.quantidadeNaoLidas(fd.getName()) %></span></a>
+                                			<span class="label label-success right"><%=(email.quantidadeNaoLidas(fd.getName())==0?"":email.quantidadeNaoLidas(fd.getName()))%></span></a>
                                 			<%
                                 		  }else {%>
                                 			<a href="javascript:void(0)">
-                                			<i class="material-icons"><%=fd.getName() %></i><%=fd.getName().substring(0, 1).toUpperCase() + fd.getName().substring(1).toLowerCase() %>
-                                			<span class="label label-success right"><%=email.quantidadeNaoLidas(fd.getName()) %></span></a>
+                                			<i class="material-icons">inbox</i><%=fd.getName().substring(0, 1).toUpperCase() + fd.getName().substring(1).toLowerCase() %>
+                                			<span class="label label-success right"><%=(email.quantidadeNaoLidas(fd.getName())==0?"":email.quantidadeNaoLidas(fd.getName()))%></span></a>
                                 			<%} %>
                             			</li>
                             		<%
@@ -102,9 +105,7 @@
                                 <a href="javascript:void(0)"> <i class="material-icons">star</i> Arquivado </a>
                             </li>
                             <li class="list-group-item">
-                                <a href="javascript:void(0)"> <i class="material-icons">send</i> Rascunho <span class="label label-danger right">3</span></a></li>
-                            <li class="list-group-item">
-                                <a href="javascript:void(0)"> <i class="material-icons">email</i> Enviar Email </a>
+                                <a href="javascript:void(0)"> <i class="material-icons">send</i> Rascunho <span class="label label-danger right">3</span></a>
                             </li>
                             <li>
                                 <div class="divider m-t-10  m-b-10"></div>
@@ -118,12 +119,72 @@
                             <li>
                                 <div class="divider m-t-10  m-b-10"></div>
                             </li>
+                            
+                            <li class="list-group-item">
+                                <a href="CadastrarEmail.jsp"> <i class="material-icons">add</i> Adicionar Email </a>
+                            </li>
+                            
+                            <li class="list-group-item">
+                                <a href="ativarEmail.jsp"> <i class="material-icons">verified_user</i> Ativar Email </a>
+                            </li>
+                            
+                            <%
+                            int qtdEmailsUsuario = (int)(session.getAttribute("QtdEmailsUsuario"));
+                            
+                            for(int a=qtdEmailsUsuario; a>0; a--)
+                            {
+                            	if(session.getAttribute("Email"+a) == null)
+                            		continue;
+                            	
+                            	Email umEmail = (Email)session.getAttribute("Email"+a);
+                            	String nomeUsuario = umEmail.getUsuario();
+                            	int atual = (int)(session.getAttribute("atual"));
+                            	
+                            	%>
+                            	<div class="conteiner">
+                            	<li class="list-group-item">
+                            	<%if(a==atual)
+                            	{	
+                            		%>
+                                	<span class="active" id="linkEmail"> <i class="material-icons">email</i>
+                                							<%=nomeUsuario%></span>
+                                	<%
+                                }
+                            	else
+                            	{
+                            		%><span id="linkEmail"> <i class="material-icons">email</i>
+                                							<%=nomeUsuario%></span>
+                                	<%
+                            	}
+                            	%>
+                            	
+ 								<a id="inEmail" href="mudar.jsp?i=<%=a %>"> <i class="material-icons">contact_mail</i>Entrar</a>
+ 								<a id="altEmail" href="alterarEmail.jsp?i=<%=a %>"> <i class="material-icons">edit</i>Editar</a>		
+                            	<a id="delEmail" href="deslogarEmail.jsp?i=<%=a %>"> <i class="material-icons">unsubscribe</i>Deletar</a>		
+ 
+                            	</li>
+                            	</div>
+                            	<%
+                            } %>
+                            
+                            
+                            <li>
+                                <div class="divider m-t-10  m-b-10"></div>
+                            </li>
                         </ul>
                     <div class="ps__scrollbar-x-rail" style="left: 0px; bottom: 0px;">
-                    <div class="ps__scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div></div>
-                    <div class="ps__scrollbar-y-rail" style="top: 0px; height: 676px; right: 0px;">
-                    <div class="ps__scrollbar-y" tabindex="0" style="top: 0px; height: 0px;"></div></div></div>
-                    
+                    	<div class="ps__scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+                    </div>
+                    <div class="ps__scrollbar-y-rail" style="top: 0px; height: 0px; right: 0px;">
+                    	<div class="ps__scrollbar-y" tabindex="0" style="top: 0px; height: 0px;"></div>
+                    </div>
+                   </div>
+                   
+                   <label class="logoutLblPos">
+					  <span class="glyphicon glyphicon-search"></span>
+					  <a href="deslogar.jsp" id="sair">Deslogar</a>
+					  </label>
+					  
 <div class="right-part mail-details active" style="display: block;">
 					  
 <div class="grey lighten-5 p-15 d-flex no-block">

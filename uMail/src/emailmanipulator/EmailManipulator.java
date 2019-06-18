@@ -458,7 +458,8 @@ public class EmailManipulator extends Email
 		{
 			if(this.mensagensNaoLidas(nomePasta) == null)
 				return 0;
-		
+
+			//fd.getUnreadMessageCount();
 			return this.mensagensNaoLidas(nomePasta).length;
 		}
 		catch(Exception e)
@@ -474,6 +475,7 @@ public class EmailManipulator extends Email
 			Folder fd = this.abrirPasta(nomePasta, 1);
 			Flags visualizada = new Flags(Flags.Flag.SEEN);
 			FlagTerm naoVisualizada = new FlagTerm(visualizada, false);
+			
 			return fd.search(naoVisualizada); //messages.length sera a qtd de mensagens nao lidas...
 		}
 		catch(Exception e)
