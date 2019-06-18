@@ -15,6 +15,7 @@
 		String usuario   = request.getParameter("usuario");
 		String senha     = request.getParameter("senha");
 		String host      = request.getParameter("host");
+		String servidor  = request.getParameter("servidor");
 		int portaR        = Integer.parseInt(request.getParameter("portaR"));
 		int portaE        = Integer.parseInt(request.getParameter("portaE"));
 		String seg       = request.getParameter("seguranca");
@@ -33,8 +34,6 @@
 			host_certo = Hosts.getHost(1);
 		else
 			host_certo = Hosts.getHost(2);
-		
-		String servidor = usuario.substring(usuario.indexOf("@")+1, usuario.length());
 		
 		Email email = new Email(usuario, CriptoSlyDe.gerarSenhaCriptografada(senha), portaR, portaE, seguranca, host_certo, nome, sobrenome, servidor, 
 								LoginMails.getUsuario(conta), 0);

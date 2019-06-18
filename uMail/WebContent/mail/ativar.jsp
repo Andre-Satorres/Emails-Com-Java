@@ -46,6 +46,7 @@
 			}
 			catch(Exception e)
 			{
+				e.getMessage();
 				session.setAttribute("erroAtivacao", "Falha de autenticação. Senha e/ou porta de envio (SMTP) erradas.");
 				response.sendRedirect("ativarEmail.jsp");
 				return;

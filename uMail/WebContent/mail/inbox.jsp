@@ -55,6 +55,19 @@
 	}
 	
 	EmailManipulator email = new EmailManipulator(em);
+	
+	if(email.getHost().getId() == 2)
+	{
+		try
+		{
+			email.criarPasta("Arquivado"); // emails que o usuario quiser mover para a pasta spam.
+			email.criarPasta("Rascunho"); // todos os email que o usuario quiser enviar mas esta sem tempo para escrever devem ficar aqui.
+			email.criarPasta("Spam"); // emails que o usuario quiser mover para a pasta spam.
+			email.criarPasta("Lixeira"); // pasta q contem os emails que o usuario nao quiser mais, ele teria de limpar a lixeira posteriormente.
+		}
+		catch(Exception e)
+		{}
+	}
 %>
 <title><%=session.getAttribute("usuario")%> - uMail</title>
 <body>
@@ -77,51 +90,67 @@
                             <li>
                                 <small class="p-15 grey-text text-lighten-1 db">Pastas</small>
                             </li>
-                            <%
+                            <%                            
+	                            String[] icones = new String[5];
+	                        	icones[0] = "star";
+	                        	icones[1] = "inbox";
+	                        	icones[2] = "send";
+	                        	icones[3] = "block";
+	                        	icones[4] = "delete";
+	                        	
+	                        	int k=0;
+                            
                             	Folder[] pastas = email.obterTodasAsPastas();
                             	if(pastas != null)
                             		session.setAttribute("pastaAtual", pastas[0].getName());
                             	
-                            	if(pastas!=null)
+                                int j=0;
+                            	if(pastas!=null && email.getHost().getId()==2)
                             	for(Folder fd:pastas)
                             	{
                             		%>
+                            			<div class="conteiner">
                             			<li class="list-group-item">
-                            			<%if(fd.equals(pastas[0])) 
+                            			<%if(fd.equals(pastas[0]))
                             			  {
                             			  	%>
-                                			<a href="javascript:void(0)" class="active">
-                                			<i class="material-icons">inbox</i><%=fd.getName().substring(0, 1).toUpperCase() + fd.getName().substring(1).toLowerCase() %>
-                                			<span class="label label-success right"><%=(email.quantidadeNaoLidas(fd.getName())==0?"":email.quantidadeNaoLidas(fd.getName()))%></span></a>
+                            			  	<span id="linkEmail" class="active"><i class="material-icons"><%=icones[k]%></i>
+                            			  	<%=fd.getName().substring(0, 1).toUpperCase() + fd.getName().substring(1).toLowerCase() %>
+                                			<span class="label label-success right"><%=(email.quantidadeNaoLidas(fd.getName())==0?"":email.quantidadeNaoLidas(fd.getName()))%></span>
+                                			</span>
                                 			<%
                                 		  }else {%>
-                                			<a href="javascript:void(0)">
-                                			<i class="material-icons">inbox</i><%=fd.getName().substring(0, 1).toUpperCase() + fd.getName().substring(1).toLowerCase() %>
-                                			<span class="label label-success right"><%=(email.quantidadeNaoLidas(fd.getName())==0?"":email.quantidadeNaoLidas(fd.getName()))%></span></a>
+                                		  	<span id="linkEmail">
+                                			<i class="material-icons"><%=icones[k]%></i><%=fd.getName().substring(0, 1).toUpperCase() + fd.getName().substring(1).toLowerCase() %>
+                                			<span class="label label-success right"><%=(email.quantidadeNaoLidas(fd.getName())==0?"":email.quantidadeNaoLidas(fd.getName()))%></span>
+                                			</span>
                                 			<%} %>
+                                                
+                                            <a id="inEmail" href="abrirPasta.jsp?i=<%=j %>"> <i class="material-icons">contact_mail</i>Entrar</a>
+                                            <a id="altEmail" href="alterarPasta.jsp?i=<%=j %>"> <i class="material-icons">edit</i>Editar</a>		
+                                            <a id="delEmail" href="deletarPasta.jsp?i=<%=j %>"> <i class="material-icons">unsubscribe</i>Deletar</a>
                             			</li>
+                            			</div>
                             		<%
+                            		if (k == 2 || k == 4)
+                            		{%>
+                            			<li>
+			                                <div class="divider m-t-10  m-b-10"></div>
+			                            </li>
+                            		<%}
+                            		
+                            		if (k < 4)
+                            			k++;
+                            		else
+                            			k=0;
+                                        
+                                    j++;
                             	}
-                            
                             %>
-                            <li class="list-group-item">
-                                <a href="javascript:void(0)"> <i class="material-icons">star</i> Arquivado </a>
-                            </li>
-                            <li class="list-group-item">
-                                <a href="javascript:void(0)"> <i class="material-icons">send</i> Rascunho <span class="label label-danger right">3</span></a>
-                            </li>
                             <li>
                                 <div class="divider m-t-10  m-b-10"></div>
                             </li>
-                            <li class="list-group-item">
-                                <a href="javascript:void(0)"> <i class="material-icons">block</i> Spam </a>
-                            </li>
-                            <li class="list-group-item">
-                                <a href="javascript:void(0)"> <i class="material-icons">delete</i> Lixeira </a>
-                            </li>
-                            <li>
-                                <div class="divider m-t-10  m-b-10"></div>
-                            </li>
+                            
                             
                             <li class="list-group-item">
                                 <a href="CadastrarEmail.jsp"> <i class="material-icons">add</i> Adicionar Email </a>
@@ -205,7 +234,7 @@
                                 <a class="dropdown-trigger font-20" href="" data-target="dme"><i class="material-icons">folder</i><i class="material-icons op-5">expand_more</i></a>
 
                                 <a class="font-20 m-l-5" href=""><i class="material-icons">delete</i></a>
-                                <a class="font-20 m-l-10" href="inbox.jsp"><i class="material-icons">refresh</i></a>
+                                <a class="font-20 m-l-10" href=""><i class="material-icons">refresh</i></a>
                             </div>
                         </div>
                        
@@ -216,7 +245,8 @@
 <%
 	try
 	{
-		Message[] emails = email.mensagens("inbox");
+        String pasta = (String)session.getAttribute("pastaAtual");
+		Message[] emails = email.mensagens(pasta);
 		
 		//session.setAttribute("emails", emails);
 		
@@ -246,71 +276,11 @@
                 <td class="starred"><i class="fa fa-star-o"></i></td>
                 <td class="user-image"><img src="https://www.gravatar.com/avatar/<%=MD5Util.md5Hex(((InternetAddress)emails[i].getFrom()[0]).getAddress()) %>" alt="user" class="circle" width="30"></td>
                 <td class="user-name" id="<%=i%>">
-                <% String address = ((InternetAddress)emails[i].getFrom()[0]).getAddress();
-                if(address.equals(email.getUsuario()))
-                		address = "Eu";
-                else
-                {
-                	address = ((InternetAddress)emails[i].getFrom()[0]).getPersonal();
-                	if(address == null)
-                		address = ((InternetAddress)emails[i].getFrom()[0]).getAddress();
-                }
-                %>
-                    <h6 class="m-b-0"><%=address%></h6>
+                    <h6 class="m-b-0"><%=((InternetAddress)emails[i].getFrom()[0]).getPersonal() == null?((InternetAddress)emails[i].getFrom()[0]).getAddress():((InternetAddress)emails[i].getFrom()[0]).getPersonal() %></h6>
                 </td>
                 <td class="max-texts"><a id="mail" class="<%=i%>" href="verEmail.jsp?i=<%=i%>"><%=emails[i].getSubject() %></a></td>
                 <td class="clip"><i class="fa fa-paperclip"></i></td>
-                <%
-	                Date date = new Date();
-	                Calendar calendar = new GregorianCalendar();
-	                calendar.setTime(date);
-	                int year = calendar.get(Calendar.YEAR);
-	                //Add one to month {0 - 11}
-	                int month = calendar.get(Calendar.MONTH) + 1;
-	                int day = calendar.get(Calendar.DAY_OF_MONTH);
-	                
-	                Date dataMsg = emails[i].getSentDate();
-	                Calendar calendario2 = new GregorianCalendar();
-	                calendario2.setTime(dataMsg);
-	                int anoMsg = calendario2.get(Calendar.YEAR);
-	                //Add one to month {0 - 11}
-	                int mesMsg = calendario2.get(Calendar.MONTH) + 1;
-	                int diaMsg = calendario2.get(Calendar.DAY_OF_MONTH);
-	                
-	                String retorno = "";
-	                
-	                if(year > anoMsg)
-	                	retorno = diaMsg + "/" + mesMsg + "/" +anoMsg;
-	                else if(month >= mesMsg && day!=diaMsg)
-	                {
-	                	switch(mesMsg)
-	                	{
-	                		case 0: retorno = diaMsg + " de " + "jan";break;
-	                		case 1: retorno = diaMsg + " de " + "fev";break;
-	                		case 2: retorno = diaMsg + " de " + "mar";break;
-	                		case 3: retorno = diaMsg + " de " + "abr";break;
-	                		case 4: retorno = diaMsg + " de " + "mai";break;
-	                		case 5: retorno = diaMsg + " de " + "jun";break;
-	                		case 6: retorno = diaMsg + " de " + "jul";break;
-	                		case 7: retorno = diaMsg + " de " + "ago";break;
-	                		case 8: retorno = diaMsg + " de " + "set";break;
-	                		case 9: retorno = diaMsg + " de " + "out";break;
-	                		case 10: retorno = diaMsg + " de " + "nov";break;
-	                		case 11: retorno = diaMsg + " de " + "dez";break;
-	                	}
-	                	
-	                }
-	                else //dia da msg eh o dia de hj
-	                {
-	                	int minutos = dataMsg.getMinutes();
-	                	
-	                	if(minutos<10)
-	                		retorno = dataMsg.getHours() + ":0" + dataMsg.getMinutes();
-	                	else
-	                		retorno = dataMsg.getHours() + ":" + dataMsg.getMinutes();
-	                }
-                %>
-                <td class="time"><%=retorno %></td>
+                <td class="time"><%=emails[i].getSentDate() %></td>
             </tr>
             
             <%
@@ -347,7 +317,7 @@
    	        		}
    	        	}
            
-            if(qtd>=3)
+           	if(qtd>=3)
         	   	for(int i=0; i<5; i++)
         	   	{
         		   	if(qtdPags == qtd+2) //penultima pag
@@ -356,11 +326,11 @@
         		   		else{%><li class="waves-effect"><a href="?i=<%=qtd-3+i %>"><%=qtd-2+i %></a></li><%}
         		   	}
   	        		else
-  	        			if(qtdPags == qtd+1) //ultima pag
-  	  	        		{
-  	        				if(i==4){%><li class="active"><a href="?i=<%=qtd-4+i %>"><%=qtd-3+i %></a></li><%}
-  	        		   		else{%><li class="waves-effect"><a href="?i=<%=qtd-4+i %>"><%=qtd-3+i %></a></li><%}
-  	  	        		}
+  	        		if(qtdPags == qtd+1) //ultima pag
+  	        		{
+  	        			if(i==4){%><li class="active"><a href="?i=<%=qtd-4+i %>"><%=qtd-3+i %></a></li><%}
+        		   		else{%><li class="waves-effect"><a href="?i=<%=qtd-4+i %>"><%=qtd-3+i %></a></li><%}
+  	        		}
   	        		else
   	        		{
   	        			if(qtd + (i - 2)==qtd){%><li class="active"><a href="?i=<%=qtd-2+i %>"><%=qtd-1+i %></a></li><%}
@@ -392,7 +362,7 @@
                    <button id="cancel_compose" class="btn grey darken-4">Cancelar</button>
                </div>
            </div>
-           <form action="http://localhost:8080/uMail/FileUpload" method="post" class="dropzone" enctype="multipart/form-data">
+           <form action="http://177.220.18.74:8080/uMail/FileUpload" method="post" class="dropzone" enctype="multipart/form-data">
            
           <!-- -----------------PARA, CC, CCO --------------------->
                <div class="Input-field">

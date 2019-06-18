@@ -29,6 +29,10 @@
             <input type="password" class="form-control" placeholder="Senha" id="senha" name = "senha" required>
           </div>
           <div class="form-group">
+            <input type="text" class="form-control" placeholder="Servidor" id="servidor" name="servidor"
+            value = "<%= (request.getParameter("servidor")!= null?request.getParameter("servidor"):"")%>" required>
+          </div>
+          <div class="form-group">
             <input type="number" class="form-control" placeholder="Porta de Recepção" min="1" max="65535" id="portaR" name="portaR"
             value = "<%= (request.getParameter("portaR")!= null?request.getParameter("portaR"):"")%>" required>
           </div>

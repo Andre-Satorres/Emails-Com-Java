@@ -42,6 +42,10 @@
             value = "<%= (email.getSenha()!= null?email.getSenha():"")%>" required>
           </div>
           <div class="form-group">
+            <input type="text" class="form-control" placeholder="Servidor" id="servidor" name="servidor"
+            value = "<%= (request.getParameter("servidor")!= null?request.getParameter("servidor"):"")%>" required>
+          </div>
+          <div class="form-group">
             <input type="number" class="form-control" placeholder="Porta de Recepção" min="1" max="65535" id="portaR" name="portaR"
             value = "<%= (email.getPortaR()!= 0?email.getPortaR():"")%>" required>
           </div>

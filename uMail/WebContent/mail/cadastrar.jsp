@@ -23,6 +23,7 @@
 		int portaE        = Integer.parseInt(request.getParameter("portaE"));
 		String seg       = request.getParameter("seguranca");
 		String conta     = (String)session.getAttribute("usuario");
+		String servidor  = request.getParameter("servidor");
 		
 		Seguranca seguranca;
 		Host host_certo;
@@ -37,8 +38,6 @@
 			host_certo = Hosts.getHost(1);
 		else
 			host_certo = Hosts.getHost(2);
-		
-		String servidor = usuario.substring(usuario.indexOf("@")+1, usuario.length());
 		
 		Email email = new Email(usuario, CriptoSlyDe.gerarSenhaCriptografada(senha), portaR, portaE, seguranca, host_certo, nome, sobrenome, servidor, 
 								LoginMails.getUsuario(conta), 0);
@@ -65,7 +64,7 @@
 	}
 	catch(Exception e)
 	{
-		session.setAttribute("erroCadastro", "Um ou mais campos inválidos!");
+		session.setAttribute("erroCadastro", "Erro! Campos inválidos. Certifique-se de que você já não inserir este email.");
 		
 		response.sendRedirect("CadastrarEmail.jsp");
 	}

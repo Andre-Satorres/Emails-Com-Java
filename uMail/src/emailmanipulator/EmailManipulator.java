@@ -59,7 +59,10 @@ public class EmailManipulator extends Email
 						if(this.getServidor().contains("unicamp"))
 							this.mailServer = "pop" + ".unicamp.br";
 						else
-							this.mailServer = "pop" + "." + this.getServidor();
+							if(this.getServidor().contains("bol"))
+								this.mailServer = "pop3." + this.getServidor();
+							else
+								this.mailServer = "pop" + "." + this.getServidor();
 					
 					emailProperties.put("mail.pop3.port", this.getPortaRecepcao());
 					emailProperties.put("mail.pop3.host", this.mailServer);
@@ -111,6 +114,8 @@ public class EmailManipulator extends Email
 							this.mailServer = "smtp" + ".unicamp.br";
 						else
 							this.mailServer = "smtp" + "." + this.getServidor();
+
+				emailProperties.setProperty("mail.host", this.mailServer);
 				
 				emailProperties.put("mail.smtp.port", this.getPortaEnvio());
 				emailProperties.put("mail.smtp.host", this.mailServer);
@@ -142,7 +147,7 @@ public class EmailManipulator extends Email
 			
 			final String user = this.getUsuario();
  			final String senha = this.getSenha();
-			emailSession = Session.getDefaultInstance(emailProperties,
+			emailSession = Session.getInstance(emailProperties,
 					new javax.mail.Authenticator() {
 						protected PasswordAuthentication getPasswordAuthentication() {
 							return new PasswordAuthentication(user, senha);
@@ -427,6 +432,12 @@ public class EmailManipulator extends Email
 		fd.close();
 	}
 	
+	public void fecharPasta(String fold) throws MessagingException
+	{
+		Folder fd = this.emailStore.getFolder(fold);
+		fd.close();
+	}
+	
 	public int quantidadeMensagens(String nomePasta) throws Exception
 	{
 		return this.mensagens(nomePasta).length;
@@ -511,10 +522,15 @@ public class EmailManipulator extends Email
 	
 	public void criarPasta(String novaPasta) throws Exception
 	{
-		Folder pastaNova = this.abrirPasta(novaPasta, 1);
+		this.authenticate(1);
+		this.setStore();
+		Folder nova = this.emailStore.getFolder(novaPasta);
 			
-		if ( !pastaNova.exists())  
-			pastaNova.create( Folder.HOLDS_FOLDERS | Folder.HOLDS_MESSAGES );
+		if ( !nova.exists())  
+		{
+			if(nova.create( Folder.HOLDS_FOLDERS | Folder.HOLDS_MESSAGES ))
+				nova.setSubscribed(true);
+		}
 		else
 			throw new Exception ("Pasta ja existente!");
 	}
@@ -523,7 +539,9 @@ public class EmailManipulator extends Email
 	{
 		try
 		{
-			Folder pasta = this.abrirPasta(nome, 1);
+			this.authenticate(1);
+			this.setStore();
+			Folder pasta = this.emailStore.getFolder(nome);
 			
 			if (!pasta.exists())
 				throw new FolderNotFoundException();
@@ -541,7 +559,9 @@ public class EmailManipulator extends Email
 	{
 		try
 		{
-			Folder pasta = this.abrirPasta(nomeOriginal, 1);
+			this.authenticate(1);
+			this.setStore();
+			Folder pasta = this.emailStore.getFolder(nomeOriginal);
 			
 			if (!pasta.exists())
 				throw new FolderNotFoundException();
@@ -552,6 +572,11 @@ public class EmailManipulator extends Email
 		{}
 	}
 	
+	/**
+	 * @param msg
+	 * @param nomePasta
+	 * @throws Exception
+	 */
 	public void deletarEmail(Message msg, String nomePasta) throws Exception
 	{
 		msg.setFlag(Flags.Flag.DELETED, true);
