@@ -205,7 +205,7 @@
                                 <a class="dropdown-trigger font-20" href="" data-target="dme"><i class="material-icons">folder</i><i class="material-icons op-5">expand_more</i></a>
 
                                 <a class="font-20 m-l-5" href=""><i class="material-icons">delete</i></a>
-                                <a class="font-20 m-l-10" href=""><i class="material-icons">refresh</i></a>
+                                <a class="font-20 m-l-10" href="inbox.jsp"><i class="material-icons">refresh</i></a>
                             </div>
                         </div>
                        
