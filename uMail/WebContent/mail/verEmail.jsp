@@ -127,7 +127,7 @@
 <div class="right-part mail-details active" style="display: block;">
 					  
 <div class="grey lighten-5 p-15 d-flex no-block">
-    <a id="back_to_inbox" class="m-l-5 tooltipped" href="window.history.back()" data-tooltip="voltar para inbox" data-position="top">
+    <a id="back_to_inbox" class="m-l-5 tooltipped" href="inbox.jsp" data-tooltip="voltar para inbox" data-position="top">
     	<i class="material-icons font-20">arrow_back</i></a>
     <a class="m-l-5 tooltipped" href="responderEmail.jsp?i=<%=i %>" data-tooltip="Reply" data-position="top">
     <i class="material-icons font-20">reply</i></a>
@@ -137,7 +137,7 @@
         <a class="dropdown-trigger font-20" href="" data-target="dme">
         <i class="material-icons">folder</i>
         <i class="material-icons op-5">expand_more</i>
-        </a><ul id="dme" class="dropdown-content col s4" tabindex="0" style="">
+        </a><ul id="dme" class="dropdown-content col s4" tabindex="0" style="width:'180px'; height:'200px'">
             
             <li tabindex="0"><a href="">Select Read</a></li>
             <li class="divider" tabindex="-1"></li>
@@ -145,7 +145,7 @@
             <li tabindex="0"><a href=""><i class="material-icons">view_module</i>Action</a></li>
             <li tabindex="0"><a href=""><i class="material-icons">cloud</i>Clear All</a></li>
         </ul>
-        <ul id="dme" class="dropdown-content col s4">
+        <ul id="dme" class="dropdown-content col s4" style="width:'180px'; height:'200px'">
             <li><a href="">Select Read</a></li>
             <li class="divider" tabindex="-1"></li>
             <li><a href="">Select Unread</a></li>
@@ -198,18 +198,17 @@
         <div class="collapsible-body" style="display: block;">
         <a class="dropdown-trigger font-20 right" href="" data-target="ddme">
         	<i class="material-icons">more_vert</i></a>
-        	<ul id="ddme" class="dropdown-content" tabindex="0">
+        	<ul id="ddme" class="dropdown-content" tabindex="0" style="width:'180px'; height:'200px'">
         	
             <li tabindex="0" class="active"><a href="responderEmail.jsp?i=<%=i %>" class="active">Responder</a></li>
             <li class="divider" tabindex="-1"></li>
             <li tabindex="0" class="active"><a href="encaminharEmail.jsp?i=<%=i %>" class="active">Encaminhar</a></li>
             <li tabindex="0" class="active"><a href="excluirEmail.jsp?i=<%=i %>" 
             	class="active"><i class="material-icons">view_module</i>Excluir</a></li>
-            <li tabindex="0" class="active"><a href="excluirTodos.jsp" 
-            	class="active"><i class="material-icons">cloud</i>Excluir Todos</a></li>
         </ul>
 
-		<%= getTextFromMessage(msg) %>
+		<% out.write(getTextFromMessage(msg)); %>
+
 		
 <%!
 	private String getTextFromMessage(Message message) throws MessagingException, IOException
@@ -219,7 +218,13 @@
 		{
 			result = message.getContent().toString(); //siplesmente printa o texto
 		}
-		else if (message.isMimeType("multipart/*")) //se tiver múltiplas partes
+		else if (message.isMimeType("text/html")) 
+		{
+			String html = (String) message.getContent();
+			result = org.jsoup.Jsoup.parse(html).html();
+            //result = org.jsoup.Jsoup.parse(html).text();
+		}
+		else
 		{
 			//obtenho o conteúdo como um texto MIME
 			MimeMultipart mimeMultipart= (MimeMultipart) message.getContent();
@@ -236,11 +241,27 @@ private String getTextFromMimeMultipart(MimeMultipart mimeMultipart) throws Mess
 {
 	String result = "";
 	int count = mimeMultipart.getCount();
-	for (int i = 0; i < count; i++)
+	for (int i = 0; i < count; i++) 
 	{
-		result += pegaTextoDeCadaParte(mimeMultipart.getBodyPart(i));
-	}
-	return result;
+        BodyPart bodyPart = mimeMultipart.getBodyPart(i);
+        
+        if (bodyPart.isMimeType("text/plain")) 
+        {
+            result = result + "\n" + bodyPart.getContent();
+            break; // without break same text appears twice in my tests
+        } 
+        else if (bodyPart.isMimeType("text/html")) 
+        {
+            String html = (String) bodyPart.getContent();
+            result = result + "\n" + org.jsoup.Jsoup.parse(html).html();
+            //result = result + "\n" + org.jsoup.Jsoup.parse(html).text();
+        } 
+        else if (bodyPart.getContent() instanceof MimeMultipart)
+        {
+            result = result + getTextFromMimeMultipart((MimeMultipart)bodyPart.getContent());
+        }
+    }
+    return result;
 }
 %>
 
@@ -283,9 +304,9 @@ if(msg.getContentType().contains("multipart"))
 }
 		if(qtdAnexos>0){%>
 		<br>
-        <h6 class="m-t-30 font-medium">Anexos (<%=qtdAnexos %>)</h6>
-        <div class="row row-minus m-t-20">
-        <%
+		<h6 class="m-t-30 font-medium">Anexos (<%=qtdAnexos %>)</h6>
+		<div class="row row-minus m-t-20">
+		<%
 			if(msg.getContentType().contains("multipart"))
 			{
 				// essa parte é multipart, então pode conter anexos.
@@ -300,12 +321,14 @@ if(msg.getContentType().contains("multipart"))
 					{
 						String nomeArq = part.getFileName();
 						nomeArq = nomeArq.substring(nomeArq.lastIndexOf('\\')+1, nomeArq.length());				
-						
+						session.setAttribute("multipart", multiPart);
+						session.setAttribute("ql", i);
+						session.setAttribute("path"+partCount, "C:\\temp" + File.separator + System.currentTimeMillis() +nomeArq);
 						%>
 						<h6><%=nomeArq %></h6>
-						<button onclick="<%part.saveFile("c:\\temp" + File.separator +nomeArq);%>" value="Baixar">Baixar</button>
+						<a href="downloadFile.jsp?i=<%=partCount%>">Baixar</a>
 			            <%
-            		}
+		    		}
 						
 				}}
 			}%>
@@ -313,28 +336,6 @@ if(msg.getContentType().contains("multipart"))
         </div>
     </div>
 </li>
-
-<%
-	if(msg.getReplyTo().length>0) 
-	for(int j=0; j<msg.getReplyTo().length; j++)
-	{
-		%>
-		<li>
-    		<div class="collapsible-header" tabindex="0">
-        		<div class="d-flex no-block align-items-center">
-            		<div class="m-r-10"><img src="./Materialart Admin Template_files/4.jpg" alt="user" class="circle" width="45"></div>
-            			<div class="">
-                			<h5 class="m-b-0 font-16 font-medium"><%=((InternetAddress)msg.getReplyTo()[j]).getPersonal()%>
-                				<small> ( <%=((InternetAddress)msg.getReplyTo()[j]).getAddress() %> )</small></h5>
-                					<span>to <%=((InternetAddress)msg.getFrom()[0]).getPersonal() == null?((InternetAddress)msg.getFrom()[0]).getAddress():((InternetAddress)msg.getFrom()[0]).getPersonal() %></span>
-            			</div>
-        			</div>
-    			</div>
-    		<div class="collapsible-body"><span>NAO SEI EXIBIR MSG AQUI</span></div>
-		</li>
-		
-		<%}%>
-
        </ul>
     </div>
 </div>

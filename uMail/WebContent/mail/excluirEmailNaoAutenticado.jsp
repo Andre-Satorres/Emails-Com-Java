@@ -11,8 +11,9 @@
 	try
 	{
 		String email = request.getParameter("u");
-
-		Emails.excluir(email, (String)session.getAttribute("usuario"));
+		String conta = (String)session.getAttribute("usuario");
+		Emails.excluir(email, conta);
+		keys_users.excluir(email, conta);
 	}
 	catch(Exception e)
 	{

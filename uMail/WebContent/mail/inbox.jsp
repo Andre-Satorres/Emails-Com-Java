@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" import="javax.mail.internet.*, javax.mail.*, 
-                         bd.core.*, java.io.*, java.util.Properties, javax.mail.search.*, md5util.*, bd.daos.*, bd.dbos.*, emailmanipulator.*"
+                         bd.core.*, java.io.*, java.util.Properties, javax.mail.search.*, md5util.*, bd.daos.*, bd.dbos.*, emailmanipulator.*, 
+                         java.util.Date, java.util.Calendar, java.util.GregorianCalendar"
     pageEncoding="ISO-8859-1"%>
     
 <!DOCTYPE html>
@@ -26,7 +27,10 @@
     
     <%
 	if(session.getAttribute("usuario") == null)
+	{
 		response.sendRedirect("../index.jsp");
+		return;
+	}
 
 	//String host = "pop.gmail.com";
 	//String user = "mommavalos@gmail.com";
@@ -43,6 +47,12 @@
 		em = (Email)session.getAttribute("Email"+session.getAttribute("QtdEmailsUsuario"));
 	else
 		em = (Email)session.getAttribute("Email"+ session.getAttribute("atual"));
+	
+	if(em == null)
+	{
+		response.sendRedirect("CadastrarEmail.jsp");
+		return;
+	}
 	
 	EmailManipulator email = new EmailManipulator(em);
 %>
@@ -236,11 +246,71 @@
                 <td class="starred"><i class="fa fa-star-o"></i></td>
                 <td class="user-image"><img src="https://www.gravatar.com/avatar/<%=MD5Util.md5Hex(((InternetAddress)emails[i].getFrom()[0]).getAddress()) %>" alt="user" class="circle" width="30"></td>
                 <td class="user-name" id="<%=i%>">
-                    <h6 class="m-b-0"><%=((InternetAddress)emails[i].getFrom()[0]).getPersonal() == null?((InternetAddress)emails[i].getFrom()[0]).getAddress():((InternetAddress)emails[i].getFrom()[0]).getPersonal() %></h6>
+                <% String address = ((InternetAddress)emails[i].getFrom()[0]).getAddress();
+                if(address.equals(email.getUsuario()))
+                		address = "Eu";
+                else
+                {
+                	address = ((InternetAddress)emails[i].getFrom()[0]).getPersonal();
+                	if(address == null)
+                		address = ((InternetAddress)emails[i].getFrom()[0]).getAddress();
+                }
+                %>
+                    <h6 class="m-b-0"><%=address%></h6>
                 </td>
                 <td class="max-texts"><a id="mail" class="<%=i%>" href="verEmail.jsp?i=<%=i%>"><%=emails[i].getSubject() %></a></td>
                 <td class="clip"><i class="fa fa-paperclip"></i></td>
-                <td class="time"><%=emails[i].getSentDate() %></td>
+                <%
+	                Date date = new Date();
+	                Calendar calendar = new GregorianCalendar();
+	                calendar.setTime(date);
+	                int year = calendar.get(Calendar.YEAR);
+	                //Add one to month {0 - 11}
+	                int month = calendar.get(Calendar.MONTH) + 1;
+	                int day = calendar.get(Calendar.DAY_OF_MONTH);
+	                
+	                Date dataMsg = emails[i].getSentDate();
+	                Calendar calendario2 = new GregorianCalendar();
+	                calendario2.setTime(dataMsg);
+	                int anoMsg = calendario2.get(Calendar.YEAR);
+	                //Add one to month {0 - 11}
+	                int mesMsg = calendario2.get(Calendar.MONTH) + 1;
+	                int diaMsg = calendario2.get(Calendar.DAY_OF_MONTH);
+	                
+	                String retorno = "";
+	                
+	                if(year > anoMsg)
+	                	retorno = diaMsg + "/" + mesMsg + "/" +anoMsg;
+	                else if(month >= mesMsg && day!=diaMsg)
+	                {
+	                	switch(mesMsg)
+	                	{
+	                		case 0: retorno = diaMsg + " de " + "jan";break;
+	                		case 1: retorno = diaMsg + " de " + "fev";break;
+	                		case 2: retorno = diaMsg + " de " + "mar";break;
+	                		case 3: retorno = diaMsg + " de " + "abr";break;
+	                		case 4: retorno = diaMsg + " de " + "mai";break;
+	                		case 5: retorno = diaMsg + " de " + "jun";break;
+	                		case 6: retorno = diaMsg + " de " + "jul";break;
+	                		case 7: retorno = diaMsg + " de " + "ago";break;
+	                		case 8: retorno = diaMsg + " de " + "set";break;
+	                		case 9: retorno = diaMsg + " de " + "out";break;
+	                		case 10: retorno = diaMsg + " de " + "nov";break;
+	                		case 11: retorno = diaMsg + " de " + "dez";break;
+	                	}
+	                	
+	                }
+	                else //dia da msg eh o dia de hj
+	                {
+	                	int minutos = dataMsg.getMinutes();
+	                	
+	                	if(minutos<10)
+	                		retorno = dataMsg.getHours() + ":0" + dataMsg.getMinutes();
+	                	else
+	                		retorno = dataMsg.getHours() + ":" + dataMsg.getMinutes();
+	                }
+                %>
+                <td class="time"><%=retorno %></td>
             </tr>
             
             <%
@@ -277,7 +347,7 @@
    	        		}
    	        	}
            
-           	if(qtd>=3)
+            if(qtd>=3)
         	   	for(int i=0; i<5; i++)
         	   	{
         		   	if(qtdPags == qtd+2) //penultima pag
@@ -286,11 +356,11 @@
         		   		else{%><li class="waves-effect"><a href="?i=<%=qtd-3+i %>"><%=qtd-2+i %></a></li><%}
         		   	}
   	        		else
-  	        		if(qtdPags == qtd+1) //ultima pag
-  	        		{
-  	        			if(i==4){%><li class="active"><a href="?i=<%=qtd-4+i %>"><%=qtd-3+i %></a></li><%}
-        		   		else{%><li class="waves-effect"><a href="?i=<%=qtd-4+i %>"><%=qtd-3+i %></a></li><%}
-  	        		}
+  	        			if(qtdPags == qtd+1) //ultima pag
+  	  	        		{
+  	        				if(i==4){%><li class="active"><a href="?i=<%=qtd-4+i %>"><%=qtd-3+i %></a></li><%}
+  	        		   		else{%><li class="waves-effect"><a href="?i=<%=qtd-4+i %>"><%=qtd-3+i %></a></li><%}
+  	  	        		}
   	        		else
   	        		{
   	        			if(qtd + (i - 2)==qtd){%><li class="active"><a href="?i=<%=qtd-2+i %>"><%=qtd-1+i %></a></li><%}

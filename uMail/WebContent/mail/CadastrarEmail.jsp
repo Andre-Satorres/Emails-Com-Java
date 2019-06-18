@@ -51,7 +51,7 @@
           <div class="form-group">
             <input type="button" class="btn-submit" value="Voltar">
             <input type="reset" class="btn-submit" value="Limpar Dados">
-            <input type="submit" class="btn-submit" value="Cadastrar">
+            <input type="submit" class="btn-submit" value="Cadastrar" id="cadastrar">
           </div>
           
           <div class="form-group">

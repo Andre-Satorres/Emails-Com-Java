@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" import="javax.mail.internet.*, javax.mail.*,
-																			emailmanipulator.*"
+																			emailmanipulator.*, bd.dbos.*"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
@@ -11,10 +11,14 @@
 <%
 	int qual = Integer.parseInt(request.getParameter("i"));
 
-	EmailManipulator email = (EmailManipulator)session.getAttribute("Email"+session.getAttribute("atual"));
-	Message msg = email.getMensagem((String)session.getAttribute("pastaAtual"), qual);
+	Email em = (Email)session.getAttribute("Email"+session.getAttribute("atual"));
+	EmailManipulator email = new EmailManipulator(em);
 	
-	msg.setFlag(Flags.Flag.DELETED, true);
+	String pasta = (String)session.getAttribute("pastaAtual");
+	
+	Message msg = email.getMensagem(pasta, qual);
+	
+	email.deletarEmail(msg, pasta);
 	
 	response.sendRedirect("inbox.jsp?i="+session.getAttribute("qtd"));
 %>

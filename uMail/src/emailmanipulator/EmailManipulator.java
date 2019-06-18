@@ -56,7 +56,10 @@ public class EmailManipulator extends Email
 					if(this.getServidor().contains("yahoo"))
 						this.mailServer = "pop" + "." + "mail." + this.getServidor();
 					else
-						this.mailServer = "pop" + "." + this.getServidor();
+						if(this.getServidor().contains("unicamp"))
+							this.mailServer = "pop" + ".unicamp.br";
+						else
+							this.mailServer = "pop" + "." + this.getServidor();
 					
 					emailProperties.put("mail.pop3.port", this.getPortaRecepcao());
 					emailProperties.put("mail.pop3.host", this.mailServer);
@@ -77,7 +80,10 @@ public class EmailManipulator extends Email
 					if(this.getServidor().contains("yahoo"))
 						this.mailServer = "imap" + "." + "mail." + this.getServidor();
 					else
-						this.mailServer = "imap" + "." + this.getServidor();
+						if(this.getServidor().contains("unicamp"))
+							this.mailServer = "imap" + ".unicamp.br";
+						else
+							this.mailServer = "imap" + "." + this.getServidor();
 					
 					emailProperties.put("mail.imap.port", this.getPortaRecepcao());
 					emailProperties.put("mail.imap.host", this.mailServer);
@@ -101,7 +107,10 @@ public class EmailManipulator extends Email
 					if(this.getServidor().contains("yahoo"))
 						this.mailServer = "smtp" + ".mail." + this.getServidor();
 					else
-						this.mailServer = "smtp" + "." + this.getServidor();
+						if(this.getServidor().contains("unicamp"))
+							this.mailServer = "smtp" + ".unicamp.br";
+						else
+							this.mailServer = "smtp" + "." + this.getServidor();
 				
 				emailProperties.put("mail.smtp.port", this.getPortaEnvio());
 				emailProperties.put("mail.smtp.host", this.mailServer);
@@ -426,6 +435,14 @@ public class EmailManipulator extends Email
 	public Message[] mensagens(String nomePasta) throws Exception
 	{
 		Folder fd = this.abrirPasta(nomePasta, 1);
+		Flags deletada = new Flags(Flags.Flag.DELETED);
+		FlagTerm naoExcluida = new FlagTerm(deletada, false);
+		return fd.search(naoExcluida);
+	}
+	
+	public Message[] todasAsMensagens(String nomePasta) throws Exception
+	{
+		Folder fd = this.abrirPasta(nomePasta, 1);
 		return fd.getMessages();
 	}
 	
@@ -531,6 +548,13 @@ public class EmailManipulator extends Email
 		}
 		catch(Exception e)
 		{}
+	}
+	
+	public void deletarEmail(Message msg, String nomePasta) throws Exception
+	{
+		msg.setFlag(Flags.Flag.DELETED, true);
+		Folder f = this.abrirPasta(nomePasta, 1);
+		f.close(true);
 	}
 }
 	

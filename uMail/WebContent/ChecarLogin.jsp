@@ -34,11 +34,16 @@
 	   			session.setAttribute("usuario", usuario);
 	   			
 	   			MeuResultSet contasVinculadas = Emails.contaTemEmails(usuario);
+	   			MeuResultSet nAutenticados = Emails.naoAutenticadosDaConta(usuario);
 	   			
 	   			if(!contasVinculadas.first())
 	   			{
 	   				session.setAttribute("QtdEmailsUsuario", 0);
-	   				response.sendRedirect("mail/CadastrarEmail.jsp");
+	   				
+	   				if(!(nAutenticados.first()))	
+	   					response.sendRedirect("mail/CadastrarEmail.jsp");
+	   				else
+	   					response.sendRedirect("mail/ativarEmail.jsp");
 	   			}
 	   			else
 	   			{

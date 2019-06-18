@@ -61,7 +61,7 @@
 
 		em.sendConfirmationEmail(usuario, builder.toString()); //envia email com chave
 			
-		response.sendRedirect("inbox.jsp");
+		response.sendRedirect("ativarEmail.jsp");
 	}
 	catch(Exception e)
 	{
